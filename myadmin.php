@@ -15,10 +15,10 @@ return [
 	'version' => '1.0.0',
 	'type' => 'licenses',
 	'hooks' => [
-		'function.requirements' => ['Detain\MyAdminGlobalsign\Plugin', 'Requirements'],
+		/*'function.requirements' => ['Detain\MyAdminGlobalsign\Plugin', 'Requirements'],
 		'licenses.settings' => ['Detain\MyAdminGlobalsign\Plugin', 'Settings'],
 		'licenses.activate' => ['Detain\MyAdminGlobalsign\Plugin', 'Activate'],
 		'licenses.change_ip' => ['Detain\MyAdminGlobalsign\Plugin', 'ChangeIp'],
-		'ui.menu' => ['Detain\MyAdminGlobalsign\Plugin', 'Menu']
+		'ui.menu' => ['Detain\MyAdminGlobalsign\Plugin', 'Menu'] */
 	],
 ];
