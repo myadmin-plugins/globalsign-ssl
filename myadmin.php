@@ -15,8 +15,8 @@ return [
 	'version' => '1.0.0',
 	'type' => 'service',
 	'hooks' => [
-		/*'function.requirements' => ['Detain\MyAdminGlobalsign\Plugin', 'Requirements'],
 		'ssl.settings' => ['Detain\MyAdminGlobalsign\Plugin', 'Settings'],
+		/*'function.requirements' => ['Detain\MyAdminGlobalsign\Plugin', 'Requirements'],
 		'ssl.activate' => ['Detain\MyAdminGlobalsign\Plugin', 'Activate'],
 		'ssl.change_ip' => ['Detain\MyAdminGlobalsign\Plugin', 'ChangeIp'],
 		'ui.menu' => ['Detain\MyAdminGlobalsign\Plugin', 'Menu'] */
