@@ -19,7 +19,7 @@ class Plugin {
 
 	public static function Hooks() {
 		return [
-			'ssl.settings' => ['Detain\MyAdminGlobalsign\Plugin', 'Settings'],
+			'ssl.settings' => [__CLASS__, 'Settings'],
 		];
 	}
 
