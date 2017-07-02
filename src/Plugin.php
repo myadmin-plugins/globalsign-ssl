@@ -28,7 +28,7 @@ class Plugin {
 		if ($event['category'] == SERVICE_TYPES_FANTASTICO) {
 			myadmin_log(self::$module, 'info', 'Globalsign Activation', __LINE__, __FILE__);
 			function_requirements('activate_globalsign');
-			activate_globalsign($serviceClass->get_ip(), $event['field1']);
+			activate_globalsign($serviceClass->getIp(), $event['field1']);
 			$event->stopPropagation();
 		}
 	}
