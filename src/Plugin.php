@@ -25,7 +25,7 @@ class Plugin {
 
 	public static function getActivate(GenericEvent $event) {
 		$serviceClass = $event->getSubject();
-		if ($event['category'] == SERVICE_TYPES_FANTASTICO) {
+		if ($event['category'] == get_service_define('FANTASTICO')) {
 			myadmin_log(self::$module, 'info', 'Globalsign Activation', __LINE__, __FILE__);
 			function_requirements('activate_globalsign');
 			activate_globalsign($serviceClass->getIp(), $event['field1']);
