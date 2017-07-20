@@ -5,6 +5,11 @@ namespace Detain\MyAdminGlobalsign;
 use Detain\Globalsign\Globalsign;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
+/**
+ * Class Plugin
+ *
+ * @package Detain\MyAdminGlobalsign
+ */
 class Plugin {
 
 	public static $name = 'Globalsign Ssl';
@@ -13,16 +18,24 @@ class Plugin {
 	public static $module = 'ssl';
 	public static $type = 'service';
 
-
+	/**
+	 * Plugin constructor.
+	 */
 	public function __construct() {
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function getHooks() {
 		return [
 			'ssl.settings' => [__CLASS__, 'getSettings'],
 		];
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 */
 	public static function getActivate(GenericEvent $event) {
 		$serviceClass = $event->getSubject();
 		if ($event['category'] == get_service_define('FANTASTICO')) {
@@ -33,6 +46,9 @@ class Plugin {
 		}
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 */
 	public static function getMenu(GenericEvent $event) {
 		$menu = $event->getSubject();
 		if ($GLOBALS['tf']->ima == 'admin') {
@@ -42,6 +58,9 @@ class Plugin {
 		}
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 */
 	public static function getRequirements(GenericEvent $event) {
 		$loader = $event->getSubject();
 		$loader->add_requirement('crud_globalsign_list', '/../vendor/detain/crud/src/crud/crud_globalsign_list.php');
@@ -58,6 +77,9 @@ class Plugin {
 		$loader->add_requirement('vps_add_globalsign', '/vps/addons/vps_add_globalsign.php');
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 */
 	public static function getSettings(GenericEvent $event) {
 		$settings = $event->getSubject();
 		$settings->add_text_setting(self::$module, 'API Settings', 'globalsign_username', 'GlobalSign Username:', 'Username to use for GlobalSign API Authentication', $settings->get_setting('GLOBALSIGN_USERNAME'));
