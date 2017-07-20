@@ -29,7 +29,7 @@ class Plugin {
 	 */
 	public static function getHooks() {
 		return [
-			'ssl.settings' => [__CLASS__, 'getSettings'],
+			'ssl.settings' => [__CLASS__, 'getSettings']
 		];
 	}
 
