@@ -29,7 +29,8 @@ class Plugin {
 	 */
 	public static function getHooks() {
 		return [
-			'ssl.settings' => [__CLASS__, 'getSettings']
+			'function.requirements' => [__CLASS__, 'getRequirements'],
+			self::$module.'.settings' => [__CLASS__, 'getSettings']
 		];
 	}
 
@@ -63,18 +64,7 @@ class Plugin {
 	 */
 	public static function getRequirements(GenericEvent $event) {
 		$loader = $event->getSubject();
-		$loader->add_requirement('crud_globalsign_list', '/../vendor/detain/crud/src/crud/crud_globalsign_list.php');
-		$loader->add_requirement('crud_reusable_globalsign', '/../vendor/detain/crud/src/crud/crud_reusable_globalsign.php');
-		$loader->add_requirement('get_globalsign_licenses', '/../vendor/detain/myadmin-globalsign-ssl/src/globalsign.inc.php');
-		$loader->add_requirement('get_globalsign_list', '/../vendor/detain/myadmin-globalsign-ssl/src/globalsign.inc.php');
-		$loader->add_requirement('globalsign_licenses_list', '/../vendor/detain/myadmin-globalsign-ssl/src/globalsign_licenses_list.php');
-		$loader->add_requirement('globalsign_list', '/../vendor/detain/myadmin-globalsign-ssl/src/globalsign_list.php');
-		$loader->add_requirement('get_available_globalsign', '/../vendor/detain/myadmin-globalsign-ssl/src/globalsign.inc.php');
-		$loader->add_requirement('activate_globalsign', '/../vendor/detain/myadmin-globalsign-ssl/src/globalsign.inc.php');
-		$loader->add_requirement('get_reusable_globalsign', '/../vendor/detain/myadmin-globalsign-ssl/src/globalsign.inc.php');
-		$loader->add_requirement('reusable_globalsign', '/../vendor/detain/myadmin-globalsign-ssl/src/reusable_globalsign.php');
-		$loader->add_requirement('class.GlobalSign', '/../vendor/detain/globalsign-ssl/src/GlobalSign.php');
-		$loader->add_requirement('vps_add_globalsign', '/vps/addons/vps_add_globalsign.php');
+		$loader->add_requirement('class.GlobalSign', '/../vendor/detain/myadmin-globalsign-ssl/src/GlobalSign.php');
 	}
 
 	/**
