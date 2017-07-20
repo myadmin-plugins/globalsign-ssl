@@ -29,7 +29,8 @@ class Plugin {
 	 */
 	public static function getHooks() {
 		return [
-			'ssl.settings' => [__CLASS__, 'getSettings']
+			'function.requirements' => [__CLASS__, 'getRequirements'],
+			self::$module.'.settings' => [__CLASS__, 'getSettings']
 		];
 	}
 
