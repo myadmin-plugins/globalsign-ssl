@@ -1,19 +1,19 @@
 <?php
 
-namespace Detain\MyAdminGlobalsign;
+namespace Detain\MyAdminGlobalSign;
 
-use Detain\Globalsign\Globalsign;
+//use Detain\MyAdminGlobalSign\GlobalSign;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * Class Plugin
  *
- * @package Detain\MyAdminGlobalsign
+ * @package Detain\MyAdminGlobalSign
  */
 class Plugin {
 
-	public static $name = 'Globalsign Ssl';
-	public static $description = 'Allows selling of Globalsign Server and VPS License Types.  More info at https://www.netenberg.com/globalsign.php';
+	public static $name = 'GlobalSign SSL';
+	public static $description = 'Allows selling of GlobalSign Server and VPS License Types.  More info at https://www.netenberg.com/globalsign.php';
 	public static $help = 'It provides more than one million end users the ability to quickly install dozens of the leading open source content management systems into their web space.  	Must have a pre-existing cPanel license with cPanelDirect to purchase a globalsign license. Allow 10 minutes for activation.';
 	public static $module = 'ssl';
 	public static $type = 'service';
@@ -39,7 +39,7 @@ class Plugin {
 	public static function getActivate(GenericEvent $event) {
 		$serviceClass = $event->getSubject();
 		if ($event['category'] == get_service_define('FANTASTICO')) {
-			myadmin_log(self::$module, 'info', 'Globalsign Activation', __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', 'GlobalSign Activation', __LINE__, __FILE__);
 			function_requirements('activate_globalsign');
 			activate_globalsign($serviceClass->getIp(), $event['field1']);
 			$event->stopPropagation();
@@ -52,9 +52,9 @@ class Plugin {
 	public static function getMenu(GenericEvent $event) {
 		$menu = $event->getSubject();
 		if ($GLOBALS['tf']->ima == 'admin') {
-			$menu->add_link(self::$module, 'choice=none.reusable_globalsign', 'icons/database_warning_48.png', 'ReUsable Globalsign Licenses');
-			$menu->add_link(self::$module, 'choice=none.globalsign_list', 'icons/database_warning_48.png', 'Globalsign Licenses Breakdown');
-			$menu->add_link(self::$module.'api', 'choice=none.globalsign_licenses_list', 'whm/createacct.gif', 'List all Globalsign Licenses');
+			$menu->add_link(self::$module, 'choice=none.reusable_globalsign', 'icons/database_warning_48.png', 'ReUsable GlobalSign Licenses');
+			$menu->add_link(self::$module, 'choice=none.globalsign_list', 'icons/database_warning_48.png', 'GlobalSign Licenses Breakdown');
+			$menu->add_link(self::$module.'api', 'choice=none.globalsign_licenses_list', 'whm/createacct.gif', 'List all GlobalSign Licenses');
 		}
 	}
 
@@ -73,7 +73,7 @@ class Plugin {
 		$loader->add_requirement('activate_globalsign', '/../vendor/detain/myadmin-globalsign-ssl/src/globalsign.inc.php');
 		$loader->add_requirement('get_reusable_globalsign', '/../vendor/detain/myadmin-globalsign-ssl/src/globalsign.inc.php');
 		$loader->add_requirement('reusable_globalsign', '/../vendor/detain/myadmin-globalsign-ssl/src/reusable_globalsign.php');
-		$loader->add_requirement('class.Globalsign', '/../vendor/detain/globalsign-ssl/src/Globalsign.php');
+		$loader->add_requirement('class.GlobalSign', '/../vendor/detain/globalsign-ssl/src/GlobalSign.php');
 		$loader->add_requirement('vps_add_globalsign', '/vps/addons/vps_add_globalsign.php');
 	}
 

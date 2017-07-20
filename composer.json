@@ -28,6 +28,6 @@
         "codacy/coverage": "dev-master"
     },
     "autoload": {
-        "psr-4": {"Detain\\MyAdminGlobalsign\\": "src/"}
+        "psr-4": {"Detain\\MyAdminGlobalSign\\": "src/"}
     }
 }
