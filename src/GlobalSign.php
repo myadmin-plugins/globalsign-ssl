@@ -1041,6 +1041,7 @@ class GlobalSign
 		}
 		if($order_id) {
 			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['RenewalTargetOrderID'] = $order_id;
+			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['RenewaltargetOrderID'] = $order_id;
 		}
 		$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['CSR'] = $csr;
 		$this->extra['GSValidateOrderParameters_params'] = $params;
@@ -1158,6 +1159,7 @@ class GlobalSign
 						'Licenses' => '1',
 						'ValidityPeriod' => ['Months' => '12'],
 						'CSR' => $csr,
+						'RenewaltargetOrderID' => $oldOrderID,
 						'RenewalTargetOrderID' => $oldOrderID
 					],
 					'OrderID' => $order_id,
@@ -1220,6 +1222,7 @@ class GlobalSign
 						'Licenses' => '1',
 						'ValidityPeriod' => ['Months' => '12'],
 						'CSR' => $csr,
+						'RenewaltargetOrderID' => $oldOrderId,
 						'RenewalTargetOrderID' => $oldOrderId
 						/*
 						* 'Options' => array(
@@ -1370,6 +1373,7 @@ class GlobalSign
 						'Licenses' => '1',
 						'ValidityPeriod' => ['Months' => '12'],
 						'CSR' => $csr,
+						'RenewaltargetOrderID'=>$oldOrderId,
 						'RenewalTargetOrderID'=>$oldOrderId
 					],
 					'OrganizationInfoEV' => [
