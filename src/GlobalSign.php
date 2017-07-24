@@ -974,7 +974,7 @@ class GlobalSign
 	public function GSResendEmail($orderID, $approverEmail) {
 		myadmin_log('ssl', 'info', "In function : GSResendEmail($orderID, $approverEmail)", __LINE__, __FILE__);
 		$params = ['ResendEmail' => ['Request' => ['OrderRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]], 'OrderID' => $orderID, 'ResendEmailType' =>$approverEmail]]];
-		myadmin_log('ssl', 'info', 'Params: ' .print_r($params), __LINE__, __FILE__);
+		//myadmin_log('ssl', 'info', 'Params: ' .print_r($params), __LINE__, __FILE__);
 		return $this->order_client->__soapCall('ResendEmail', $params);
 	}
 
