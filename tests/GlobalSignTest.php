@@ -18,7 +18,8 @@ class GlobalSignTest extends TestCase
 	 */
 	protected function setUp()
 	{
-		include_once __DIR__.'/../src/GlobalSign.php';
+		if (!class_exists('GlobalSign'))
+			require_once __DIR__.'/../src/GlobalSign.php';
 		if (file_exists(__DIR__.'/.env')) {
 			$dotenv = new Dotenv\Dotenv(__DIR__);
 			$dotenv->load();
