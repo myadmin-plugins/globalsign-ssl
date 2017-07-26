@@ -1,5 +1,6 @@
 <?php
 
+use Detain\MyAdminGlobalSign\GlobalSign;
 use PHPUnit\Framework\TestCase;
 
 /**
