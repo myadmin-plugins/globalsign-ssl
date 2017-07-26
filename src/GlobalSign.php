@@ -83,7 +83,7 @@ class GlobalSign
 	private $test_username = '';
 	private $test_password = '';
 
-	public $testing = false;
+	public $testing = FALSE;
 	public $connection_timeout = 1000;
 
 	public $functions_client;
@@ -104,12 +104,12 @@ class GlobalSign
 	 * @param bool $testing optional (defaults to false) testing
 	 * @return \GlobalSign
 	 */
-	public function __construct($username, $password, $testing = false) {
+	public function __construct($username, $password, $testing = FALSE) {
 		//myadmin_log('ssl', 'info', "__construct({$username}, {$password})", __LINE__, __FILE__);
 		$this->username = $username;
 		$this->password = $password;
 		$this->testing = $testing;
-		if ($this->testing == true) {
+		if ($this->testing == TRUE) {
 			$this->order_wsdl = $this->test_order_wsdl;
 			$this->query_wsdl = $this->test_query_wsdl;
 			$this->autocsr_wsdl = $this->test_autocsr_wsdl;
@@ -176,7 +176,7 @@ class GlobalSign
 	 * @param bool  $wildcard
 	 * @return array
 	 */
-	public function create_alphassl($fqdn, $csr, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = false) {
+	public function create_alphassl($fqdn, $csr, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = FALSE) {
 		$product = 'DV_LOW_SHA2';
 		$res = $this->GSValidateOrderParameters($product, $fqdn, $csr, $wildcard);
 		$this->extra = [];
@@ -223,7 +223,7 @@ class GlobalSign
 	 * @param bool  $wildcard
 	 * @return array|bool
 	 */
-	public function create_domainssl($fqdn, $csr, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = false) {
+	public function create_domainssl($fqdn, $csr, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = FALSE) {
 		$product = 'DV_SHA2';
 		$res = $this->GSValidateOrderParameters($product, $fqdn, $csr, $wildcard);
 		myadmin_log('ssl', 'info', "GSValidateOrderParameters($product, $fqdn, [CSR], $wildcard) returned: ".json_encode($res), __LINE__, __FILE__);
@@ -283,7 +283,7 @@ class GlobalSign
 	 * @param bool  $wildcard
 	 * @return bool
 	 */
-	public function create_domainssl_autocsr($fqdn, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = false) {
+	public function create_domainssl_autocsr($fqdn, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = FALSE) {
 		$res = $this->GetDVApproverList($fqdn);
 		if ($res->Response->QueryResponseHeader->SuccessCode != 0) {
 			echo "Error In order\n";
@@ -331,7 +331,7 @@ class GlobalSign
 	 * @param bool  $wildcard
 	 * @return array|bool
 	 */
-	public function create_organizationssl($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, $wildcard = false) {
+	public function create_organizationssl($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, $wildcard = FALSE) {
 		$res = $this->GSValidateOrderParameters('OV_SHA2', $fqdn, $csr, $wildcard);
 		myadmin_log('ssl', 'info', 'GSValidateOrderParameters returned '.str_replace("\n", '', var_export($res, TRUE)), __LINE__, __FILE__);
 		$this->extra = [];
@@ -533,7 +533,7 @@ class GlobalSign
 	 * @param bool   $wildcard
 	 * @return mixed
 	 */
-	private function GSValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = false) {
+	private function GSValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE) {
 		// 1.1 Extracting Common Name from the CSR and carrying out a Phishing DB Check
 		$OrderType = 'new';
 		$params = [
@@ -550,7 +550,7 @@ class GlobalSign
 				]
 			]
 		];
-		if ($wildcard === true) {
+		if ($wildcard === TRUE) {
 			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		}
 		if ($csr != '') {
@@ -577,7 +577,7 @@ class GlobalSign
 	 * @param bool  $wildcard
 	 * @return mixed
 	 */
-	private function GSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = false) {
+	private function GSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = FALSE) {
 
 		/*
 		* $Options = array(
@@ -630,7 +630,7 @@ class GlobalSign
 			]
 		];
 
-		if ($wildcard === true) {
+		if ($wildcard === TRUE) {
 			$params['GSDVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		}
 		$this->extra['GSDVOrder_params'] = $params;
@@ -661,7 +661,7 @@ class GlobalSign
 	 * @param bool  $wildcard
 	 * @return mixed
 	 */
-	private function GSOVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = false) {
+	private function GSOVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE) {
 		$params = [
 			'GSOVOrder' => [
 				'Request' => [
@@ -722,7 +722,7 @@ class GlobalSign
 			]
 		];
 
-		if ($wildcard === true) {
+		if ($wildcard === TRUE) {
 			$params['GSOVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		}
 		$this->extra['GSOVOrder_params'] = $params;
@@ -746,7 +746,7 @@ class GlobalSign
 	 * @param bool  $wildcard
 	 * @return mixed
 	 */
-	private function GSOVOrderWithoutCSR($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = false) {
+	private function GSOVOrderWithoutCSR($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE) {
 		$params = [
 			'GSOVOrderWithoutCSR' => [
 				'Request' => [
@@ -808,7 +808,7 @@ class GlobalSign
 				]
 			]
 		];
-		if ($wildcard === true) {
+		if ($wildcard === TRUE) {
 			$params['GSOVOrderWithoutCSR']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		}
 		$this->extra['GSOVOrderWithoutCSR_params'] = $params;
@@ -1003,7 +1003,7 @@ class GlobalSign
 	 * @param bool   $order_id
 	 * @return mixed
 	 */
-	private function renewGSValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = false, $order_id = false) {
+	private function renewGSValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE, $order_id = FALSE) {
 		// 1.1 Extracting Common Name from the CSR and carrying out a Phishing DB Check
 		$params = [
 			'GSValidateOrderParameters' => [
@@ -1019,7 +1019,7 @@ class GlobalSign
 				]
 			]
 		];
-		if ($wildcard === true) {
+		if ($wildcard === TRUE) {
 			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		}
 		if ($csr != '') {
@@ -1052,7 +1052,7 @@ class GlobalSign
 	 * @param $oldOrderId
 	 * @return array
 	 */
-	public function renewAlphaDomain($fqdn, $csr, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = false, $SSLType, $oldOrderId) {
+	public function renewAlphaDomain($fqdn, $csr, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = FALSE, $SSLType, $oldOrderId) {
 		myadmin_log('ssl', 'info', "renew AlphaDomain called - renewAlphaDomain($fqdn, $csr, $firstname, $lastname, $phone, $email, $approver_email, $wildcard, $SSLType, $oldOrderId)", __LINE__, __FILE__);
 		if ($SSLType == 1) {
 			$product = 'DV_LOW_SHA2';
@@ -1129,7 +1129,7 @@ class GlobalSign
 	 * @param mixed $oldOrderID
 	 * @return mixed
 	 */
-	private function renewGSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = false, $oldOrderID) {
+	private function renewGSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = FALSE, $oldOrderID) {
 		myadmin_log('ssl', 'info', "Called renewGSDVOrder - renewGSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderID)", __LINE__, __FILE__);
 		$params = [
 			'GSDVOrder' => [
@@ -1160,7 +1160,7 @@ class GlobalSign
 				]
 			]
 		];
-		if ($wildcard === true) {
+		if ($wildcard === TRUE) {
 			$params['GSDVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		}
 		$this->extra['GSDVOrder_params'] = $params;
@@ -1193,7 +1193,7 @@ class GlobalSign
 	 * @param string $oldOrderId
 	 * @return mixed
 	 */
-	private function renewGSOVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = false, $oldOrderId) {
+	private function renewGSOVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE, $oldOrderId) {
 		$params = [
 			'GSOVOrder' => [
 				'Request' => [
@@ -1256,7 +1256,7 @@ class GlobalSign
 			]
 		];
 
-		if ($wildcard === true) {
+		if ($wildcard === TRUE) {
 			$params['GSOVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		}
 		$this->extra['GSOVOrder_params'] = $params;
@@ -1283,7 +1283,7 @@ class GlobalSign
 	 * @param string $oldOrderId
 	 * @return array|bool
 	 */
-	public function renewOrganizationSSL($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, $wildcard = false, $oldOrderId) {
+	public function renewOrganizationSSL($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, $wildcard = FALSE, $oldOrderId) {
 		$res = $this->renewGSValidateOrderParameters('OV_SHA2', $fqdn, $csr, $wildcard);
 		$this->extra = [];
 		$this->extra['laststep'] = 'GSValidateOrderParameters';
@@ -1509,7 +1509,7 @@ class GlobalSign
 	 * @param bool $wildcard
 	 * @return mixed
 	 */
-	private function GSDVOrderWithoutCSR($fqdn, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $wildcard = false) {
+	private function GSDVOrderWithoutCSR($fqdn, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $wildcard = FALSE) {
 		$params = [
 			'GSDVOrderWithoutCSR' => [
 				'Request' => [
@@ -1558,7 +1558,7 @@ class GlobalSign
 				]
 			]
 		];
-		if ($wildcard === true) {
+		if ($wildcard === TRUE) {
 			$params['GSDVOrderWithoutCSR']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		}
 		$this->extra['GSDVOrderWithoutCSR_params'] = $params;
