@@ -51,15 +51,15 @@ class Plugin {
 			myadmin_log('ssl', 'info', 'Got CSR Size: '.mb_strlen($extra['csr']), __LINE__, __FILE__);
 			myadmin_log('ssl', 'info', "starting SSL Hostname {$serviceClass->getHostname()} Type " . $event['field1'], __LINE__, __FILE__);
 			if ($event['field2'] == 'wildcard')
-				$wildcard = true;
+				$wildcard = TRUE;
 			else
-				$wildcard = false;
+				$wildcard = FALSE;
 			switch ($event['field1']) {
 				case 'DV_LOW':
 					//myadmin_log('ssl', 'info', "Calling new GlobalSign(" . GLOBALSIGN_USERNAME . " , " . GLOBALSIGN_PASSWORD . ");", __LINE__, __FILE__);
 					$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
 					$ret = $GS->create_alphassl($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $extra['approver_email'], $wildcard);
-					if ($ret === false) {
+					if ($ret === FALSE) {
 						dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
 					} else {
 						foreach ($ret as $key => $value)
@@ -72,7 +72,7 @@ class Plugin {
 				case 'DV_SKIP':
 					$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
 					$ret = $GS->create_domainssl($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $extra['approver_email'], $wildcard);
-					if ($ret === false) {
+					if ($ret === FALSE) {
 						dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
 					} else {
 						foreach ($ret as $key => $value)
@@ -99,7 +99,7 @@ class Plugin {
 						$extra['business_category'],
 						$extra['agency'],
 						$extra['approver_email']);
-					if ($ret === false) {
+					if ($ret === FALSE) {
 						dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
 					} else {
 						foreach ($ret as $key => $value)
@@ -125,7 +125,7 @@ class Plugin {
 						$serviceClass->getZip(),
 						$extra['approver_email'],
 						$wildcard);
-					if ($ret === false) {
+					if ($ret === FALSE) {
 						dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
 					} else {
 						foreach ($ret as $key => $value)
@@ -144,7 +144,7 @@ class Plugin {
 				$subject = 'Error Registering SSL Certificate '.$serviceClass->getHostname();
 				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
 				myadmin_log('ssl', 'info', $subject, __LINE__, __FILE__);
-				$event['success'] = false;
+				$event['success'] = FALSE;
 			}
 			$event->stopPropagation();
 		}

@@ -60,8 +60,7 @@
  *
  * @access public
  */
-class GlobalSign
-{
+class GlobalSign {
 	public $functions_wsdl = 'https://system.globalsign.com/kb/ws/v1/ServerSSLService?wsdl';
 	public $order_wsdl = 'https://system.globalsign.com/wsdls/gasorder.wsdl';
 	public $order_wsdl_new = 'https://system.globalsign.com/kb/ws/v1/GASService?wsdl';
@@ -233,7 +232,7 @@ class GlobalSign
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
 			myadmin_log('ssl', 'info', 'create_domainssl returned: '.json_encode($res), __LINE__, __FILE__);
-			return false;
+			return FALSE;
 		}
 		$this->__construct($this->username, $this->password);
 		$res = $this->GetDVApproverList($fqdn);
@@ -243,7 +242,7 @@ class GlobalSign
 		if ($res->Response->QueryResponseHeader->SuccessCode != 0) {
 			dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
 			myadmin_log('ssl', 'info', 'create_domainssl returned: '.json_encode($res), __LINE__, __FILE__);
-			return false;
+			return FALSE;
 		}
 		$order_id = $res->Response->OrderID;
 		$this->extra['order_id'] = $order_id;
@@ -264,7 +263,7 @@ class GlobalSign
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
 			}
 			myadmin_log('ssl', 'info', 'create_domainssl returned: '.json_encode($res), __LINE__, __FILE__);
-			return false;
+			return FALSE;
 		} else {
 			$this->extra['finished'] = 1;
 			dialog('Order Completed', 'Your SSL Certificate order has been successfully processed.');
@@ -288,7 +287,7 @@ class GlobalSign
 		if ($res->Response->QueryResponseHeader->SuccessCode != 0) {
 			echo "Error In order\n";
 			print_r($res->Response->OrderResponseHeader->Errors);
-			return false;
+			return FALSE;
 		}
 		$order_id = $res->Response->OrderID;
 		if ($approver_email == '') {
@@ -306,7 +305,7 @@ class GlobalSign
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
 			}
 			myadmin_log('ssl', 'info', 'create_domainssl_autocsrf returned: '.json_encode($res), __LINE__, __FILE__);
-			return false;
+			return FALSE;
 		} else {
 			echo 'Your Order Has Been Completed';
 		}
@@ -342,7 +341,7 @@ class GlobalSign
 			print_r($res->Response->OrderResponseHeader->Errors);
 			myadmin_log('ssl', 'info', 'SSL Renew Order Error in validation - create_organizationssl', __LINE__, __FILE__);
 			myadmin_log('ssl', 'info', json_encode($res), __LINE__, __FILE__);
-			return false;
+			return FALSE;
 		}
 		$order_id = $res->Response->OrderID;
 		$this->__construct($this->username, $this->password);
@@ -358,7 +357,7 @@ class GlobalSign
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
 			}
 			myadmin_log('ssl', 'info', 'create_organizationssl returned: '.json_encode($res), __LINE__, __FILE__);
-			return false;
+			return FALSE;
 		} else {
 			$this->extra['finished'] = 1;
 			echo 'Your Order Has Been Completed';
@@ -397,7 +396,7 @@ class GlobalSign
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
 			}
 			myadmin_log('ssl', 'info', 'create_organizationalssl_autocsr returned: '.json_encode($res), __LINE__, __FILE__);
-			return false;
+			return FALSE;
 		} else {
 			echo 'Your Order Has Been Completed';
 		}
@@ -439,7 +438,7 @@ class GlobalSign
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
 			}
 			myadmin_log('ssl', 'info', 'create_extendedssl returned: '.json_encode($res), __LINE__, __FILE__);
-			return false;
+			return FALSE;
 		}
 		$this->__construct($this->username, $this->password);
 
@@ -456,7 +455,7 @@ class GlobalSign
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
 			}
 			myadmin_log('ssl', 'info', 'create_extendedssl returned: '.json_encode($res), __LINE__, __FILE__);
-			return false;
+			return FALSE;
 		} else {
 			$this->extra['finished'] = 1;
 			echo 'Your Order Has Been Completed';
@@ -527,7 +526,7 @@ class GlobalSign
 	/**
 	 * GlobalSign::GSValidateOrderParameters()
 	 *
-	 * @param mixed  $product
+	 * @param string  $product
 	 * @param mixed  $fqdn
 	 * @param string $csr
 	 * @param bool   $wildcard
@@ -565,7 +564,7 @@ class GlobalSign
 	/**
 	 * GlobalSign::GSDVOrder()
 	 *
-	 * @param mixed $product
+	 * @param string $product
 	 * @param mixed $order_id
 	 * @param mixed $approver_email
 	 * @param mixed $fqdn
@@ -996,7 +995,7 @@ class GlobalSign
 	/**
 	 * GlobalSign::renewGSValidateOrderParameters()
 	 *
-	 * @param mixed  $product
+	 * @param string  $product
 	 * @param mixed  $fqdn
 	 * @param string $csr
 	 * @param bool   $wildcard
@@ -1116,7 +1115,7 @@ class GlobalSign
 	/**
 	 * GlobalSign::renewGSDVOrder()
 	 *
-	 * @param mixed $product
+	 * @param string $product
 	 * @param mixed $order_id
 	 * @param mixed $approver_email
 	 * @param mixed $fqdn
@@ -1297,7 +1296,7 @@ class GlobalSign
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 			}
 			myadmin_log('ssl', 'info', 'renewOrganizationSSL returned: '.json_encode($res), __LINE__, __FILE__);
-			return false;
+			return FALSE;
 		}
 		$order_id = $res->Response->OrderID;
 		$this->__construct($this->username, $this->password);
@@ -1313,7 +1312,7 @@ class GlobalSign
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 			}
 			myadmin_log('ssl', 'info', 'renewOrganizationSSL returned: '.json_encode($res), __LINE__, __FILE__);
-			return false;
+			return FALSE;
 		} else {
 			$this->extra['finished'] = 1;
 			echo 'Your Order Has Been Completed';
@@ -1421,7 +1420,7 @@ class GlobalSign
 		$this->extra['GSEVOrder_params'] = $params;
 		$res = $this->order_client->__soapCall('GSEVOrder', $params);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
-			return false;
+			return FALSE;
 		} else {
 			$this->extra['finished'] = 1;
 			$this->extra['GSEVOrder'] = obj2array($res);
@@ -1458,7 +1457,7 @@ class GlobalSign
 			echo "Error In order\n";
 			myadmin_log('ssl', 'info', 'SSL Renew Order Error in validation - renewExtendedSSL', __LINE__, __FILE__);
 			myadmin_log('ssl', 'info', json_encode($res), __LINE__, __FILE__);
-			return false;
+			return FALSE;
 		}
 		$this->__construct($this->username, $this->password);
 
@@ -1475,7 +1474,7 @@ class GlobalSign
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team.');
 			}
 			myadmin_log('ssl', 'info', 'renewExtendedSSL returned: '.json_encode($res), __LINE__, __FILE__);
-			return false;
+			return FALSE;
 		} else {
 			$this->extra['finished'] = 1;
 			echo 'Your Order Has Been Completed';
