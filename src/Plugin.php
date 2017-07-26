@@ -30,6 +30,7 @@ class Plugin {
 	public static function getHooks() {
 		return [
 			self::$module.'.activate' => [__CLASS__, 'getActivate'],
+			self::$module.'.reactivate' => [__CLASS__, 'getActivate'],
 			self::$module.'.settings' => [__CLASS__, 'getSettings'],
 			'function.requirements' => [__CLASS__, 'getRequirements']
 		];
