@@ -98,12 +98,12 @@ class GlobalSign
 	public $extra;
 
 	/**
-	* GlobalSign::GlobalSign()
-	* @param string $username the API username
-	* @param string $password the API password
-	* @param bool $testing optional (defaults to false) testing
-	* @return \GlobalSign
-	*/
+	 * GlobalSign::GlobalSign()
+	 * @param string $username the API username
+	 * @param string $password the API password
+	 * @param bool $testing optional (defaults to false) testing
+	 * @return \GlobalSign
+	 */
 	public function __construct($username, $password, $testing = false) {
 		//myadmin_log('ssl', 'info', "__construct({$username}, {$password})", __LINE__, __FILE__);
 		$this->username = $username;
@@ -156,26 +156,26 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::list_certs()
-	* @return mixed
-	*/
+	 * GlobalSign::list_certs()
+	 * @return mixed
+	 */
 	public function list_certs() {
 		$res = $this->GetCertificateOrders();
 		return $res;
 	}
 
 	/**
-	* GlobalSign::create_alphassl()
-	* @param mixed $fqdn
-	* @param mixed $csr
-	* @param mixed $firstname
-	* @param mixed $lastname
-	* @param mixed $phone
-	* @param mixed $email
-	* @param mixed $approver_email
-	* @param bool  $wildcard
-	* @return array
-	*/
+	 * GlobalSign::create_alphassl()
+	 * @param mixed $fqdn
+	 * @param mixed $csr
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param mixed $approver_email
+	 * @param bool  $wildcard
+	 * @return array
+	 */
 	public function create_alphassl($fqdn, $csr, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = false) {
 		$product = 'DV_LOW_SHA2';
 		$res = $this->GSValidateOrderParameters($product, $fqdn, $csr, $wildcard);
@@ -212,17 +212,17 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::create_domainssl()
-	* @param mixed $fqdn
-	* @param mixed $csr
-	* @param mixed $firstname
-	* @param mixed $lastname
-	* @param mixed $phone
-	* @param mixed $email
-	* @param mixed $approver_email
-	* @param bool  $wildcard
-	* @return array|bool
-	*/
+	 * GlobalSign::create_domainssl()
+	 * @param mixed $fqdn
+	 * @param mixed $csr
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param mixed $approver_email
+	 * @param bool  $wildcard
+	 * @return array|bool
+	 */
 	public function create_domainssl($fqdn, $csr, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = false) {
 		$product = 'DV_SHA2';
 		$res = $this->GSValidateOrderParameters($product, $fqdn, $csr, $wildcard);
@@ -273,16 +273,16 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::create_domainssl_autocsr()
-	* @param mixed $fqdn
-	* @param mixed $firstname
-	* @param mixed $lastname
-	* @param mixed $phone
-	* @param mixed $email
-	* @param mixed $approver_email
-	* @param bool  $wildcard
-	* @return bool
-	*/
+	 * GlobalSign::create_domainssl_autocsr()
+	 * @param mixed $fqdn
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param mixed $approver_email
+	 * @param bool  $wildcard
+	 * @return bool
+	 */
 	public function create_domainssl_autocsr($fqdn, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = false) {
 		$res = $this->GetDVApproverList($fqdn);
 		if ($res->Response->QueryResponseHeader->SuccessCode != 0) {
@@ -314,23 +314,23 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::create_organizationssl()
-	*
-	* @param mixed $fqdn
-	* @param mixed $csr
-	* @param mixed $firstname
-	* @param mixed $lastname
-	* @param mixed $phone
-	* @param mixed $email
-	* @param mixed $company
-	* @param mixed $address
-	* @param mixed $city
-	* @param mixed $state
-	* @param mixed $zip
-	* @param mixed $approver_email
-	* @param bool  $wildcard
-	* @return array|bool
-	*/
+	 * GlobalSign::create_organizationssl()
+	 *
+	 * @param mixed $fqdn
+	 * @param mixed $csr
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param mixed $company
+	 * @param mixed $address
+	 * @param mixed $city
+	 * @param mixed $state
+	 * @param mixed $zip
+	 * @param mixed $approver_email
+	 * @param bool  $wildcard
+	 * @return array|bool
+	 */
 	public function create_organizationssl($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, $wildcard = false) {
 		$res = $this->GSValidateOrderParameters('OV_SHA2', $fqdn, $csr, $wildcard);
 		myadmin_log('ssl', 'info', 'GSValidateOrderParameters returned '.str_replace("\n", '', var_export($res, TRUE)), __LINE__, __FILE__);
@@ -370,22 +370,22 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::create_organizationssl_autocsr()
-	*
-	* @param mixed $fqdn
-	* @param mixed $firstname
-	* @param mixed $lastname
-	* @param mixed $phone
-	* @param mixed $email
-	* @param mixed $company
-	* @param mixed $address
-	* @param mixed $city
-	* @param mixed $state
-	* @param mixed $zip
-	* @param mixed $approver_email
-	* @param       $wildcard
-	* @return bool
-	*/
+	 * GlobalSign::create_organizationssl_autocsr()
+	 *
+	 * @param mixed $fqdn
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param mixed $company
+	 * @param mixed $address
+	 * @param mixed $city
+	 * @param mixed $state
+	 * @param mixed $zip
+	 * @param mixed $approver_email
+	 * @param       $wildcard
+	 * @return bool
+	 */
 	public function create_organizationssl_autocsr($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, $wildcard) {
 		$res = $this->GSOVOrderWithoutCSR($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
@@ -406,24 +406,24 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::create_extendedssl()
-	*
-	* @param mixed $fqdn
-	* @param mixed $csr
-	* @param mixed $firstname
-	* @param mixed $lastname
-	* @param mixed $phone
-	* @param mixed $email
-	* @param mixed $company
-	* @param mixed $address
-	* @param mixed $city
-	* @param mixed $state
-	* @param mixed $zip
-	* @param mixed $business_category
-	* @param mixed $agency
-	* @param mixed $approver_email
-	* @return array|bool
-	*/
+	 * GlobalSign::create_extendedssl()
+	 *
+	 * @param mixed $fqdn
+	 * @param mixed $csr
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param mixed $company
+	 * @param mixed $address
+	 * @param mixed $city
+	 * @param mixed $state
+	 * @param mixed $zip
+	 * @param mixed $business_category
+	 * @param mixed $agency
+	 * @param mixed $approver_email
+	 * @return array|bool
+	 */
 	public function create_extendedssl($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency, $approver_email) {
 		$res = $this->GSValidateOrderParameters('EV_SHA2', $fqdn, $csr);
 
@@ -466,11 +466,11 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::GetOrderByOrderID()
-	*
-	* @param mixed $order_id
-	* @return array
-	*/
+	 * GlobalSign::GetOrderByOrderID()
+	 *
+	 * @param mixed $order_id
+	 * @return array
+	 */
 	public function GetOrderByOrderID($order_id) {
 		$params = [
 			'GetOrderByOrderID' => [
@@ -491,12 +491,12 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::GetOrderByDataRange()
-	*
-	* @param mixed $fromdate
-	* @param mixed $todate
-	* @return mixed
-	*/
+	 * GlobalSign::GetOrderByDataRange()
+	 *
+	 * @param mixed $fromdate
+	 * @param mixed $todate
+	 * @return mixed
+	 */
 	public function GetOrderByDataRange($fromdate, $todate) {
 		$params = [
 			'GetOrderByDataRange' => [
@@ -512,12 +512,12 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::GetCertificateOrders()
-	*
-	* @param mixed $fromdate
-	* @param mixed $todate
-	* @return mixed
-	*/
+	 * GlobalSign::GetCertificateOrders()
+	 *
+	 * @param mixed $fromdate
+	 * @param mixed $todate
+	 * @return mixed
+	 */
 	private function GetCertificateOrders($fromdate, $todate) {
 		$params = ['GetCertificateOrders' => ['Request' => ['QueryRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]]]]];
 		$this->extra['GetCertificateOrders'] = $params;
@@ -525,14 +525,14 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::GSValidateOrderParameters()
-	*
-	* @param mixed  $product
-	* @param mixed  $fqdn
-	* @param string $csr
-	* @param bool   $wildcard
-	* @return mixed
-	*/
+	 * GlobalSign::GSValidateOrderParameters()
+	 *
+	 * @param mixed  $product
+	 * @param mixed  $fqdn
+	 * @param string $csr
+	 * @param bool   $wildcard
+	 * @return mixed
+	 */
 	private function GSValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = false) {
 		// 1.1 Extracting Common Name from the CSR and carrying out a Phishing DB Check
 		$OrderType = 'new';
@@ -563,20 +563,20 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::GSDVOrder()
-	*
-	* @param mixed $product
-	* @param mixed $order_id
-	* @param mixed $approver_email
-	* @param mixed $fqdn
-	* @param mixed $csr
-	* @param mixed $firstname
-	* @param mixed $lastname
-	* @param mixed $phone
-	* @param mixed $email
-	* @param bool  $wildcard
-	* @return mixed
-	*/
+	 * GlobalSign::GSDVOrder()
+	 *
+	 * @param mixed $product
+	 * @param mixed $order_id
+	 * @param mixed $approver_email
+	 * @param mixed $fqdn
+	 * @param mixed $csr
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param bool  $wildcard
+	 * @return mixed
+	 */
 	private function GSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = false) {
 
 		/*
@@ -643,24 +643,24 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::GSOVOrder()
-	*
-	* @param mixed $fqdn
-	* @param mixed $csr
-	* @param mixed $order_id
-	* @param mixed $approver_email
-	* @param mixed $firstname
-	* @param mixed $lastname
-	* @param mixed $phone
-	* @param mixed $email
-	* @param mixed $company
-	* @param mixed $address
-	* @param mixed $city
-	* @param mixed $state
-	* @param mixed $zip
-	* @param bool  $wildcard
-	* @return mixed
-	*/
+	 * GlobalSign::GSOVOrder()
+	 *
+	 * @param mixed $fqdn
+	 * @param mixed $csr
+	 * @param mixed $order_id
+	 * @param mixed $approver_email
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param mixed $company
+	 * @param mixed $address
+	 * @param mixed $city
+	 * @param mixed $state
+	 * @param mixed $zip
+	 * @param bool  $wildcard
+	 * @return mixed
+	 */
 	private function GSOVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = false) {
 		$params = [
 			'GSOVOrder' => [
@@ -731,21 +731,21 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::GSOVOrderWithoutCSR()
-	*
-	* @param mixed $fqdn
-	* @param mixed $firstname
-	* @param mixed $lastname
-	* @param mixed $phone
-	* @param mixed $email
-	* @param mixed $company
-	* @param mixed $address
-	* @param mixed $city
-	* @param mixed $state
-	* @param mixed $zip
-	* @param bool  $wildcard
-	* @return mixed
-	*/
+	 * GlobalSign::GSOVOrderWithoutCSR()
+	 *
+	 * @param mixed $fqdn
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param mixed $company
+	 * @param mixed $address
+	 * @param mixed $city
+	 * @param mixed $state
+	 * @param mixed $zip
+	 * @param bool  $wildcard
+	 * @return mixed
+	 */
 	private function GSOVOrderWithoutCSR($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = false) {
 		$params = [
 			'GSOVOrderWithoutCSR' => [
@@ -817,23 +817,23 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::GSEVOrder()
-	*
-	* @param mixed $fqdn
-	* @param mixed $csr
-	* @param mixed $firstname
-	* @param mixed $lastname
-	* @param mixed $phone
-	* @param mixed $email
-	* @param mixed $company
-	* @param mixed $address
-	* @param mixed $city
-	* @param mixed $state
-	* @param mixed $zip
-	* @param mixed $business_category PO, GE, or BE for Private Organization, Government Entity, or Business Entity
-	* @param mixed $agency
-	* @return mixed
-	*/
+	 * GlobalSign::GSEVOrder()
+	 *
+	 * @param mixed $fqdn
+	 * @param mixed $csr
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param mixed $company
+	 * @param mixed $address
+	 * @param mixed $city
+	 * @param mixed $state
+	 * @param mixed $zip
+	 * @param mixed $business_category PO, GE, or BE for Private Organization, Government Entity, or Business Entity
+	 * @param mixed $agency
+	 * @return mixed
+	 */
 	private function GSEVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency) {
 
 		$params = [
@@ -937,11 +937,11 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::GetDVApproverList()
-	*
-	* @param mixed $fqdn
-	* @return mixed
-	*/
+	 * GlobalSign::GetDVApproverList()
+	 *
+	 * @param mixed $fqdn
+	 * @return mixed
+	 */
 	public function GetDVApproverList($fqdn) {
 		// 1.1 Receive List of Approver email addresses
 		$params = ['GetDVApproverList' => ['Request' => ['QueryRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]], 'FQDN' => $fqdn]]];
@@ -1114,21 +1114,21 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::renewGSDVOrder()
-	*
-	* @param mixed $product
-	* @param mixed $order_id
-	* @param mixed $approver_email
-	* @param mixed $fqdn
-	* @param mixed $csr
-	* @param mixed $firstname
-	* @param mixed $lastname
-	* @param mixed $phone
-	* @param mixed $email
-	* @param bool  $wildcard
-	* @param mixed $oldOrderID
-	* @return mixed
-	*/
+	 * GlobalSign::renewGSDVOrder()
+	 *
+	 * @param mixed $product
+	 * @param mixed $order_id
+	 * @param mixed $approver_email
+	 * @param mixed $fqdn
+	 * @param mixed $csr
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param bool  $wildcard
+	 * @param mixed $oldOrderID
+	 * @return mixed
+	 */
 	private function renewGSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = false, $oldOrderID) {
 		myadmin_log('ssl', 'info', "Called renewGSDVOrder - renewGSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderID)", __LINE__, __FILE__);
 		$params = [
@@ -1174,25 +1174,25 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::renewGSOVOrder()
-	*
-	* @param mixed $fqdn
-	* @param mixed $csr
-	* @param mixed $order_id
-	* @param mixed $approver_email
-	* @param mixed $firstname
-	* @param mixed $lastname
-	* @param mixed $phone
-	* @param mixed $email
-	* @param mixed $company
-	* @param mixed $address
-	* @param mixed $city
-	* @param mixed $state
-	* @param mixed $zip
-	* @param bool  $wildcard
-	* @param string $oldOrderId
-	* @return mixed
-	*/
+	 * GlobalSign::renewGSOVOrder()
+	 *
+	 * @param mixed $fqdn
+	 * @param mixed $csr
+	 * @param mixed $order_id
+	 * @param mixed $approver_email
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param mixed $company
+	 * @param mixed $address
+	 * @param mixed $city
+	 * @param mixed $state
+	 * @param mixed $zip
+	 * @param bool  $wildcard
+	 * @param string $oldOrderId
+	 * @return mixed
+	 */
 	private function renewGSOVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = false, $oldOrderId) {
 		$params = [
 			'GSOVOrder' => [
@@ -1265,24 +1265,24 @@ class GlobalSign
 	}
 
 	/**
-	* GlobalSign::renewOrganizationSSL()
-	*
-	* @param mixed $fqdn
-	* @param mixed $csr
-	* @param mixed $firstname
-	* @param mixed $lastname
-	* @param mixed $phone
-	* @param mixed $email
-	* @param mixed $company
-	* @param mixed $address
-	* @param mixed $city
-	* @param mixed $state
-	* @param mixed $zip
-	* @param mixed $approver_email
-	* @param bool  $wildcard
-	* @param string $oldOrderId
-	* @return array|bool
-	*/
+	 * GlobalSign::renewOrganizationSSL()
+	 *
+	 * @param mixed $fqdn
+	 * @param mixed $csr
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param mixed $company
+	 * @param mixed $address
+	 * @param mixed $city
+	 * @param mixed $state
+	 * @param mixed $zip
+	 * @param mixed $approver_email
+	 * @param bool  $wildcard
+	 * @param string $oldOrderId
+	 * @return array|bool
+	 */
 	public function renewOrganizationSSL($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, $wildcard = false, $oldOrderId) {
 		$res = $this->renewGSValidateOrderParameters('OV_SHA2', $fqdn, $csr, $wildcard);
 		$this->extra = [];
