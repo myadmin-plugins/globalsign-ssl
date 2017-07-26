@@ -18,7 +18,11 @@ class GlobalSignTest extends TestCase
 	 */
 	protected function setUp()
 	{
-		$this->object = new GlobalSign;
+		if (file_exists(__DIR__.'/.env')) {
+			$dotenv = new Dotenv\Dotenv(__DIR__);
+			$dotenv->load();
+		}
+		$this->object = new GlobalSign(getenv('GLOBALSIGN_USERNAME'), getenv('GLOBALSIGN_PASSWORD'));
 	}
 
 	/**
