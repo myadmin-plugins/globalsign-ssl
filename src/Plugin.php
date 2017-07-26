@@ -49,7 +49,7 @@ class Plugin {
 			if (mb_strlen($extra['csr']) == 0)
 				$extra = ensure_csr($serviceInfo[$prefix.'_id']);
 			myadmin_log('ssl', 'info', 'Got CSR Size: '.mb_strlen($extra['csr']), __LINE__, __FILE__);
-			myadmin_log('ssl', 'info', "starting SSL Hostname {$serviceClass->getHostname()} Type " . $event['field1'], __LINE__, __FILE__);
+			myadmin_log('ssl', 'info', "starting SSL Hostname {$serviceClass->getHostname()} Type ".$event['field1'], __LINE__, __FILE__);
 			if ($event['field2'] == 'wildcard')
 				$wildcard = TRUE;
 			else
@@ -64,8 +64,8 @@ class Plugin {
 					} else {
 						foreach ($ret as $key => $value)
 							$extra[$key] = $value;
-						$order_id  = $extra['order_id'];
-						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='" . $db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra)))) . "' where ssl_id='" . $serviceClass->getId() . "'";
+						$order_id = $extra['order_id'];
+						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
 						$db2->query($query, __LINE__, __FILE__);
 					}
 					break;
@@ -77,8 +77,8 @@ class Plugin {
 					} else {
 						foreach ($ret as $key => $value)
 							$extra[$key] = $value;
-						$order_id  = $extra['order_id'];
-						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='" . $db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra)))) . "' where ssl_id='" . $serviceClass->getId() . "'";
+						$order_id = $extra['order_id'];
+						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
 						$db2->query($query, __LINE__, __FILE__);
 					}
 					break;
@@ -104,8 +104,8 @@ class Plugin {
 					} else {
 						foreach ($ret as $key => $value)
 							$extra[$key] = $value;
-						$order_id  = $extra['order_id'];
-						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='" . $db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra)))) . "' where ssl_id='" . $serviceClass->getId() . "'";
+						$order_id = $extra['order_id'];
+						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
 						$db2->query($query, __LINE__, __FILE__);
 					}
 					break;
@@ -130,8 +130,8 @@ class Plugin {
 					} else {
 						foreach ($ret as $key => $value)
 							$extra[$key] = $value;
-						$order_id  = $extra['order_id'];
-						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='" . $db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra)))) . "' where ssl_id='" . $serviceClass->getId() . "'";
+						$order_id = $extra['order_id'];
+						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
 						$db2->query($query, __LINE__, __FILE__);
 					}
 					break;
