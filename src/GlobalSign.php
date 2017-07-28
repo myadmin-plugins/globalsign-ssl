@@ -8,6 +8,8 @@
  * @category SSL
  */
 
+namespace Detain\MyAdminGlobalSign;
+
 /**
  * GlobalSign
  * The following URL’s should be used to access the GlobalSign live API:
@@ -113,21 +115,21 @@ class GlobalSign {
 			$this->query_wsdl = $this->test_query_wsdl;
 			$this->autocsr_wsdl = $this->test_autocsr_wsdl;
 		}
-		$this->functions_client = new SoapClient($this->functions_wsdl, [
+		$this->functions_client = new \SoapClient($this->functions_wsdl, [
 			'user_agent' => $this->user_agent,
 			'connection_timeout' => $this->connection_timeout,
 			'trace' => $this->trace_connections,
 			'cache_wsdl' => WSDL_CACHE_BOTH
 		]
 		);
-		$this->order_client = new SoapClient($this->order_wsdl, [
+		$this->order_client = new \SoapClient($this->order_wsdl, [
 			'user_agent' => $this->user_agent,
 			'connection_timeout' => $this->connection_timeout,
 			'trace' => $this->trace_connections,
 			'cache_wsdl' => WSDL_CACHE_BOTH
 		]
 		);
-		$this->order_client_new = new SoapClient($this->order_wsdl_new, [
+		$this->order_client_new = new \SoapClient($this->order_wsdl_new, [
 			'user_agent' => $this->user_agent,
 			'connection_timeout' => $this->connection_timeout,
 			'trace' => $this->trace_connections,
@@ -135,14 +137,14 @@ class GlobalSign {
 		]
 		);
 
-		$this->query_client = new SoapClient($this->query_wsdl, [
+		$this->query_client = new \SoapClient($this->query_wsdl, [
 			'user_agent' => $this->user_agent,
 			'connection_timeout' => $this->connection_timeout,
 			'trace' => $this->trace_connections,
 			'cache_wsdl' => WSDL_CACHE_BOTH
 		]
 		);
-		$this->autocsr_client = new SoapClient($this->autocsr_wsdl, [
+		$this->autocsr_client = new \SoapClient($this->autocsr_wsdl, [
 			'user_agent' => $this->user_agent,
 			'connection_timeout' => $this->connection_timeout,
 			'trace' => $this->trace_connections,

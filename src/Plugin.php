@@ -4,6 +4,8 @@ namespace Detain\MyAdminGlobalSign;
 
 use Detain\MyAdminGlobalSign\GlobalSign;
 use Symfony\Component\EventDispatcher\GenericEvent;
+//include_once __DIR__.'/GlobalSign.php';
+//use GlobalSign;
 
 /**
  * Class Plugin
@@ -50,6 +52,7 @@ class Plugin {
 				$extra = ensure_csr($serviceInfo[$prefix.'_id']);
 			myadmin_log('ssl', 'info', 'Got CSR Size: '.mb_strlen($extra['csr']), __LINE__, __FILE__);
 			myadmin_log('ssl', 'info', "starting SSL Hostname {$serviceClass->getHostname()} Type ".$event['field1'], __LINE__, __FILE__);
+			$db = get_module_db(self::$module);
 			if ($event['field2'] == 'wildcard')
 				$wildcard = TRUE;
 			else
@@ -66,7 +69,7 @@ class Plugin {
 							$extra[$key] = $value;
 						$order_id = $extra['order_id'];
 						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
-						$db2->query($query, __LINE__, __FILE__);
+						$db->query($query, __LINE__, __FILE__);
 					}
 					break;
 				case 'DV_SKIP':
@@ -79,7 +82,7 @@ class Plugin {
 							$extra[$key] = $value;
 						$order_id = $extra['order_id'];
 						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
-						$db2->query($query, __LINE__, __FILE__);
+						$db->query($query, __LINE__, __FILE__);
 					}
 					break;
 				case 'EV':
@@ -106,7 +109,7 @@ class Plugin {
 							$extra[$key] = $value;
 						$order_id = $extra['order_id'];
 						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
-						$db2->query($query, __LINE__, __FILE__);
+						$db->query($query, __LINE__, __FILE__);
 					}
 					break;
 				case 'OV_SKIP':
@@ -132,7 +135,7 @@ class Plugin {
 							$extra[$key] = $value;
 						$order_id = $extra['order_id'];
 						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
-						$db2->query($query, __LINE__, __FILE__);
+						$db->query($query, __LINE__, __FILE__);
 					}
 					break;
 			}
