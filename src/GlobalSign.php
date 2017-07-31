@@ -1022,14 +1022,15 @@ class GlobalSign
 		if ($wildcard === true) {
 			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		}
-		if ($csr != '') {
-			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['CSR'] = $csr;
-			unset($params['GSValidateOrderParameters']['Request']['FQDN']);
-		}
 		if($order_id) {
 			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['RenewalTargetOrderID'] = $order_id;
 			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['RenewaltargetOrderID'] = $order_id;
 		}
+		if ($csr != '') {
+			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['CSR'] = $csr;
+			unset($params['GSValidateOrderParameters']['Request']['FQDN']);
+		}
+		
 		$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['CSR'] = $csr;
 		$this->extra['GSValidateOrderParameters_params'] = $params;
 		myadmin_log('ssl', 'info', 'Params: ' .print_r($params, TRUE), __LINE__, __FILE__);
@@ -1145,9 +1146,9 @@ class GlobalSign
 						'OrderKind' => 'renewal',
 						'Licenses' => '1',
 						'ValidityPeriod' => ['Months' => '12'],
-						'CSR' => $csr,
 						'RenewaltargetOrderID' => $oldOrderID,
-						'RenewalTargetOrderID' => $oldOrderID
+						'RenewalTargetOrderID' => $oldOrderID,
+						'CSR' => $csr
 					],
 					'OrderID' => $order_id,
 					'ApproverEmail' => $approver_email,
@@ -1208,9 +1209,9 @@ class GlobalSign
 						'OrderKind' => 'renewal',
 						'Licenses' => '1',
 						'ValidityPeriod' => ['Months' => '12'],
-						'CSR' => $csr,
 						'RenewaltargetOrderID' => $oldOrderId,
-						'RenewalTargetOrderID' => $oldOrderId
+						'RenewalTargetOrderID' => $oldOrderId,
+						'CSR' => $csr
 						/*
 						* 'Options' => array(
 						* 'Option' => array(
@@ -1358,9 +1359,9 @@ class GlobalSign
 						'OrderKind' => 'renewal',
 						'Licenses' => '1',
 						'ValidityPeriod' => ['Months' => '12'],
-						'CSR' => $csr,
 						'RenewaltargetOrderID'=>$oldOrderId,
-						'RenewalTargetOrderID'=>$oldOrderId
+						'RenewalTargetOrderID'=>$oldOrderId,
+						'CSR' => $csr
 					],
 					'OrganizationInfoEV' => [
 						'BusinessCategoryCode' => $business_category, 'OrganizationAddress' => [
