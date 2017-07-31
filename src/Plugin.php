@@ -2,8 +2,10 @@
 
 namespace Detain\MyAdminGlobalSign;
 
-//use Detain\MyAdminGlobalSign\GlobalSign;
+use Detain\MyAdminGlobalSign\GlobalSign;
 use Symfony\Component\EventDispatcher\GenericEvent;
+//include_once __DIR__.'/GlobalSign.php';
+//use GlobalSign;
 
 /**
  * Class Plugin
@@ -29,8 +31,10 @@ class Plugin {
 	 */
 	public static function getHooks() {
 		return [
-			'function.requirements' => [__CLASS__, 'getRequirements'],
-			self::$module.'.settings' => [__CLASS__, 'getSettings']
+			self::$module.'.activate' => [__CLASS__, 'getActivate'],
+			self::$module.'.reactivate' => [__CLASS__, 'getActivate'],
+			self::$module.'.settings' => [__CLASS__, 'getSettings'],
+			'function.requirements' => [__CLASS__, 'getRequirements']
 		];
 	}
 
@@ -38,11 +42,113 @@ class Plugin {
 	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
 	 */
 	public static function getActivate(GenericEvent $event) {
-		$serviceClass = $event->getSubject();
-		if ($event['category'] == get_service_define('FANTASTICO')) {
+		if ($event['category'] == get_service_define('GLOBALSIGN')) {
 			myadmin_log(self::$module, 'info', 'GlobalSign Activation', __LINE__, __FILE__);
-			function_requirements('activate_globalsign');
-			activate_globalsign($serviceClass->getIp(), $event['field1']);
+			$serviceClass = $event->getSubject();
+			$serviceTypes = run_event('get_service_types', FALSE, self::$module);
+			$settings = get_module_settings(self::$module);
+			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
+			if (mb_strlen($extra['csr']) == 0)
+				$extra = ensure_csr($serviceInfo[$prefix.'_id']);
+			myadmin_log('ssl', 'info', 'Got CSR Size: '.mb_strlen($extra['csr']), __LINE__, __FILE__);
+			myadmin_log('ssl', 'info', "starting SSL Hostname {$serviceClass->getHostname()} Type ".$event['field1'], __LINE__, __FILE__);
+			$db = get_module_db(self::$module);
+			if ($event['field2'] == 'wildcard')
+				$wildcard = TRUE;
+			else
+				$wildcard = FALSE;
+			switch ($event['field1']) {
+				case 'DV_LOW':
+					//myadmin_log('ssl', 'info', "Calling new GlobalSign(" . GLOBALSIGN_USERNAME . " , " . GLOBALSIGN_PASSWORD . ");", __LINE__, __FILE__);
+					$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
+					$ret = $GS->create_alphassl($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $extra['approver_email'], $wildcard);
+					if ($ret === FALSE) {
+						dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
+					} else {
+						foreach ($ret as $key => $value)
+							$extra[$key] = $value;
+						$order_id = $extra['order_id'];
+						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
+						$db->query($query, __LINE__, __FILE__);
+					}
+					break;
+				case 'DV_SKIP':
+					$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
+					$ret = $GS->create_domainssl($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $extra['approver_email'], $wildcard);
+					if ($ret === FALSE) {
+						dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
+					} else {
+						foreach ($ret as $key => $value)
+							$extra[$key] = $value;
+						$order_id = $extra['order_id'];
+						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
+						$db->query($query, __LINE__, __FILE__);
+					}
+					break;
+				case 'EV':
+					$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
+					$ret = $GS->create_extendedssl(
+						$serviceClass->getHostname(),
+						$extra['csr'],
+						$serviceClass->getFirstname(),
+						$serviceClass->getLastname(),
+						$serviceClass->getPhone(),
+						$serviceClass->getEmail(),
+						$serviceClass->getCompany(),
+						$serviceClass->getAddress(),
+						$serviceClass->getCity(),
+						$serviceClass->getState(),
+						$serviceClass->getZip(),
+						$extra['business_category'],
+						$extra['agency'],
+						$extra['approver_email']);
+					if ($ret === FALSE) {
+						dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
+					} else {
+						foreach ($ret as $key => $value)
+							$extra[$key] = $value;
+						$order_id = $extra['order_id'];
+						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
+						$db->query($query, __LINE__, __FILE__);
+					}
+					break;
+				case 'OV_SKIP':
+					$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
+					$ret = $GS->create_organizationssl(
+						$serviceClass->getHostname(),
+						$extra['csr'],
+						$serviceClass->getFirstname(),
+						$serviceClass->getLastname(),
+						$serviceClass->getPhone(),
+						$serviceClass->getEmail(),
+						$serviceClass->getCompany(),
+						$serviceClass->getAddress(),
+						$serviceClass->getCity(),
+						$serviceClass->getState(),
+						$serviceClass->getZip(),
+						$extra['approver_email'],
+						$wildcard);
+					if ($ret === FALSE) {
+						dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
+					} else {
+						foreach ($ret as $key => $value)
+							$extra[$key] = $value;
+						$order_id = $extra['order_id'];
+						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
+						$db->query($query, __LINE__, __FILE__);
+					}
+					break;
+			}
+			if (!isset($order_id)) {
+				$headers = '';
+				$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
+				$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
+				$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
+				$subject = 'Error Registering SSL Certificate '.$serviceClass->getHostname();
+				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
+				myadmin_log('ssl', 'info', $subject, __LINE__, __FILE__);
+				$event['success'] = FALSE;
+			}
 			$event->stopPropagation();
 		}
 	}
@@ -53,8 +159,8 @@ class Plugin {
 	public static function getMenu(GenericEvent $event) {
 		$menu = $event->getSubject();
 		if ($GLOBALS['tf']->ima == 'admin') {
-			$menu->add_link(self::$module, 'choice=none.reusable_globalsign', 'icons/database_warning_48.png', 'ReUsable GlobalSign Licenses');
-			$menu->add_link(self::$module, 'choice=none.globalsign_list', 'icons/database_warning_48.png', 'GlobalSign Licenses Breakdown');
+			$menu->add_link(self::$module, 'choice=none.reusable_globalsign', 'images/icons/database_warning_48.png', 'ReUsable GlobalSign Licenses');
+			$menu->add_link(self::$module, 'choice=none.globalsign_list', 'images/icons/database_warning_48.png', 'GlobalSign Licenses Breakdown');
 			$menu->add_link(self::$module.'api', 'choice=none.globalsign_licenses_list', 'whm/createacct.gif', 'List all GlobalSign Licenses');
 		}
 	}
@@ -64,7 +170,7 @@ class Plugin {
 	 */
 	public static function getRequirements(GenericEvent $event) {
 		$loader = $event->getSubject();
-		$loader->add_requirement('class.GlobalSign', '/../vendor/detain/myadmin-globalsign-ssl/src/GlobalSign.php');
+		$loader->add_requirement('class.GlobalSign', '/../vendor/detain/myadmin-globalsign-ssl/src/GlobalSign.php', '\\Detain\\MyAdminGlobalSign\\');
 	}
 
 	/**
