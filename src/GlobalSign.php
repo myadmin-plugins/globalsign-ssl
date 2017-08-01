@@ -1137,8 +1137,8 @@ class GlobalSign {
 				'Request' => [
 					'OrderRequestHeader' => [
 						'AuthToken' => [
-					'UserName' => $this->username,
-					'Password' => $this->password
+							'UserName' => $this->username,
+							'Password' => $this->password
 						]
 					],
 					'OrderRequestParameter' => [
@@ -1153,10 +1153,10 @@ class GlobalSign {
 					'OrderID' => $order_id,
 					'ApproverEmail' => $approver_email,
 					'ContactInfo' => [
-				'FirstName' => $firstname,
-				'LastName' => $lastname,
-				'Phone' => $phone,
-				'Email' => $email
+						'FirstName' => $firstname,
+						'LastName' => $lastname,
+						'Phone' => $phone,
+						'Email' => $email
 					]
 				]
 			]
