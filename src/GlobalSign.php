@@ -1006,6 +1006,11 @@ class GlobalSign {
 	 */
 	private function renewGSValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE, $order_id = FALSE) {
 		// 1.1 Extracting Common Name from the CSR and carrying out a Phishing DB Check
+		if($wildcard === TRUE) {
+			$wild_card_str = 'wildcard';
+		} else {
+			$wild_card_str = '';
+		}
 		$params = [
 			'GSValidateOrderParameters' => [
 				'Request' => [
@@ -1014,29 +1019,19 @@ class GlobalSign {
 						'ProductCode' => $product,
 						'OrderKind' => 'renewal',
 						'Licenses' => '1',
-						'ValidityPeriod' => ['Months' => '12']
+						'ValidityPeriod' => ['Months' => '12'],
+						'RenewalTargetOrderID' => $order_id,
+						'RenewaltargetOrderID' => $order_id,
+						'BaseOption' => $wild_card_str,
+						'CSR' => $csr
 					],
 					'FQDN' => $fqdn
 				]
 			]
 		];
-		if ($wildcard === TRUE) {
-			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		}
 		if ($csr != '') {
-			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['CSR'] = $csr;
 			unset($params['GSValidateOrderParameters']['Request']['FQDN']);
 		}
-		if ($order_id) {
-			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['RenewalTargetOrderID'] = $order_id;
-			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['RenewaltargetOrderID'] = $order_id;
-		}
-		if ($csr != '') {
-			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['CSR'] = $csr;
-			unset($params['GSValidateOrderParameters']['Request']['FQDN']);
-		}
-		
-		$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['CSR'] = $csr;
 		$this->extra['GSValidateOrderParameters_params'] = $params;
 		myadmin_log('ssl', 'info', 'Params: '.print_r($params, TRUE), __LINE__, __FILE__);
 		$res = $this->order_client->__soapCall('GSValidateOrderParameters', $params);
