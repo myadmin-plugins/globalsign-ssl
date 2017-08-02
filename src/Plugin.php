@@ -4,8 +4,6 @@ namespace Detain\MyAdminGlobalSign;
 
 use Detain\MyAdminGlobalSign\GlobalSign;
 use Symfony\Component\EventDispatcher\GenericEvent;
-//include_once __DIR__.'/GlobalSign.php';
-//use GlobalSign;
 
 /**
  * Class Plugin
@@ -50,94 +48,55 @@ class Plugin {
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			if (mb_strlen($extra['csr']) == 0)
 				$extra = ensure_csr($serviceInfo[$prefix.'_id']);
-			myadmin_log('ssl', 'info', 'Got CSR Size: '.mb_strlen($extra['csr']), __LINE__, __FILE__);
-			myadmin_log('ssl', 'info', "starting SSL Hostname {$serviceClass->getHostname()} Type ".$event['field1'], __LINE__, __FILE__);
-			$db = get_module_db(self::$module);
-			if ($event['field2'] == 'wildcard')
-				$wildcard = TRUE;
-			else
-				$wildcard = FALSE;
-			switch ($event['field1']) {
-				case 'DV_LOW':
-					//myadmin_log('ssl', 'info', "Calling new GlobalSign(" . GLOBALSIGN_USERNAME . " , " . GLOBALSIGN_PASSWORD . ");", __LINE__, __FILE__);
-					$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
-					$ret = $GS->create_alphassl($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $extra['approver_email'], $wildcard);
-					if ($ret === FALSE) {
-						dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
-					} else {
-						foreach ($ret as $key => $value)
-							$extra[$key] = $value;
-						$order_id = $extra['order_id'];
-						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
-						$db->query($query, __LINE__, __FILE__);
-					}
-					break;
-				case 'DV_SKIP':
-					$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
-					$ret = $GS->create_domainssl($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $extra['approver_email'], $wildcard);
-					if ($ret === FALSE) {
-						dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
-					} else {
-						foreach ($ret as $key => $value)
-							$extra[$key] = $value;
-						$order_id = $extra['order_id'];
-						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
-						$db->query($query, __LINE__, __FILE__);
-					}
-					break;
-				case 'EV':
-					$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
-					$ret = $GS->create_extendedssl(
-						$serviceClass->getHostname(),
-						$extra['csr'],
-						$serviceClass->getFirstname(),
-						$serviceClass->getLastname(),
-						$serviceClass->getPhone(),
-						$serviceClass->getEmail(),
-						$serviceClass->getCompany(),
-						$serviceClass->getAddress(),
-						$serviceClass->getCity(),
-						$serviceClass->getState(),
-						$serviceClass->getZip(),
-						$extra['business_category'],
-						$extra['agency'],
-						$extra['approver_email']);
-					if ($ret === FALSE) {
-						dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
-					} else {
-						foreach ($ret as $key => $value)
-							$extra[$key] = $value;
-						$order_id = $extra['order_id'];
-						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
-						$db->query($query, __LINE__, __FILE__);
-					}
-					break;
-				case 'OV_SKIP':
-					$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
-					$ret = $GS->create_organizationssl(
-						$serviceClass->getHostname(),
-						$extra['csr'],
-						$serviceClass->getFirstname(),
-						$serviceClass->getLastname(),
-						$serviceClass->getPhone(),
-						$serviceClass->getEmail(),
-						$serviceClass->getCompany(),
-						$serviceClass->getAddress(),
-						$serviceClass->getCity(),
-						$serviceClass->getState(),
-						$serviceClass->getZip(),
-						$extra['approver_email'],
-						$wildcard);
-					if ($ret === FALSE) {
-						dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
-					} else {
-						foreach ($ret as $key => $value)
-							$extra[$key] = $value;
-						$order_id = $extra['order_id'];
-						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
-						$db->query($query, __LINE__, __FILE__);
-					}
-					break;
+			myadmin_log('ssl', 'info', "starting SSL Hostname {$serviceClass->getHostname()} Type ".$event['field1'].' Got CSR Size: '.mb_strlen($extra['csr']), __LINE__, __FILE__);
+			$renew = substr($serviceClass->getOrderId(), 0, 2) == 'CE' && $GS->GetOrderByOrderID($serviceClass->getOrderId())['Response']['QueryResponseHeader']['SuccessCode'] == '0';
+			myadmin_log(self::$module, 'info', $renew === true ? 'found order_id already set and GetOrderByOrderID is returning a vald order so decided to renew the cert' : 'order_id is either not seto or invalid so placing a new order', __LINE__, __FIE__);
+			$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
+			if ($renew === false) {
+				// placing new ssl order
+				switch ($event['field1']) {
+					case 'DV_LOW':
+						$res = $GS->create_alphassl($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $extra['approver_email'], $event['field2'] == 'wildcard');
+						break;
+					case 'DV_SKIP':
+						$res = $GS->create_domainssl($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $extra['approver_email'], $event['field2'] == 'wildcard');
+						break;
+					case 'EV':
+						$res = $GS->create_extendedssl($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $serviceClass->getCompany(), $serviceClass->getAddress(), $serviceClass->getCity(), $serviceClass->getState(), $serviceClass->getZip(), $extra['business_category'], $extra['agency'], $extra['approver_email']);
+						break;
+					case 'OV_SKIP':
+						$res = $GS->create_organizationssl($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $serviceClass->getCompany(), $serviceClass->getAddress(), $serviceClass->getCity(), $serviceClass->getState(), $serviceClass->getZip(), $extra['approver_email'], $event['field2'] == 'wildcard');
+						break;
+				}
+				if ($res === FALSE) {
+					dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
+				} else {
+					foreach ($res as $key => $value)
+						$extra[$key] = $value;
+					$order_id = $extra['order_id'];
+					$serviceClass->setOrderId($order_id)->setExtra(base64_encode(gzcompress(myadmin_stringify($extra))))->save();
+				}
+			} else {
+				// renewing ssl order
+				switch ($event['field1']) {
+					case 'DV_LOW':
+					case 'DV_SKIP':
+						myadmin_log('ssl', 'info', "renewAlphaDomain($hostname, $csr, $firstname, $lastname, $phone, $email, $approver_email, FALSE, {$ssl_typeArray[$servicename]}, $order_id)", __LINE__, __FILE__);
+						$res = $GS->renewAlphaDomain($hostname, $csr, $firstname, $lastname, $phone, $email, $approver_email, $event['field2'] == 'wildcard', $ssl_typeArray[$servicename], $order_id);
+						break;
+					case 'EV':
+						myadmin_log('ssl', 'info', "renewExtendedSSL($hostname, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, {$extra['business_category']}, {$extra['agency']}, $approver_email, $order_id)", __LINE__, __FILE__);
+						$res = $GS->renewExtendedSSL($hostname, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $extra['business_category'], $extra['agency'], $approver_email, $order_id);
+						break;
+					case 'OV_SKIP':
+						myadmin_log('ssl', 'info', "renewOrganizationSSL($hostname, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, TRUE, $order_id)", __LINE__, __FILE__);
+						$res = $GS->renewOrganizationSSL($hostname, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, $event['field2'] == 'wildcard', $order_id);
+						break;
+				}
+				if ($res != false && isset($res['finished']) && $res['finished'] == 1) {
+					$order_id = $res['order_id'];
+					$serviceClass->setOrderId($order_id)->save();
+				}
 			}
 			if (!isset($order_id)) {
 				$headers = '';
@@ -145,7 +104,7 @@ class Plugin {
 				$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
 				$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
 				$subject = 'Error Registering SSL Certificate '.$serviceClass->getHostname();
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
 				myadmin_log('ssl', 'info', $subject, __LINE__, __FILE__);
 				$event['success'] = FALSE;
 			}
