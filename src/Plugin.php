@@ -68,9 +68,7 @@ class Plugin {
 						$res = $GS->create_organizationssl($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $serviceClass->getCompany(), $serviceClass->getAddress(), $serviceClass->getCity(), $serviceClass->getState(), $serviceClass->getZip(), $extra['approver_email'], $event['field2'] == 'wildcard');
 						break;
 				}
-				if ($res === FALSE) {
-					dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
-				} else {
+				if ($res !== FALSE) {
 					foreach ($res as $key => $value)
 						$extra[$key] = $value;
 					$order_id = $extra['order_id'];
@@ -99,6 +97,7 @@ class Plugin {
 				}
 			}
 			if (!isset($order_id)) {
+				dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
 				$headers = '';
 				$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
 				$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
