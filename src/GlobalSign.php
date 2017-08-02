@@ -956,11 +956,10 @@ class GlobalSign {
 	 * GlobalSign::ResendEmail()
 	 *
 	 * @param string $orderID
-	 * @param string $approverEmail
 	 * @return mixed
 	 */
-	public function GSResendEmail($orderID, $approverEmail) {
-		myadmin_log('ssl', 'info', "In function : GSResendEmail($orderID, $approverEmail)", __LINE__, __FILE__);
+	public function GSResendEmail($orderID) {
+		myadmin_log('ssl', 'info', "In function : GSResendEmail($orderID)", __LINE__, __FILE__);
 		$params = ['ResendEmail' => ['Request' => ['OrderRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]], 'OrderID' => $orderID, 'ResendEmailType' =>'APPROVEREMAIL']]];
 		myadmin_log('ssl', 'info', 'Params: '.print_r($params, TRUE), __LINE__, __FILE__);
 		return $this->order_client->__soapCall('ResendEmail', $params);
