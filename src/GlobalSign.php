@@ -100,10 +100,10 @@ class GlobalSign {
 
 	/**
 	 * GlobalSign::GlobalSign()
+	 *
 	 * @param string $username the API username
 	 * @param string $password the API password
-	 * @param bool $testing optional (defaults to false) testing
-	 * @return \GlobalSign
+	 * @param bool   $testing  optional (defaults to false) testing
 	 */
 	public function __construct($username, $password, $testing = FALSE) {
 		//myadmin_log('ssl', 'info', "__construct({$username}, {$password})", __LINE__, __FILE__);

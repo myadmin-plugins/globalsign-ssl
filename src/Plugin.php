@@ -46,7 +46,7 @@ class Plugin {
 			$serviceTypes = run_event('get_service_types', FALSE, self::$module);
 			$settings = get_module_settings(self::$module);
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
-			if (mb_strlen($extra['csr']) == 0)
+			if ('' === $extra['csr'])
 				$extra = ensure_csr($serviceInfo[$prefix.'_id']);
 			myadmin_log('ssl', 'info', "starting SSL Hostname {$serviceClass->getHostname()} Type ".$event['field1'].' Got CSR Size: '.mb_strlen($extra['csr']), __LINE__, __FILE__);
 			$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
