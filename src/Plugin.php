@@ -51,7 +51,7 @@ class Plugin {
 			myadmin_log('ssl', 'info', "starting SSL Hostname {$serviceClass->getHostname()} Type ".$event['field1'].' Got CSR Size: '.mb_strlen($extra['csr']), __LINE__, __FILE__);
 			$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
 			$renew = substr($serviceClass->getOrderId(), 0, 2) == 'CE' && $GS->GetOrderByOrderID($serviceClass->getOrderId())['Response']['QueryResponseHeader']['SuccessCode'] == '0';
-			myadmin_log(self::$module, 'info', $renew === true ? 'found order_id already set and GetOrderByOrderID is returning a vald order so decided to renew the cert' : 'order_id is either not seto or invalid so placing a new order', __LINE__, __FIE__);
+			myadmin_log(self::$module, 'info', $renew === true ? 'found order_id already set and GetOrderByOrderID is returning a vald order so decided to renew the cert' : 'order_id is either not seto or invalid so placing a new order', __LINE__, __FILE__);
 			if ($renew === false) {
 				// placing new ssl order
 				switch ($event['field1']) {
