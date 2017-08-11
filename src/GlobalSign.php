@@ -1,8 +1,7 @@
 <?php
 /**
  * GlobalSign SSL Related Functionality
- * Last Changed: $LastChangedDate: 2017-07-20 04:48:03 -0400 (Thu, 20 Jul 2017) $
- * @author detain
+ * @author Joe Huss <detain@interserver.net>
  * @copyright 2017
  * @package MyAdmin
  * @category SSL
