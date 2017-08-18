@@ -32,25 +32,14 @@ namespace Detain\MyAdminGlobalSign;
  *		Account: https://testsystem.globalsign.com/kb/ws/v1/AccountService?wsdl
  *
  * SSL Functions:
- *		GetApproverList		Getting list of approver email addresses
- *		GetDVApproverList		Getting list of approver email addresses and OrderID for DVOrder (DomainSSL and AlphaSSL only)
- *		DVOrder		Order AlphaSSL or DomainSSL Certificate with Approver Email validation
  *		URLVerification		Order AlphaSSL or DomainSSL Certificate with Metatag validation
  *		URLVerificationForIssue		Order AlphaSSL or DomainSSL Certificate with Metatag validation
- *		OVOrder		Order OrganizationSSL Certificate
- *		EVOrder		Order ExtendedSSL Certificate
  *		ModifyOrder		Changing certificate order status
- *		ResendEmail		Resend Approver Emails for AlphaSSL & DomainSSL orders
  *		CertInviteOrder		Place an order using the cert invite functionality
- *		ChangeApproverEmail		Change the email address that the approval request is sent to for domain validated products
  *		ChangeSubjectAltName	Change the SubjectAltName in certificate.
  *  Service/Query Functions:
- *		GetOrderByOrderID		Searching order information by Order ID
  *		GetModifiedOrders		Searching modified orders by modified date (from/to)
- *		GetOrderByDateRange		Getting order list GetCertificateOrders Searching orders by order date (from/to)
- *		ValidateOrderParameters		Checking order parameter validity
  *		DecodeCSR		Decoding a CSR
- *		ReIssue		Certificate ReIssue
  *		ToggleRenewalNotice		Turn on/off Renewal notice
  *		GetOrderByExpirationDate		Check upcoming expirations
  *  Account Functions:
@@ -258,8 +247,8 @@ class GlobalSign {
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
 			}
@@ -300,8 +289,8 @@ class GlobalSign {
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
 			}
@@ -352,8 +341,8 @@ class GlobalSign {
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
 			}
@@ -391,8 +380,8 @@ class GlobalSign {
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
 			}
@@ -433,8 +422,8 @@ class GlobalSign {
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
 			}
@@ -450,8 +439,8 @@ class GlobalSign {
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
 			}
@@ -466,7 +455,7 @@ class GlobalSign {
 	}
 
 	/**
-	 * GlobalSign::GetOrderByOrderID()
+	 * Searching order information by Order ID
 	 *
 	 * @param mixed $order_id
 	 * @return array
@@ -525,7 +514,7 @@ class GlobalSign {
 	}
 
 	/**
-	 * GlobalSign::GSValidateOrderParameters()
+	 * Checking order parameter validity
 	 *
 	 * @param string  $product
 	 * @param mixed  $fqdn
@@ -563,7 +552,7 @@ class GlobalSign {
 	}
 
 	/**
-	 * GlobalSign::GSDVOrder()
+	 * Order AlphaSSL or DomainSSL Certificate with Approver Email validation
 	 *
 	 * @param string $product
 	 * @param mixed $order_id
@@ -643,7 +632,7 @@ class GlobalSign {
 	}
 
 	/**
-	 * GlobalSign::GSOVOrder()
+	 * Order OrganizationSSL Certificate
 	 *
 	 * @param mixed $fqdn
 	 * @param mixed $csr
@@ -817,7 +806,7 @@ class GlobalSign {
 	}
 
 	/**
-	 * GlobalSign::GSEVOrder()
+	 * Order ExtendedSSL Certificate
 	 *
 	 * @param mixed $fqdn
 	 * @param mixed $csr
@@ -937,7 +926,7 @@ class GlobalSign {
 	}
 
 	/**
-	 * GlobalSign::GetDVApproverList()
+	 * Getting list of approver email addresses and OrderID for DVOrder (DomainSSL and AlphaSSL only)
 	 *
 	 * @param mixed $fqdn
 	 * @return mixed
@@ -952,7 +941,7 @@ class GlobalSign {
 	}
 
 	/**
-	 * GlobalSign::ResendEmail()
+	 * Resend Approver Emails for AlphaSSL & DomainSSL orders
 	 *
 	 * @param string $orderID
 	 * @return mixed
@@ -965,7 +954,7 @@ class GlobalSign {
 	}
 
 	/**
-	 * GlobalSign::ChangeApproverEmail()
+	 * Change the email address that the approval request is sent to for domain validated products
 	 *
 	 * @param $orderID
 	 * @param $approverEmail
@@ -1066,8 +1055,8 @@ class GlobalSign {
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team.');
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team.');
 			}
@@ -1098,8 +1087,8 @@ class GlobalSign {
 			$this->extra['error'] = 'Error In order';
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 			}
@@ -1290,8 +1279,8 @@ class GlobalSign {
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 			}
@@ -1306,8 +1295,8 @@ class GlobalSign {
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 			}
@@ -1468,8 +1457,8 @@ class GlobalSign {
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team.');
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team.');
 			}
@@ -1486,6 +1475,8 @@ class GlobalSign {
 	}
 
 	/**
+	 * Certificate ReIssue
+	 *
 	 * @param $orderID
 	 * @param $csr
 	 * @return mixed
