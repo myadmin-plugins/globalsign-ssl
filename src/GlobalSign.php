@@ -171,9 +171,8 @@ class GlobalSign {
 		$this->extra = [];
 		$this->extra['laststep'] = 'GSValidateOrderParameters';
 		$this->extra['GSValidateOrderParameters'] = obj2array($res);
-		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
+		if ($res->Response->OrderResponseHeader->SuccessCode != 0)
 			$this->extra['error'] = 'Error In order';
-		}
 		$this->__construct($this->username, $this->password);
 		$res = $this->GetDVApproverList($fqdn);
 		$this->extra['laststep'] = 'GetDVApproverList';
@@ -184,9 +183,8 @@ class GlobalSign {
 		}
 		$order_id = $res->Response->OrderID;
 		$this->extra['order_id'] = $order_id;
-		if ($approver_email == '') {
+		if ($approver_email == '')
 			$approver_email = $res->Response->Approvers->Approver[0]->ApproverEmail;
-		}
 		myadmin_log('ssl', 'info', "GSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard)", __LINE__, __FILE__);
 		$this->__construct($this->username, $this->password);
 		$res = $this->GSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard);
@@ -236,9 +234,8 @@ class GlobalSign {
 		}
 		$order_id = $res->Response->OrderID;
 		$this->extra['order_id'] = $order_id;
-		if ($approver_email == '') {
+		if ($approver_email == '')
 			$approver_email = $res->Response->Approvers->Approver[0]->ApproverEmail;
-		}
 		$this->__construct($this->username, $this->password);
 		$res = $this->GSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard);
 		myadmin_log('ssl', 'info', "GSDVOrder($product, $order_id, $approver_email, $fqdn, [CSR], $firstname, $lastname, $phone, $email, $wildcard) returned: ".json_encode($res), __LINE__, __FILE__);
@@ -280,9 +277,8 @@ class GlobalSign {
 			return FALSE;
 		}
 		$order_id = $res->Response->OrderID;
-		if ($approver_email == '') {
+		if ($approver_email == '')
 			$approver_email = $res->Response->Approvers->Approver[0]->ApproverEmail;
-		}
 
 		$this->__construct($this->username, $this->password);
 		$res = $this->GSDVOrderWithoutCSR($fqdn, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $wildcard);
@@ -539,9 +535,8 @@ class GlobalSign {
 				]
 			]
 		];
-		if ($wildcard === TRUE) {
+		if ($wildcard === TRUE)
 			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		}
 		if ($csr != '') {
 			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['CSR'] = $csr;
 			unset($params['GSValidateOrderParameters']['Request']['FQDN']);
@@ -619,9 +614,8 @@ class GlobalSign {
 			]
 		];
 
-		if ($wildcard === TRUE) {
+		if ($wildcard === TRUE)
 			$params['GSDVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		}
 		$this->extra['GSDVOrder_params'] = $params;
 		//  	    ini_set("max_input_time", -1);
 		//	        ini_set("max_execution_time", -1);
@@ -711,9 +705,8 @@ class GlobalSign {
 			]
 		];
 
-		if ($wildcard === TRUE) {
+		if ($wildcard === TRUE)
 			$params['GSOVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		}
 		$this->extra['GSOVOrder_params'] = $params;
 		$res = $this->order_client->__soapCall('GSOVOrder', $params);
 		return $res;
@@ -797,9 +790,8 @@ class GlobalSign {
 				]
 			]
 		];
-		if ($wildcard === TRUE) {
+		if ($wildcard === TRUE)
 			$params['GSOVOrderWithoutCSR']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		}
 		$this->extra['GSOVOrderWithoutCSR_params'] = $params;
 		$res = $this->order_client->__soapCall('GSOVOrderWithoutCSR', $params);
 		return $res;
@@ -1016,9 +1008,8 @@ class GlobalSign {
 				]
 			]
 		];
-		if ($csr != '') {
+		if ($csr != '')
 			unset($params['GSValidateOrderParameters']['Request']['FQDN']);
-		}
 		$this->extra['GSValidateOrderParameters_params'] = $params;
 		myadmin_log('ssl', 'info', 'Params: '.print_r($params, TRUE), __LINE__, __FILE__);
 		$res = $this->order_client->__soapCall('GSValidateOrderParameters', $params);
@@ -1075,9 +1066,8 @@ class GlobalSign {
 		}
 		$order_id = $res->Response->OrderID;
 		$this->extra['order_id'] = $order_id;
-		if ($approver_email == '') {
+		if ($approver_email == '')
 			$approver_email = $res->Response->Approvers->Approver[0]->ApproverEmail;
-		}
 		myadmin_log('ssl', 'info', "renewGSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderId)", __LINE__, __FILE__);
 		$this->__construct($this->username, $this->password);
 		$res = $this->renewGSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderId);
@@ -1148,9 +1138,8 @@ class GlobalSign {
 				]
 			]
 		];
-		if ($wildcard === TRUE) {
+		if ($wildcard === TRUE)
 			$params['GSDVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		}
 		$this->extra['GSDVOrder_params'] = $params;
 		//  	    ini_set("max_input_time", -1);
 		//	        ini_set("max_execution_time", -1);
@@ -1244,9 +1233,8 @@ class GlobalSign {
 			]
 		];
 
-		if ($wildcard === TRUE) {
+		if ($wildcard === TRUE)
 			$params['GSOVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		}
 		$this->extra['GSOVOrder_params'] = $params;
 		$res = $this->order_client->__soapCall('GSOVOrder', $params);
 		return $res;
@@ -1548,9 +1536,8 @@ class GlobalSign {
 				]
 			]
 		];
-		if ($wildcard === TRUE) {
+		if ($wildcard === TRUE)
 			$params['GSDVOrderWithoutCSR']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		}
 		$this->extra['GSDVOrderWithoutCSR_params'] = $params;
 		return $order_client->__soapCall('GSDVOrderWithoutCSR', $params);
 	}
