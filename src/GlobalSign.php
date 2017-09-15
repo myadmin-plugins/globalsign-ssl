@@ -941,7 +941,7 @@ class GlobalSign {
 	public function GSResendEmail($orderID) {
 		myadmin_log('ssl', 'info', "In function : GSResendEmail($orderID)", __LINE__, __FILE__);
 		$params = ['ResendEmail' => ['Request' => ['OrderRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]], 'OrderID' => $orderID, 'ResendEmailType' =>'APPROVEREMAIL']]];
-		myadmin_log('ssl', 'info', 'Params: '.print_r($params, TRUE), __LINE__, __FILE__);
+		myadmin_log('ssl', 'info', 'Params: '.json_encode($params), __LINE__, __FILE__);
 		return $this->order_client->__soapCall('ResendEmail', $params);
 	}
 
@@ -993,25 +993,29 @@ class GlobalSign {
 		$params = [
 			'GSValidateOrderParameters' => [
 				'Request' => [
-					'OrderRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]],
+					'OrderRequestHeader' => [
+						'AuthToken' => [
+							'UserName' => $this->username,
+							'Password' => $this->password
+					]],
 					'OrderRequestParameter' => [
 						'ProductCode' => $product,
 						'OrderKind' => 'renewal',
 						'Licenses' => '1',
 						'ValidityPeriod' => ['Months' => '12'],
+						'BaseOption' => $wild_card_str,
+						'CSR' => $csr,
 						'RenewalTargetOrderID' => $order_id,
 						'RenewaltargetOrderID' => $order_id,
-						'BaseOption' => $wild_card_str,
-						'CSR' => $csr
 					],
 					'FQDN' => $fqdn
 				]
 			]
 		];
-		if ($csr != '')
-			unset($params['GSValidateOrderParameters']['Request']['FQDN']);
+		//if ($csr != '')
+			//unset($params['GSValidateOrderParameters']['Request']['FQDN']);
 		$this->extra['GSValidateOrderParameters_params'] = $params;
-		myadmin_log('ssl', 'info', 'Params: '.print_r($params, TRUE), __LINE__, __FILE__);
+		myadmin_log('ssl', 'info', 'Params: '.json_encode($params), __LINE__, __FILE__);
 		$res = $this->order_client->__soapCall('GSValidateOrderParameters', $params);
 		return $res;
 	}
