@@ -1149,7 +1149,7 @@ class GlobalSign {
 		//	        ini_set("max_execution_time", -1);
 		ini_set('max_execution_time', 1000); // just put a lot of time
 		ini_set('default_socket_timeout', 1000); // same
-		myadmin_log('ssl', 'info', 'Params - '.print_r($params, TRUE), __LINE__, __FILE__);
+		myadmin_log('ssl', 'info', 'Params - '.json_encode($params), __LINE__, __FILE__);
 		$res = $this->order_client->__soapCall('GSDVOrder', $params);
 		return $res;
 	}
