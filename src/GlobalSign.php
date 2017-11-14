@@ -167,10 +167,10 @@ class GlobalSign {
 	 */
 	public function create_alphassl($fqdn, $csr, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = FALSE) {
 		$product = 'DV_LOW_SHA2';
-		$res = $this->GSValidateOrderParameters($product, $fqdn, $csr, $wildcard);
+		$res = $this->ValidateOrderParameters($product, $fqdn, $csr, $wildcard);
 		$this->extra = [];
-		$this->extra['laststep'] = 'GSValidateOrderParameters';
-		$this->extra['GSValidateOrderParameters'] = obj2array($res);
+		$this->extra['laststep'] = 'ValidateOrderParameters';
+		$this->extra['ValidateOrderParameters'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0)
 			$this->extra['error'] = 'Error In order';
 		$this->__construct($this->username, $this->password);
@@ -212,11 +212,11 @@ class GlobalSign {
 	 */
 	public function create_domainssl($fqdn, $csr, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = FALSE) {
 		$product = 'DV_SHA2';
-		$res = $this->GSValidateOrderParameters($product, $fqdn, $csr, $wildcard);
-		myadmin_log('ssl', 'info', "GSValidateOrderParameters($product, $fqdn, [CSR], $wildcard) returned: ".json_encode($res), __LINE__, __FILE__);
+		$res = $this->ValidateOrderParameters($product, $fqdn, $csr, $wildcard);
+		myadmin_log('ssl', 'info', "ValidateOrderParameters($product, $fqdn, [CSR], $wildcard) returned: ".json_encode($res), __LINE__, __FILE__);
 		$this->extra = [];
-		$this->extra['laststep'] = 'GSValidateOrderParameters';
-		$this->extra['GSValidateOrderParameters'] = obj2array($res);
+		$this->extra['laststep'] = 'ValidateOrderParameters';
+		$this->extra['ValidateOrderParameters'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
 			myadmin_log('ssl', 'info', 'create_domainssl returned: '.json_encode($res), __LINE__, __FILE__);
@@ -317,11 +317,11 @@ class GlobalSign {
 	 * @return array|bool
 	 */
 	public function create_organizationssl($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, $wildcard = FALSE) {
-		$res = $this->GSValidateOrderParameters('OV_SHA2', $fqdn, $csr, $wildcard);
-		myadmin_log('ssl', 'info', 'GSValidateOrderParameters returned '.json_encode($res), __LINE__, __FILE__);
+		$res = $this->ValidateOrderParameters('OV_SHA2', $fqdn, $csr, $wildcard);
+		myadmin_log('ssl', 'info', 'ValidateOrderParameters returned '.json_encode($res), __LINE__, __FILE__);
 		$this->extra = [];
-		$this->extra['laststep'] = 'GSValidateOrderParameters';
-		$this->extra['GSValidateOrderParameters'] = obj2array($res);
+		$this->extra['laststep'] = 'ValidateOrderParameters';
+		$this->extra['ValidateOrderParameters'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			echo "Error In order\n";
 			print_r($res->Response->OrderResponseHeader->Errors);
@@ -410,11 +410,11 @@ class GlobalSign {
 	 * @return array|bool
 	 */
 	public function create_extendedssl($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency, $approver_email) {
-		$res = $this->GSValidateOrderParameters('EV_SHA2', $fqdn, $csr);
+		$res = $this->ValidateOrderParameters('EV_SHA2', $fqdn, $csr);
 
 		$this->extra = [];
-		$this->extra['laststep'] = 'GSValidateOrderParameters';
-		$this->extra['GSValidateOrderParameters'] = obj2array($res);
+		$this->extra['laststep'] = 'ValidateOrderParameters';
+		$this->extra['ValidateOrderParameters'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
@@ -518,11 +518,11 @@ class GlobalSign {
 	 * @param bool   $wildcard
 	 * @return mixed
 	 */
-	private function GSValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE) {
+	private function ValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE) {
 		// 1.1 Extracting Common Name from the CSR and carrying out a Phishing DB Check
 		$OrderType = 'new';
 		$params = [
-			'GSValidateOrderParameters' => [
+			'ValidateOrderParameters' => [
 				'Request' => [
 					'OrderRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]],
 					'OrderRequestParameter' => [
@@ -536,13 +536,13 @@ class GlobalSign {
 			]
 		];
 		if ($wildcard === TRUE)
-			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
+			$params['ValidateOrderParameters']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		if ($csr != '') {
-			$params['GSValidateOrderParameters']['Request']['OrderRequestParameter']['CSR'] = $csr;
-			unset($params['GSValidateOrderParameters']['Request']['FQDN']);
+			$params['ValidateOrderParameters']['Request']['OrderRequestParameter']['CSR'] = $csr;
+			unset($params['ValidateOrderParameters']['Request']['FQDN']);
 		}
-		$this->extra['GSValidateOrderParameters_params'] = $params;
-		$res = $this->order_client->__soapCall('GSValidateOrderParameters', $params);
+		$this->extra['ValidateOrderParameters_params'] = $params;
+		$res = $this->order_client->__soapCall('ValidateOrderParameters', $params);
 		return $res;
 	}
 
@@ -974,7 +974,7 @@ class GlobalSign {
 	}
 
 	/**
-	 * GlobalSign::renewGSValidateOrderParameters()
+	 * GlobalSign::renewValidateOrderParameters()
 	 *
 	 * @param string  $product
 	 * @param mixed  $fqdn
@@ -983,7 +983,7 @@ class GlobalSign {
 	 * @param bool   $order_id
 	 * @return mixed
 	 */
-	private function renewGSValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE, $order_id = FALSE) {
+	private function renewValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE, $order_id = FALSE) {
 		// 1.1 Extracting Common Name from the CSR and carrying out a Phishing DB Check
 		if($wildcard === TRUE) {
 			$wild_card_str = 'wildcard';
@@ -991,7 +991,7 @@ class GlobalSign {
 			$wild_card_str = '';
 		}
 		$params = [
-			'GSValidateOrderParameters' => [
+			'ValidateOrderParameters' => [
 				'Request' => [
 					'OrderRequestHeader' => [
 						'AuthToken' => [
@@ -1013,10 +1013,10 @@ class GlobalSign {
 			]
 		];
 		//if ($csr != '')
-			//unset($params['GSValidateOrderParameters']['Request']['FQDN']);
-		$this->extra['GSValidateOrderParameters_params'] = $params;
+			//unset($params['ValidateOrderParameters']['Request']['FQDN']);
+		$this->extra['ValidateOrderParameters_params'] = $params;
 		myadmin_log('ssl', 'info', 'Params: '.json_encode($params), __LINE__, __FILE__);
-		$res = $this->order_client->__soapCall('GSValidateOrderParameters', $params);
+		$res = $this->order_client->__soapCall('ValidateOrderParameters', $params);
 		return $res;
 	}
 
@@ -1042,11 +1042,11 @@ class GlobalSign {
 		} else {
 			$product = 'DV_SHA2';
 		}
-		$res = $this->renewGSValidateOrderParameters($product, $fqdn, $csr, $wildcard, $oldOrderId);
-		myadmin_log('ssl', 'info', "renewGSValidateOrderParameters($product, $fqdn, $csr, $wildcard, $oldOrderId)", __LINE__, __FILE__);
+		$res = $this->renewValidateOrderParameters($product, $fqdn, $csr, $wildcard, $oldOrderId);
+		myadmin_log('ssl', 'info', "renewValidateOrderParameters($product, $fqdn, $csr, $wildcard, $oldOrderId)", __LINE__, __FILE__);
 		$this->extra = [];
-		$this->extra['laststep'] = 'GSValidateOrderParameters';
-		$this->extra['GSValidateOrderParameters'] = obj2array($res);
+		$this->extra['laststep'] = 'ValidateOrderParameters';
+		$this->extra['ValidateOrderParameters'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team.');
@@ -1055,7 +1055,7 @@ class GlobalSign {
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team.');
 			}
-			myadmin_log('ssl', 'info', 'renewGSValidateOrderParameters returned: '.json_encode($res), __LINE__, __FILE__);
+			myadmin_log('ssl', 'info', 'renewValidateOrderParameters returned: '.json_encode($res), __LINE__, __FILE__);
 			$this->extra['error'] = 'Error In order';
 			return $this->extra;
 		}
@@ -1086,7 +1086,7 @@ class GlobalSign {
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 			}
-			myadmin_log('ssl', 'info', 'renewGSValidateOrderParameters returned: '.json_encode($res), __LINE__, __FILE__);
+			myadmin_log('ssl', 'info', 'renewValidateOrderParameters returned: '.json_encode($res), __LINE__, __FILE__);
 		} else {
 			$this->extra['finished'] = 1;
 			myadmin_log('ssl', 'info', 'SSL Renew Order success - renewAlphaDomain', __LINE__, __FILE__);
@@ -1264,10 +1264,10 @@ class GlobalSign {
 	 * @return array|bool
 	 */
 	public function renewOrganizationSSL($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, $wildcard = FALSE, $oldOrderId) {
-		$res = $this->renewGSValidateOrderParameters('OV_SHA2', $fqdn, $csr, $wildcard);
+		$res = $this->renewValidateOrderParameters('OV_SHA2', $fqdn, $csr, $wildcard);
 		$this->extra = [];
-		$this->extra['laststep'] = 'GSValidateOrderParameters';
-		$this->extra['GSValidateOrderParameters'] = obj2array($res);
+		$this->extra['laststep'] = 'ValidateOrderParameters';
+		$this->extra['ValidateOrderParameters'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
@@ -1430,10 +1430,10 @@ class GlobalSign {
 	 * @return array|bool
 	 */
 	public function renewExtendedSSL($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency, $approver_email, $oldOrderId) {
-		$res = $this->renewGSValidateOrderParameters('EV_SHA2', $fqdn, $csr, FALSE);
+		$res = $this->renewValidateOrderParameters('EV_SHA2', $fqdn, $csr, FALSE);
 		$this->extra = [];
-		$this->extra['laststep'] = 'GSValidateOrderParameters';
-		$this->extra['GSValidateOrderParameters'] = obj2array($res);
+		$this->extra['laststep'] = 'ValidateOrderParameters';
+		$this->extra['ValidateOrderParameters'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			echo "Error In order\n";
 			myadmin_log('ssl', 'info', 'SSL Renew Order Error in validation - renewExtendedSSL', __LINE__, __FILE__);
