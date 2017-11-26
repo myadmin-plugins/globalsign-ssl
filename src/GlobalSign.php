@@ -11,25 +11,6 @@ namespace Detain\MyAdminGlobalSign;
 
 /**
  * GlobalSign
- * The following URL’s should be used to access the GlobalSign live API:
- *		SSL Functions: https://system.globalsign.com/kb/ws/v1/ServerSSLService
- *		Service/Query: https://system.globalsign.com/kb/ws/v1/GASService
- *		Account: https://system.globalsign.com/kb/ws/v1/AccountService
- *		Subscriber Agreement: https://system.globalsign.com/qb/ws/GasQuery
- * The following URLs* should be used to access the GlobalSign Test API:
- *		SSL Functions: https://testsystem.globalsign.com/kb/ws/v1/ServerSSLService
- *		Service/Query: https://testsystem.globalsign.com/kb/ws/v1/GASService
- *		Account: https://testsystem.globalsign.com/kb/ws/v1/AccountService
- *
- *GlobalSign’s WSDL files are available from:
- *		SSL Functions: https://system.globalsign.com/kb/ws/v1/ServerSSLService?wsdl
- *		Service/Query: https://system.globalsign.com/kb/ws/v1/GASService?wsdl
- *		Account: https://system.globalsign.com/kb/ws/v1/AccountService?wsdl
- *		Subscriber Agreement: https://system.globalsign.com/qb/ws/GasQuery?wsdl
- * Test account WSDL files are available from:
- *		SSL Functions: https://testsystem.globalsign.com/kb/ws/v1/ServerSSLService?wsdl
- *		Service/Query: https://testsystem.globalsign.com/kb/ws/v1/GASService?wsdl
- *		Account: https://testsystem.globalsign.com/kb/ws/v1/AccountService?wsdl
  *
  * SSL Functions:
  *		URLVerification		Order AlphaSSL or DomainSSL Certificate with Metatag validation
@@ -52,19 +33,14 @@ namespace Detain\MyAdminGlobalSign;
  */
 class GlobalSign {
 	public $functions_wsdl = 'https://system.globalsign.com/kb/ws/v1/ServerSSLService?wsdl';
-	public $order_wsdl = 'https://system.globalsign.com/wsdls/gasorder.wsdl';
-	public $order_wsdl_new = 'https://system.globalsign.com/kb/ws/v1/GASService?wsdl';
-	public $query_wsdl = 'https://system.globalsign.com/wsdls/gasquery.wsdl';
-	public $autocsr_wsdl = 'https://system.globalsign.com/wsdls/gasorderwoc.wsdl';
+	public $query_wsdl = 'https://system.globalsign.com/kb/ws/v1/GASService?wsdl';
+	public $account_wsdl = 'https://system.globalsign.com/kb/ws/v1/AccountService?wsdl';
 
-	public $test_functions_wsdl = 'https://testsystem.globalsign.com/kb/ws/v1/ServerSSLService';
-	public $test_order_wsdl = 'https://testsystem.globalsign.com/wsdls/gasorder.wsdl';
-	public $test_query_wsdl = 'https://testsystem.globalsign.com/wsdls/gasquery.wsdl';
-	public $test_autocsr_wsdl = 'https://testsystem.globalsign.com/wsdls/gasorderwoc.wsdl';
+	public $order_wsdl_old = 'https://system.globalsign.com/wsdls/gasorder.wsdl';
 
-	public $order_namespace = 'http://stub.order.gasapiserver.esp.globalsign.com';
-	public $query_namespace = 'http://stub.query.gasapiserver.esp.globalsign.com';
-	public $autocsr_namespace = 'http://stub.orderwoc.gasapiserver.esp.globalsign.com';
+	public $test_functions_wsdl = 'https://test-gcc.globalsign.com/kb/ws/v1/ServerSSLService?wsdl';
+	public $test_query_wsdl = 'https://test-gcc.globalsign.com/kb/ws/v1/GASService?wsdl';
+	public $test_account_wsdl = 'https://test-gcc.globalsign.com/kb/ws/v1/AccountService?wsdl';
 
 	private $username = '';
 	private $password = '';
@@ -76,10 +52,9 @@ class GlobalSign {
 	public $connection_timeout = 1000;
 
 	public $functions_client;
-	public $order_client;
-	public $order_client_new;
+	public $account_client;
 	public $query_client;
-	public $autocsr_client;
+	public $order_client_old;
 
 	public $user_agent = '';
 	public $trace_connections = 1;
@@ -98,50 +73,16 @@ class GlobalSign {
 		$this->username = $username;
 		$this->password = $password;
 		$this->testing = $testing;
-		if ($this->testing == TRUE) {
-			$this->order_wsdl = $this->test_order_wsdl;
-			$this->query_wsdl = $this->test_query_wsdl;
-			$this->autocsr_wsdl = $this->test_autocsr_wsdl;
-		}
-		$this->functions_client = new \SoapClient($this->functions_wsdl, [
+		$soapOptions = [
 			'user_agent' => $this->user_agent,
 			'connection_timeout' => $this->connection_timeout,
 			'trace' => $this->trace_connections,
 			'cache_wsdl' => WSDL_CACHE_BOTH
-		]
-		);
-		$this->order_client = new \SoapClient($this->order_wsdl, [
-			'user_agent' => $this->user_agent,
-			'connection_timeout' => $this->connection_timeout,
-			'trace' => $this->trace_connections,
-			'cache_wsdl' => WSDL_CACHE_BOTH
-		]
-		);
-		$this->order_client_new = new \SoapClient($this->order_wsdl_new, [
-			'user_agent' => $this->user_agent,
-			'connection_timeout' => $this->connection_timeout,
-			'trace' => $this->trace_connections,
-			'cache_wsdl' => WSDL_CACHE_BOTH
-		]
-		);
-
-		$this->query_client = new \SoapClient($this->query_wsdl, [
-			'user_agent' => $this->user_agent,
-			'connection_timeout' => $this->connection_timeout,
-			'trace' => $this->trace_connections,
-			'cache_wsdl' => WSDL_CACHE_BOTH
-		]
-		);
-		$this->autocsr_client = new \SoapClient($this->autocsr_wsdl, [
-			'user_agent' => $this->user_agent,
-			'connection_timeout' => $this->connection_timeout,
-			'trace' => $this->trace_connections,
-			'cache_wsdl' => WSDL_CACHE_BOTH
-		]
-		);
-		$this->query_client->_namespace = $this->query_namespace;
-		$this->order_client->_namespace = $this->order_namespace;
-		$this->autocsr_client->_namespace = $this->autocsr_namespace;
+		];
+		$this->functions_client = new \SoapClient($this->testing != TRUE ? $this->functions_wsdl : $this->test_functions_wsdl, $soapOptions);
+		$this->account_client = new \SoapClient($this->testing != TRUE ? $this->account_wsdl : $this->test_account_wsdl, $soapOptions);
+		$this->query_client = new \SoapClient($this->testing != TRUE ? $this->query_wsdl : $this->test_query_wsdl, $soapOptions);
+		$this->order_client_old = new \SoapClient($this->order_wsdl_old, $soapOptions);
 	}
 
 	/**
@@ -185,12 +126,12 @@ class GlobalSign {
 		$this->extra['order_id'] = $order_id;
 		if ($approver_email == '')
 			$approver_email = $res->Response->Approvers->Approver[0]->ApproverEmail;
-		myadmin_log('ssl', 'info', "GSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard)", __LINE__, __FILE__);
+		myadmin_log('ssl', 'info', "DVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard)", __LINE__, __FILE__);
 		$this->__construct($this->username, $this->password);
-		$res = $this->GSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard);
+		$res = $this->DVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard);
 		myadmin_log('ssl', 'info', json_encode($res), __LINE__, __FILE__);
-		$this->extra['laststep'] = 'GSDVOrder';
-		$this->extra['GSDVOrder'] = obj2array($res);
+		$this->extra['laststep'] = 'DVOrder';
+		$this->extra['DVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0)
 			$this->extra['error'] = 'Error In order';
 		else
@@ -237,10 +178,10 @@ class GlobalSign {
 		if ($approver_email == '')
 			$approver_email = $res->Response->Approvers->Approver[0]->ApproverEmail;
 		$this->__construct($this->username, $this->password);
-		$res = $this->GSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard);
-		myadmin_log('ssl', 'info', "GSDVOrder($product, $order_id, $approver_email, $fqdn, [CSR], $firstname, $lastname, $phone, $email, $wildcard) returned: ".json_encode($res), __LINE__, __FILE__);
-		$this->extra['laststep'] = 'GSDVOrder';
-		$this->extra['GSDVOrder'] = obj2array($res);
+		$res = $this->DVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard);
+		myadmin_log('ssl', 'info', "DVOrder($product, $order_id, $approver_email, $fqdn, [CSR], $firstname, $lastname, $phone, $email, $wildcard) returned: ".json_encode($res), __LINE__, __FILE__);
+		$this->extra['laststep'] = 'DVOrder';
+		$this->extra['DVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
@@ -281,7 +222,7 @@ class GlobalSign {
 			$approver_email = $res->Response->Approvers->Approver[0]->ApproverEmail;
 
 		$this->__construct($this->username, $this->password);
-		$res = $this->GSDVOrderWithoutCSR($fqdn, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $wildcard);
+		$res = $this->DVOrderWithoutCSR($fqdn, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $wildcard);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
@@ -331,9 +272,9 @@ class GlobalSign {
 		}
 		$order_id = $res->Response->OrderID;
 		$this->__construct($this->username, $this->password);
-		$res = $this->GSOVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard);
-		$this->extra['laststep'] = 'GSOVOrder';
-		$this->extra['GSOVOrder'] = obj2array($res);
+		$res = $this->OVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard);
+		$this->extra['laststep'] = 'OVOrder';
+		$this->extra['OVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
@@ -372,7 +313,7 @@ class GlobalSign {
 	 * @return bool
 	 */
 	public function create_organizationssl_autocsr($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, $wildcard) {
-		$res = $this->GSOVOrderWithoutCSR($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard);
+		$res = $this->OVOrderWithoutCSR($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
@@ -428,10 +369,10 @@ class GlobalSign {
 		}
 		$this->__construct($this->username, $this->password);
 
-		$res = $this->GSEVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency);
+		$res = $this->EVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency);
 		$order_id = $res->Response->OrderID;
-		$this->extra['laststep'] = 'GSEVOrder';
-		$this->extra['GSEVOrder'] = obj2array($res);
+		$this->extra['laststep'] = 'EVOrder';
+		$this->extra['EVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
@@ -497,14 +438,33 @@ class GlobalSign {
 	}
 
 	/**
-	 * GlobalSign::GetCertificateOrders()
+	 * return a list of orders based on criteria provided.
+	 * sample date might be 2017-10-08T04:54:12.000-05:00
+	 * to access response its something like:
+	 *  $response->Response->SearchOrderDetails->SearchOrderDetail[0]->OrderID
 	 *
-	 * @param mixed $fromdate
-	 * @param mixed $todate
+	 * @param string $fromdate optional from date for lookup in YYYY-MM-DDTHH:MM:SS.000Z format
+	 * @param string $todate optional to date for lookup in YYYY-MM-DDTHH:MM:SS.000Z format
+	 * @param string $fqdn optional domain name to check/lookup
+	 * @param string $status optional status to check, status can be   1: INITIAL, 2: Waiting for phishing check, 3: Cancelled - Not Issued, 4: Issue completed, 5: Cancelled - Issued, 6: Waiting for revocation, 7: Revoked
 	 * @return mixed
 	 */
-	private function GetCertificateOrders($fromdate, $todate) {
-		$params = ['GetCertificateOrders' => ['Request' => ['QueryRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]]]]];
+	public function GetCertificateOrders($fromdate = '', $todate = '', $fqdn = '', $status = '') {
+		$params = ['GetCertificateOrders' => [
+			'Request' => [
+				'QueryRequestHeader' => [
+					'AuthToken' => [
+						'UserName' => $this->username,
+						'Password' => $this->password
+		]]]]];
+		if ($fromdate != '')
+			$params['GetCertificateOrders']['Request']['FromDate'] = $fromdate;
+		if ($todate != '')
+			$params['GetCertificateOrders']['Request']['ToDate'] = $todate;
+		if ($fqdn != '')
+			$params['GetCertificateOrders']['Request']['FQDN'] = $fqdn;
+		if ($status != '')
+			$params['GetCertificateOrders']['Request']['OrderStatus'] = $status;
 		$this->extra['GetCertificateOrders'] = $params;
 		return $this->query_client->__soapCall('GetCertificateOrders', $params);
 	}
@@ -518,7 +478,7 @@ class GlobalSign {
 	 * @param bool   $wildcard
 	 * @return mixed
 	 */
-	private function ValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE) {
+	public function ValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE) {
 		// 1.1 Extracting Common Name from the CSR and carrying out a Phishing DB Check
 		$OrderType = 'new';
 		$params = [
@@ -542,7 +502,7 @@ class GlobalSign {
 			unset($params['ValidateOrderParameters']['Request']['FQDN']);
 		}
 		$this->extra['ValidateOrderParameters_params'] = $params;
-		$res = $this->order_client->__soapCall('ValidateOrderParameters', $params);
+		$res = $this->order_client_old->__soapCall('ValidateOrderParameters', $params);
 		return $res;
 	}
 
@@ -561,7 +521,7 @@ class GlobalSign {
 	 * @param bool  $wildcard
 	 * @return mixed
 	 */
-	private function GSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = FALSE) {
+	public function DVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = FALSE) {
 
 		/*
 		* $Options = array(
@@ -570,7 +530,7 @@ class GlobalSign {
 		* 'OptionValue' => 'true',
 		* ),
 		* );
-		* $params['GSDVOrder']['Request']['OrderRequestParameter']['Options'] = $Options;
+		* $params['DVOrder']['Request']['OrderRequestParameter']['Options'] = $Options;
 
 		* $SANEntries => array(
 		* 'SANEntry' => array(
@@ -584,10 +544,10 @@ class GlobalSign {
 		* ),
 		* ),
 		* );
-		* $params['GSDVOrder']['Request']['SANEntries'] = $SANEntries;
+		* $params['DVOrder']['Request']['SANEntries'] = $SANEntries;
 		*/
 		$params = [
-			'GSDVOrder' => [
+			'DVOrder' => [
 				'Request' => [
 					'OrderRequestHeader' => [
 						'AuthToken' => [
@@ -615,13 +575,13 @@ class GlobalSign {
 		];
 
 		if ($wildcard === TRUE)
-			$params['GSDVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		$this->extra['GSDVOrder_params'] = $params;
+			$params['DVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
+		$this->extra['DVOrder_params'] = $params;
 		//  	    ini_set("max_input_time", -1);
 		//	        ini_set("max_execution_time", -1);
 		ini_set('max_execution_time', 1000); // just put a lot of time
 		ini_set('default_socket_timeout', 1000); // same
-		$res = $this->order_client->__soapCall('GSDVOrder', $params);
+		$res = $this->order_client_old->__soapCall('DVOrder', $params);
 		return $res;
 	}
 
@@ -644,9 +604,9 @@ class GlobalSign {
 	 * @param bool  $wildcard
 	 * @return mixed
 	 */
-	private function GSOVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE) {
+	public function OVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE) {
 		$params = [
-			'GSOVOrder' => [
+			'OVOrder' => [
 				'Request' => [
 					'OrderRequestHeader' => [
 						'AuthToken' => [
@@ -706,14 +666,14 @@ class GlobalSign {
 		];
 
 		if ($wildcard === TRUE)
-			$params['GSOVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		$this->extra['GSOVOrder_params'] = $params;
-		$res = $this->order_client->__soapCall('GSOVOrder', $params);
+			$params['OVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
+		$this->extra['OVOrder_params'] = $params;
+		$res = $this->order_client_old->__soapCall('OVOrder', $params);
 		return $res;
 	}
 
 	/**
-	 * GlobalSign::GSOVOrderWithoutCSR()
+	 * GlobalSign::OVOrderWithoutCSR()
 	 *
 	 * @param mixed $fqdn
 	 * @param mixed $firstname
@@ -728,9 +688,9 @@ class GlobalSign {
 	 * @param bool  $wildcard
 	 * @return mixed
 	 */
-	private function GSOVOrderWithoutCSR($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE) {
+	public function OVOrderWithoutCSR($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE) {
 		$params = [
-			'GSOVOrderWithoutCSR' => [
+			'OVOrderWithoutCSR' => [
 				'Request' => [
 					'OrderRequestHeader' => [
 						'AuthToken' => [
@@ -791,9 +751,9 @@ class GlobalSign {
 			]
 		];
 		if ($wildcard === TRUE)
-			$params['GSOVOrderWithoutCSR']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		$this->extra['GSOVOrderWithoutCSR_params'] = $params;
-		$res = $this->order_client->__soapCall('GSOVOrderWithoutCSR', $params);
+			$params['OVOrderWithoutCSR']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
+		$this->extra['OVOrderWithoutCSR_params'] = $params;
+		$res = $this->order_client_old->__soapCall('OVOrderWithoutCSR', $params);
 		return $res;
 	}
 
@@ -815,10 +775,10 @@ class GlobalSign {
 	 * @param mixed $agency
 	 * @return mixed
 	 */
-	private function GSEVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency) {
+	public function EVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency) {
 
 		$params = [
-			'GSEVOrder' => [
+			'EVOrder' => [
 				'Request' => [
 					'OrderRequestHeader' => [
 						'AuthToken' => [
@@ -912,8 +872,8 @@ class GlobalSign {
 				]
 			]
 		];
-		$this->extra['GSEVOrder_params'] = $params;
-		$res = $this->order_client->__soapCall('GSEVOrder', $params);
+		$this->extra['EVOrder_params'] = $params;
+		$res = $this->order_client_old->__soapCall('EVOrder', $params);
 		return $res;
 	}
 
@@ -938,11 +898,11 @@ class GlobalSign {
 	 * @param string $orderID
 	 * @return mixed
 	 */
-	public function GSResendEmail($orderID) {
-		myadmin_log('ssl', 'info', "In function : GSResendEmail($orderID)", __LINE__, __FILE__);
+	public function ResendEmail($orderID) {
+		myadmin_log('ssl', 'info', "In function : ResendEmail($orderID)", __LINE__, __FILE__);
 		$params = ['ResendEmail' => ['Request' => ['OrderRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]], 'OrderID' => $orderID, 'ResendEmailType' =>'APPROVEREMAIL']]];
 		myadmin_log('ssl', 'info', 'Params: '.json_encode($params), __LINE__, __FILE__);
-		return $this->order_client->__soapCall('ResendEmail', $params);
+		return $this->order_client_old->__soapCall('ResendEmail', $params);
 	}
 
 	/**
@@ -954,7 +914,7 @@ class GlobalSign {
 	 * @return string
 	 * @internal param mixed $fdqn
 	 */
-	public function GSChangeApproverEmail($orderID, $approverEmail, $fqdn) {
+	public function ChangeApproverEmail($orderID, $approverEmail, $fqdn) {
 		$params = [
 			'ChangeApproverEmail' => [
 				'Request' => [
@@ -983,7 +943,7 @@ class GlobalSign {
 	 * @param bool   $order_id
 	 * @return mixed
 	 */
-	private function renewValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE, $order_id = FALSE) {
+	public function renewValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE, $order_id = FALSE) {
 		// 1.1 Extracting Common Name from the CSR and carrying out a Phishing DB Check
 		if($wildcard === TRUE) {
 			$wild_card_str = 'wildcard';
@@ -1016,7 +976,7 @@ class GlobalSign {
 			//unset($params['ValidateOrderParameters']['Request']['FQDN']);
 		$this->extra['ValidateOrderParameters_params'] = $params;
 		myadmin_log('ssl', 'info', 'Params: '.json_encode($params), __LINE__, __FILE__);
-		$res = $this->order_client->__soapCall('ValidateOrderParameters', $params);
+		$res = $this->order_client_old->__soapCall('ValidateOrderParameters', $params);
 		return $res;
 	}
 
@@ -1072,11 +1032,11 @@ class GlobalSign {
 		$this->extra['order_id'] = $order_id;
 		if ($approver_email == '')
 			$approver_email = $res->Response->Approvers->Approver[0]->ApproverEmail;
-		myadmin_log('ssl', 'info', "renewGSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderId)", __LINE__, __FILE__);
+		myadmin_log('ssl', 'info', "renewDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderId)", __LINE__, __FILE__);
 		$this->__construct($this->username, $this->password);
-		$res = $this->renewGSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderId);
-		$this->extra['laststep'] = 'GSDVOrder';
-		$this->extra['GSDVOrder'] = obj2array($res);
+		$res = $this->renewDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderId);
+		$this->extra['laststep'] = 'DVOrder';
+		$this->extra['DVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			$this->extra['error'] = 'Error In order';
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
@@ -1096,7 +1056,7 @@ class GlobalSign {
 	}
 
 	/**
-	 * GlobalSign::renewGSDVOrder()
+	 * GlobalSign::renewDVOrder()
 	 *
 	 * @param string $product
 	 * @param mixed $order_id
@@ -1111,10 +1071,10 @@ class GlobalSign {
 	 * @param mixed $oldOrderID
 	 * @return mixed
 	 */
-	private function renewGSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = FALSE, $oldOrderID) {
-		myadmin_log('ssl', 'info', "Called renewGSDVOrder - renewGSDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderID)", __LINE__, __FILE__);
+	public function renewDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = FALSE, $oldOrderID) {
+		myadmin_log('ssl', 'info', "Called renewDVOrder - renewDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderID)", __LINE__, __FILE__);
 		$params = [
-			'GSDVOrder' => [
+			'DVOrder' => [
 				'Request' => [
 					'OrderRequestHeader' => [
 						'AuthToken' => [
@@ -1143,19 +1103,19 @@ class GlobalSign {
 			]
 		];
 		if ($wildcard === TRUE)
-			$params['GSDVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		$this->extra['GSDVOrder_params'] = $params;
+			$params['DVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
+		$this->extra['DVOrder_params'] = $params;
 		//  	    ini_set("max_input_time", -1);
 		//	        ini_set("max_execution_time", -1);
 		ini_set('max_execution_time', 1000); // just put a lot of time
 		ini_set('default_socket_timeout', 1000); // same
 		myadmin_log('ssl', 'info', 'Params - '.json_encode($params), __LINE__, __FILE__);
-		$res = $this->order_client->__soapCall('GSDVOrder', $params);
+		$res = $this->order_client_old->__soapCall('DVOrder', $params);
 		return $res;
 	}
 
 	/**
-	 * GlobalSign::renewGSOVOrder()
+	 * GlobalSign::renewOVOrder()
 	 *
 	 * @param mixed $fqdn
 	 * @param mixed $csr
@@ -1174,9 +1134,9 @@ class GlobalSign {
 	 * @param string $oldOrderId
 	 * @return mixed
 	 */
-	private function renewGSOVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE, $oldOrderId) {
+	public function renewOVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE, $oldOrderId) {
 		$params = [
-			'GSOVOrder' => [
+			'OVOrder' => [
 				'Request' => [
 					'OrderRequestHeader' => [
 						'AuthToken' => [
@@ -1238,9 +1198,9 @@ class GlobalSign {
 		];
 
 		if ($wildcard === TRUE)
-			$params['GSOVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		$this->extra['GSOVOrder_params'] = $params;
-		$res = $this->order_client->__soapCall('GSOVOrder', $params);
+			$params['OVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
+		$this->extra['OVOrder_params'] = $params;
+		$res = $this->order_client_old->__soapCall('OVOrder', $params);
 		return $res;
 	}
 
@@ -1281,9 +1241,9 @@ class GlobalSign {
 		}
 		$order_id = $res->Response->OrderID;
 		$this->__construct($this->username, $this->password);
-		$res = $this->renewGSOVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard, $oldOrderId);
-		$this->extra['laststep'] = 'GSOVOrder';
-		$this->extra['GSOVOrder'] = obj2array($res);
+		$res = $this->renewOVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard, $oldOrderId);
+		$this->extra['laststep'] = 'OVOrder';
+		$this->extra['OVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
@@ -1305,7 +1265,7 @@ class GlobalSign {
 	}
 
 	/**
-	 * GlobalSign::GSEVOrder()
+	 * GlobalSign::EVOrder()
 	 *
 	 * @param mixed $fqdn
 	 * @param mixed $csr
@@ -1323,9 +1283,9 @@ class GlobalSign {
 	 * @param $oldOrderId
 	 * @return mixed
 	 */
-	private function renewGSEVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency, $oldOrderId) {
+	public function renewEVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency, $oldOrderId) {
 		$params = [
-			'GSEVOrder' => [
+			'EVOrder' => [
 				'Request' => [
 					'OrderRequestHeader' => [
 						'AuthToken' => [
@@ -1398,13 +1358,13 @@ class GlobalSign {
 			]
 		];
 		$this->extra = [];
-		$this->extra['GSEVOrder_params'] = $params;
-		$res = $this->order_client->__soapCall('GSEVOrder', $params);
+		$this->extra['EVOrder_params'] = $params;
+		$res = $this->order_client_old->__soapCall('EVOrder', $params);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			return FALSE;
 		} else {
 			$this->extra['finished'] = 1;
-			$this->extra['GSEVOrder'] = obj2array($res);
+			$this->extra['EVOrder'] = obj2array($res);
 		}
 		return $this->extra;
 	}
@@ -1443,9 +1403,9 @@ class GlobalSign {
 		$this->__construct($this->username, $this->password);
 
 		$order_id = $res->Response->OrderID;
-		$res = $this->renewGSEVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency, $oldOrderId);
-		$this->extra['laststep'] = 'GSEVOrder';
-		$this->extra['GSEVOrder'] = obj2array($res);
+		$res = $this->renewEVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency, $oldOrderId);
+		$this->extra['laststep'] = 'EVOrder';
+		$this->extra['EVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team.');
@@ -1473,13 +1433,13 @@ class GlobalSign {
 	 * @param $csr
 	 * @return mixed
 	 */
-	public function GSReIssue($orderID, $csr) {
+	public function ReIssue($orderID, $csr) {
 		$params = ['ReIssue' => ['Request' => ['OrderRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]], 'OrderParameter' => ['CSR' => $csr], 'TargetOrderID' => $orderID, 'HashAlgorithm' =>'SHA256']]];
 		return $this->order_client_new->__soapCall('ReIssue', $params);
 	}
 
 	/**
-	 * GlobalSign::GSDVOrderWithoutCSR()
+	 * GlobalSign::DVOrderWithoutCSR()
 	 *
 	 * @param mixed $fqdn
 	 * @param mixed $order_id
@@ -1491,9 +1451,9 @@ class GlobalSign {
 	 * @param bool $wildcard
 	 * @return mixed
 	 */
-	private function GSDVOrderWithoutCSR($fqdn, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $wildcard = FALSE) {
+	public function DVOrderWithoutCSR($fqdn, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $wildcard = FALSE) {
 		$params = [
-			'GSDVOrderWithoutCSR' => [
+			'DVOrderWithoutCSR' => [
 				'Request' => [
 					'OrderRequestHeader' => [
 						'AuthToken' => [
@@ -1541,9 +1501,9 @@ class GlobalSign {
 			]
 		];
 		if ($wildcard === TRUE)
-			$params['GSDVOrderWithoutCSR']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		$this->extra['GSDVOrderWithoutCSR_params'] = $params;
-		return $order_client->__soapCall('GSDVOrderWithoutCSR', $params);
+			$params['DVOrderWithoutCSR']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
+		$this->extra['DVOrderWithoutCSR_params'] = $params;
+		return $order_client->__soapCall('DVOrderWithoutCSR', $params);
 	}
 
 }
