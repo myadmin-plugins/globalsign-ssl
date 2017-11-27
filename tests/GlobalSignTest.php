@@ -37,8 +37,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::GetOrderByOrderID
-	 * @todo   Implement testGetOrderByOrderID().
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::GetOrderByOrderID
 	 */
 	public function testGetOrderByOrderID() {
 		$response = $this->object->GetOrderByOrderID('CE201011028514');
@@ -55,8 +54,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::GetOrderByDateRange
-	 * @todo   Implement testGetOrderByDateRange().
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::GetOrderByDateRange
 	 */
 	public function testGetOrderByDateRange() {
 		$response = $this->object->GetOrderByDateRange('2017-11-24T00:00:01.000-05:00', '2017-11-24T23:23:59.000-05:00');
@@ -69,8 +67,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::GetCertificateOrders
-	 * @todo   Implement testGetCertificateOrders().
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::GetCertificateOrders
 	 */
 	public function testGetCertificateOrders() {
 		$response = $this->object->GetCertificateOrders('2017-11-24T00:00:01.000-05:00', '2017-11-24T23:23:59.000-05:00');
@@ -109,8 +106,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::ValidateOrderParameters
-	 * @todo   Implement testValidateOrderParameters().
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::ValidateOrderParameters
 	 */
 	public function testValidateOrderParameters() {
 		$fqdn = 'somerandomnewdomain.net';
@@ -140,8 +136,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::GetDVApproverList
-	 * @todo   Implement testGetDVApproverList().
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::GetDVApproverList
 	 */
 	public function testGetDVApproverList() {
 		$response = $this->object->GetDVApproverList('interserver.net');
@@ -158,8 +153,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::renewValidateOrderParameters
-	 * @todo   Implement testRenewValidateOrderParameters().
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::renewValidateOrderParameters
 	 */
 	public function testRenewValidateOrderParameters() {
 		$response = $this->object->renewValidateOrderParameters('DV_LOW_SHA2', 'synergypublishers.com', "", FALSE, 'CE20171125014256');
@@ -174,8 +168,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::ResendEmail
-	 * @todo   Implement testResendEmail().
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::ResendEmail
 	 */
 	public function testResendEmail() {
 		$response = $this->object->ResendEmail('CE198105220000');
@@ -195,7 +188,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::ChangeApproverEmail
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::ChangeApproverEmail
 	 * @todo   Implement testChangeApproverEmail().
 	 */
 	public function testChangeApproverEmail() {
@@ -203,7 +196,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::ReIssue
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::ReIssue
 	 * @todo   Implement testReIssue().
 	 */
 	public function testReIssue() {
@@ -211,7 +204,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::DVOrder
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::DVOrder
 	 * @todo   Implement testDVOrder().
 	 */
 	public function testDVOrder() {
@@ -219,7 +212,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::DVOrderWithoutCSR
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::DVOrderWithoutCSR
 	 * @todo   Implement testDVOrderWithoutCSR().
 	 */
 	public function testDVOrderWithoutCSR() {
@@ -227,7 +220,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::OVOrder
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::OVOrder
 	 * @todo   Implement testOVOrder().
 	 */
 	public function testOVOrder() {
@@ -235,7 +228,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::OVOrderWithoutCSR
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::OVOrderWithoutCSR
 	 * @todo   Implement testOVOrderWithoutCSR().
 	 */
 	public function testOVOrderWithoutCSR() {
@@ -243,7 +236,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::EVOrder
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::EVOrder
 	 * @todo   Implement testEVOrder().
 	 */
 	public function testEVOrder() {
@@ -252,7 +245,7 @@ class GlobalSignTest extends TestCase {
 
 
 	/**
-	 * @covers GlobalSign::create_alphassl
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::create_alphassl
 	 * @todo   Implement testCreate_alphassl().
 	 */
 	public function testCreate_alphassl() {
@@ -260,7 +253,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::create_domainssl
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::create_domainssl
 	 * @todo   Implement testCreate_domainssl().
 	 */
 	public function testCreate_domainssl() {
@@ -268,7 +261,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::create_domainssl_autocsr
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::create_domainssl_autocsr
 	 * @todo   Implement testCreate_domainssl_autocsr().
 	 */
 	public function testCreate_domainssl_autocsr() {
@@ -276,7 +269,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::create_organizationssl
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::create_organizationssl
 	 * @todo   Implement testCreate_organizationssl().
 	 */
 	public function testCreate_organizationssl() {
@@ -284,7 +277,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::create_organizationssl_autocsr
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::create_organizationssl_autocsr
 	 * @todo   Implement testCreate_organizationssl_autocsr().
 	 */
 	public function testCreate_organizationssl_autocsr() {
@@ -292,14 +285,14 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::create_extendedssl
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::create_extendedssl
 	 * @todo   Implement testCreate_extendedssl().
 	 */
 	public function testCreate_extendedssl() {
 		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 	/**
-	 * @covers GlobalSign::renewAlphaDomain
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::renewAlphaDomain
 	 * @todo   Implement testRenewAlphaDomain().
 	 */
 	public function testRenewAlphaDomain() {
@@ -307,7 +300,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::renewDVOrder
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::renewDVOrder
 	 * @todo   Implement testRenewDVOrder().
 	 */
 	public function testRenewDVOrder() {
@@ -315,7 +308,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::renewOVOrder
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::renewOVOrder
 	 * @todo   Implement testRenewOVOrder().
 	 */
 	public function testRenewOVOrder() {
@@ -323,7 +316,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::renewOrganizationSSL
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::renewOrganizationSSL
 	 * @todo   Implement testRenewOrganizationSSL().
 	 */
 	public function testRenewOrganizationSSL() {
@@ -331,7 +324,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::renewEVOrder
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::renewEVOrder
 	 * @todo   Implement testRenewEVOrder().
 	 */
 	public function testRenewEVOrder() {
@@ -339,7 +332,7 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::renewExtendedSSL
+	 * @covers Detain\MyAdminGlobalSign\GlobalSign::renewExtendedSSL
 	 * @todo   Implement testRenewExtendedSSL().
 	 */
 	public function testRenewExtendedSSL() {
