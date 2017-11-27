@@ -37,6 +37,19 @@ class GlobalSignTest extends TestCase {
 	 */
 	public function testGetOrderByOrderID() {
 		$this->markTestIncomplete('This test has not been implemented yet.');
+		$response = $this->object->GetOrderByOrderID('CE201011028514');
+		$this->assertArrayKeyExists('Response', $response);
+		$this->ArrayKeyExists('QueryResponseHeader', $response['Response']);
+		$this->ArrayKeyExists('SuccessCode', $response['Response']['QueryResponseHeader']);
+		$this->assertEquals($response['Response']['QueryResponseHeader']['SuccessCode'], 0);
+		$this->ArrayKeyExists('SearchOrderDetails', $response['Response']);
+		$this->assertTrue(is_array($response['Response']['SearchOrderDetails']['SearchOrderDetail']));
+		$this->assertArrayHasKey(0, $response['Response']['SearchOrderDetails']['SearchOrderDetail']);
+		$this->ArrayKeyExists('OrderID', $response['Response']['SearchOrderDetails']['SearchOrderDetail'][0]);
+		$this->ArrayKeyExists('OrderKind', $response['Response']['SearchOrderDetails']['SearchOrderDetail'][0]);
+		$this->ArrayKeyExists('OrderStatus', $response['Response']['SearchOrderDetails']['SearchOrderDetail'][0]);
+		$this->ArrayKeyExists('FQDN', $response['Response']['SearchOrderDetails']['SearchOrderDetail'][0]);
+		$this->assertTrue(strpos($response['Response']['SearchOrderDetails']['SearchOrderDetail'][0]['FQDN'], 'interserver.net') !== FALSE);
 	}
 
 	/**
@@ -52,7 +65,39 @@ class GlobalSignTest extends TestCase {
 	 * @todo   Implement testGetCertificateOrders().
 	 */
 	public function testGetCertificateOrders() {
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$response = $this->object->GetCertificateOrders('2017-11-24T00:00:01.000-05:00', '2017-11-24T23:23:59.000-05:00');
+		$this->assertObjectHasAttribute('Response', $response);
+		$this->assertObjectHasAttribute('QueryResponseHeader', $response->Response);
+		$this->assertObjectHasAttribute('SuccessCode', $response->Response->QueryResponseHeader);
+		//var_export($response);
+		$this->assertEquals(0, $response->Response->QueryResponseHeader->SuccessCode);
+		$this->assertObjectHasAttribute('SearchOrderDetails', $response->Response);
+		$response = $this->object->GetCertificateOrders('', '', 'interserver.net');
+		$this->assertObjectHasAttribute('Response', $response);
+		$this->assertObjectHasAttribute('QueryResponseHeader', $response->Response);
+		$this->assertObjectHasAttribute('SuccessCode', $response->Response->QueryResponseHeader);
+		$this->assertEquals($response->Response->QueryResponseHeader->SuccessCode, 0);
+		$this->assertObjectHasAttribute('SearchOrderDetails', $response->Response);
+		$this->assertTrue(is_array($response->Response->SearchOrderDetails->SearchOrderDetail));
+		$this->assertArrayHasKey(0, $response->Response->SearchOrderDetails->SearchOrderDetail);
+		$this->assertObjectHasAttribute('OrderID', $response->Response->SearchOrderDetails->SearchOrderDetail[0]);
+		$this->assertObjectHasAttribute('OrderKind', $response->Response->SearchOrderDetails->SearchOrderDetail[0]);
+		$this->assertObjectHasAttribute('OrderStatus', $response->Response->SearchOrderDetails->SearchOrderDetail[0]);
+		$this->assertObjectHasAttribute('FQDN', $response->Response->SearchOrderDetails->SearchOrderDetail[0]);
+		$this->assertTrue(strpos($response->Response->SearchOrderDetails->SearchOrderDetail[0]->FQDN, 'interserver.net') !== FALSE);
+		$response = $this->object->GetCertificateOrders('', '', '', '3');
+		$this->assertObjectHasAttribute('Response', $response);
+		$this->assertObjectHasAttribute('QueryResponseHeader', $response->Response);
+		$this->assertObjectHasAttribute('SuccessCode', $response->Response->QueryResponseHeader);
+		$this->assertEquals($response->Response->QueryResponseHeader->SuccessCode, 0);
+		$this->assertObjectHasAttribute('SearchOrderDetails', $response->Response);
+		$this->assertTrue(is_array($response->Response->SearchOrderDetails->SearchOrderDetail));
+		$this->assertArrayHasKey(0, $response->Response->SearchOrderDetails->SearchOrderDetail);
+		$this->assertObjectHasAttribute('OrderID', $response->Response->SearchOrderDetails->SearchOrderDetail[0]);
+		$this->assertObjectHasAttribute('OrderKind', $response->Response->SearchOrderDetails->SearchOrderDetail[0]);
+		$this->assertObjectHasAttribute('OrderStatus', $response->Response->SearchOrderDetails->SearchOrderDetail[0]);
+		$this->assertObjectHasAttribute('FQDN', $response->Response->SearchOrderDetails->SearchOrderDetail[0]);
+		$this->assertTrue($response->Response->SearchOrderDetails->SearchOrderDetail[0]->OrderStatus == '3');
 	}
 
 	/**
@@ -60,14 +105,6 @@ class GlobalSignTest extends TestCase {
 	 * @todo   Implement testValidateOrderParameters().
 	 */
 	public function testValidateOrderParameters() {
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
-	 * @covers GlobalSign::list_certs
-	 * @todo   Implement testList_certs().
-	 */
-	public function testList_certs() {
 		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
