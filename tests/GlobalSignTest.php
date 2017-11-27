@@ -34,6 +34,54 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
+	 * @covers GlobalSign::GetOrderByOrderID
+	 * @todo   Implement testGetOrderByOrderID().
+	 */
+	public function testGetOrderByOrderID()
+	{
+		// Remove the following lines when you implement this test.
+		$this->markTestIncomplete(
+			'This test has not been implemented yet.'
+		);
+	}
+
+	/**
+	 * @covers GlobalSign::GetOrderByDataRange
+	 * @todo   Implement testGetOrderByDataRange().
+	 */
+	public function testGetOrderByDataRange()
+	{
+		// Remove the following lines when you implement this test.
+		$this->markTestIncomplete(
+			'This test has not been implemented yet.'
+		);
+	}
+
+	/**
+	 * @covers GlobalSign::GetCertificateOrders
+	 * @todo   Implement testGetCertificateOrders().
+	 */
+	public function testGetCertificateOrders()
+	{
+		// Remove the following lines when you implement this test.
+		$this->markTestIncomplete(
+			'This test has not been implemented yet.'
+		);
+	}
+
+	/**
+	 * @covers GlobalSign::ValidateOrderParameters
+	 * @todo   Implement testValidateOrderParameters().
+	 */
+	public function testValidateOrderParameters()
+	{
+		// Remove the following lines when you implement this test.
+		$this->markTestIncomplete(
+			'This test has not been implemented yet.'
+		);
+	}
+
+	/**
 	 * @covers GlobalSign::list_certs
 	 * @todo   Implement testList_certs().
 	 */
@@ -110,54 +158,6 @@ class GlobalSignTest extends TestCase {
 	 * @todo   Implement testCreate_extendedssl().
 	 */
 	public function testCreate_extendedssl()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
-	}
-
-	/**
-	 * @covers GlobalSign::GetOrderByOrderID
-	 * @todo   Implement testGetOrderByOrderID().
-	 */
-	public function testGetOrderByOrderID()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
-	}
-
-	/**
-	 * @covers GlobalSign::GetOrderByDataRange
-	 * @todo   Implement testGetOrderByDataRange().
-	 */
-	public function testGetOrderByDataRange()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
-	}
-
-	/**
-	 * @covers GlobalSign::GetCertificateOrders
-	 * @todo   Implement testGetCertificateOrders().
-	 */
-	public function testGetCertificateOrders()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
-	}
-
-	/**
-	 * @covers GlobalSign::ValidateOrderParameters
-	 * @todo   Implement testValidateOrderParameters().
-	 */
-	public function testValidateOrderParameters()
 	{
 		// Remove the following lines when you implement this test.
 		$this->markTestIncomplete(

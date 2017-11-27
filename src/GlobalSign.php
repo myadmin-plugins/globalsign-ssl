@@ -79,6 +79,121 @@ class GlobalSign {
 	}
 
 	/**
+	 * Searching order information by Order ID
+	 *
+	 * @param mixed $order_id
+	 * @return array
+	 */
+	public function GetOrderByOrderID($order_id) {
+		$params = [
+			'GetOrderByOrderID' => [
+				'Request' => [
+					'QueryRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]],
+					'OrderID' => $order_id,
+					'OrderQueryOption' => [
+						'ReturnOrderOption' => 'true',
+						'ReturnCertificateInfo' => 'true',
+						'ReturnFulfillment' => 'true',
+						'ReturnCACerts' => 'true'
+					]
+				]
+			]
+		];
+		$this->extra['GetOrderByOrderID_params'] = $params;
+		return obj2array($this->query_client->__soapCall('GetOrderByOrderID', $params));
+	}
+
+	/**
+	 * GlobalSign::GetOrderByDataRange()
+	 *
+	 * @param mixed $fromdate
+	 * @param mixed $todate
+	 * @return mixed
+	 */
+	public function GetOrderByDataRange($fromdate, $todate) {
+		$params = [
+			'GetOrderByDataRange' => [
+				'Request' => [
+					'QueryRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]],
+					'FromDate' => $fromdate,
+					'ToDate' => $todate
+				]
+			]
+		];
+		$this->extra['GetOrderByDataRange_params'] = $params;
+		return $this->query_client->__soapCall('GetOrderByDataRange', $params);
+	}
+
+	/**
+	 * return a list of orders based on criteria provided.
+	 * sample date might be 2017-10-08T04:54:12.000-05:00
+	 * to access response its something like:
+	 *  $response->Response->SearchOrderDetails->SearchOrderDetail[0]->OrderID
+	 *
+	 * @param string $fromdate optional from date for lookup in YYYY-MM-DDTHH:MM:SS.000Z format
+	 * @param string $todate optional to date for lookup in YYYY-MM-DDTHH:MM:SS.000Z format
+	 * @param string $fqdn optional domain name to check/lookup
+	 * @param string $status optional status to check, status can be   1: INITIAL, 2: Waiting for phishing check, 3: Cancelled - Not Issued, 4: Issue completed, 5: Cancelled - Issued, 6: Waiting for revocation, 7: Revoked
+	 * @return mixed
+	 */
+	public function GetCertificateOrders($fromdate = '', $todate = '', $fqdn = '', $status = '') {
+		$params = ['GetCertificateOrders' => [
+			'Request' => [
+				'QueryRequestHeader' => [
+					'AuthToken' => [
+						'UserName' => $this->username,
+						'Password' => $this->password
+		]]]]];
+		if ($fromdate != '')
+			$params['GetCertificateOrders']['Request']['FromDate'] = $fromdate;
+		if ($todate != '')
+			$params['GetCertificateOrders']['Request']['ToDate'] = $todate;
+		if ($fqdn != '')
+			$params['GetCertificateOrders']['Request']['FQDN'] = $fqdn;
+		if ($status != '')
+			$params['GetCertificateOrders']['Request']['OrderStatus'] = $status;
+		$this->extra['GetCertificateOrders'] = $params;
+		return $this->query_client->__soapCall('GetCertificateOrders', $params);
+	}
+
+	/**
+	 * Checking order parameter validity
+	 *
+	 * @param string  $product
+	 * @param mixed  $fqdn
+	 * @param string $csr
+	 * @param bool   $wildcard
+	 * @return mixed
+	 */
+	public function ValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE) {
+		// 1.1 Extracting Common Name from the CSR and carrying out a Phishing DB Check
+		$OrderType = 'new';
+		$params = [
+			'ValidateOrderParameters' => [
+				'Request' => [
+					'OrderRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]],
+					'OrderRequestParameter' => [
+						'ProductCode' => $product,
+						'OrderKind' => $OrderType,
+						'Licenses' => '1',
+						'ValidityPeriod' => ['Months' => '12']
+					],
+					'FQDN' => $fqdn
+				]
+			]
+		];
+		if ($wildcard === TRUE)
+			$params['ValidateOrderParameters']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
+		if ($csr != '') {
+			$params['ValidateOrderParameters']['Request']['OrderRequestParameter']['CSR'] = $csr;
+			unset($params['ValidateOrderParameters']['Request']['FQDN']);
+		}
+		$this->extra['ValidateOrderParameters_params'] = $params;
+		$res = $this->query_client->__soapCall('ValidateOrderParameters', $params);
+		return $res;
+	}
+
+	/**
 	 * GlobalSign::list_certs()
 	 * @return mixed
 	 */
@@ -382,121 +497,6 @@ class GlobalSign {
 		}
 		$this->extra['order_id'] = $order_id;
 		return $this->extra;
-	}
-
-	/**
-	 * Searching order information by Order ID
-	 *
-	 * @param mixed $order_id
-	 * @return array
-	 */
-	public function GetOrderByOrderID($order_id) {
-		$params = [
-			'GetOrderByOrderID' => [
-				'Request' => [
-					'QueryRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]],
-					'OrderID' => $order_id,
-					'OrderQueryOption' => [
-						'ReturnOrderOption' => 'true',
-						'ReturnCertificateInfo' => 'true',
-						'ReturnFulfillment' => 'true',
-						'ReturnCACerts' => 'true'
-					]
-				]
-			]
-		];
-		$this->extra['GetOrderByOrderID_params'] = $params;
-		return obj2array($this->query_client->__soapCall('GetOrderByOrderID', $params));
-	}
-
-	/**
-	 * GlobalSign::GetOrderByDataRange()
-	 *
-	 * @param mixed $fromdate
-	 * @param mixed $todate
-	 * @return mixed
-	 */
-	public function GetOrderByDataRange($fromdate, $todate) {
-		$params = [
-			'GetOrderByDataRange' => [
-				'Request' => [
-					'QueryRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]],
-					'FromDate' => $fromdate,
-					'ToDate' => $todate
-				]
-			]
-		];
-		$this->extra['GetOrderByDataRange_params'] = $params;
-		return $this->query_client->__soapCall('GetOrderByDataRange', $params);
-	}
-
-	/**
-	 * return a list of orders based on criteria provided.
-	 * sample date might be 2017-10-08T04:54:12.000-05:00
-	 * to access response its something like:
-	 *  $response->Response->SearchOrderDetails->SearchOrderDetail[0]->OrderID
-	 *
-	 * @param string $fromdate optional from date for lookup in YYYY-MM-DDTHH:MM:SS.000Z format
-	 * @param string $todate optional to date for lookup in YYYY-MM-DDTHH:MM:SS.000Z format
-	 * @param string $fqdn optional domain name to check/lookup
-	 * @param string $status optional status to check, status can be   1: INITIAL, 2: Waiting for phishing check, 3: Cancelled - Not Issued, 4: Issue completed, 5: Cancelled - Issued, 6: Waiting for revocation, 7: Revoked
-	 * @return mixed
-	 */
-	public function GetCertificateOrders($fromdate = '', $todate = '', $fqdn = '', $status = '') {
-		$params = ['GetCertificateOrders' => [
-			'Request' => [
-				'QueryRequestHeader' => [
-					'AuthToken' => [
-						'UserName' => $this->username,
-						'Password' => $this->password
-		]]]]];
-		if ($fromdate != '')
-			$params['GetCertificateOrders']['Request']['FromDate'] = $fromdate;
-		if ($todate != '')
-			$params['GetCertificateOrders']['Request']['ToDate'] = $todate;
-		if ($fqdn != '')
-			$params['GetCertificateOrders']['Request']['FQDN'] = $fqdn;
-		if ($status != '')
-			$params['GetCertificateOrders']['Request']['OrderStatus'] = $status;
-		$this->extra['GetCertificateOrders'] = $params;
-		return $this->query_client->__soapCall('GetCertificateOrders', $params);
-	}
-
-	/**
-	 * Checking order parameter validity
-	 *
-	 * @param string  $product
-	 * @param mixed  $fqdn
-	 * @param string $csr
-	 * @param bool   $wildcard
-	 * @return mixed
-	 */
-	public function ValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE) {
-		// 1.1 Extracting Common Name from the CSR and carrying out a Phishing DB Check
-		$OrderType = 'new';
-		$params = [
-			'ValidateOrderParameters' => [
-				'Request' => [
-					'OrderRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]],
-					'OrderRequestParameter' => [
-						'ProductCode' => $product,
-						'OrderKind' => $OrderType,
-						'Licenses' => '1',
-						'ValidityPeriod' => ['Months' => '12']
-					],
-					'FQDN' => $fqdn
-				]
-			]
-		];
-		if ($wildcard === TRUE)
-			$params['ValidateOrderParameters']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		if ($csr != '') {
-			$params['ValidateOrderParameters']['Request']['OrderRequestParameter']['CSR'] = $csr;
-			unset($params['ValidateOrderParameters']['Request']['FQDN']);
-		}
-		$this->extra['ValidateOrderParameters_params'] = $params;
-		$res = $this->query_client->__soapCall('ValidateOrderParameters', $params);
-		return $res;
 	}
 
 	/**
