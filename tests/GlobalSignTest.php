@@ -16,8 +16,7 @@ class GlobalSignTest extends TestCase {
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
-	protected function setUp()
-	{
+	protected function setUp() {
 		if (file_exists(__DIR__.'/.env')) {
 			$dotenv = new Dotenv\Dotenv(__DIR__);
 			$dotenv->load();
@@ -29,331 +28,222 @@ class GlobalSignTest extends TestCase {
 	 * Tears down the fixture, for example, closes a network connection.
 	 * This method is called after a test is executed.
 	 */
-	protected function tearDown()
-	{
+	protected function tearDown() {
 	}
 
 	/**
 	 * @covers GlobalSign::GetOrderByOrderID
 	 * @todo   Implement testGetOrderByOrderID().
 	 */
-	public function testGetOrderByOrderID()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testGetOrderByOrderID() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::GetOrderByDataRange
 	 * @todo   Implement testGetOrderByDataRange().
 	 */
-	public function testGetOrderByDataRange()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testGetOrderByDataRange() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::GetCertificateOrders
 	 * @todo   Implement testGetCertificateOrders().
 	 */
-	public function testGetCertificateOrders()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testGetCertificateOrders() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::ValidateOrderParameters
 	 * @todo   Implement testValidateOrderParameters().
 	 */
-	public function testValidateOrderParameters()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testValidateOrderParameters() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::list_certs
 	 * @todo   Implement testList_certs().
 	 */
-	public function testList_certs()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testList_certs() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::create_alphassl
 	 * @todo   Implement testCreate_alphassl().
 	 */
-	public function testCreate_alphassl()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testCreate_alphassl() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::create_domainssl
 	 * @todo   Implement testCreate_domainssl().
 	 */
-	public function testCreate_domainssl()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testCreate_domainssl() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::create_domainssl_autocsr
 	 * @todo   Implement testCreate_domainssl_autocsr().
 	 */
-	public function testCreate_domainssl_autocsr()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testCreate_domainssl_autocsr() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::create_organizationssl
 	 * @todo   Implement testCreate_organizationssl().
 	 */
-	public function testCreate_organizationssl()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testCreate_organizationssl() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::create_organizationssl_autocsr
 	 * @todo   Implement testCreate_organizationssl_autocsr().
 	 */
-	public function testCreate_organizationssl_autocsr()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testCreate_organizationssl_autocsr() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::create_extendedssl
 	 * @todo   Implement testCreate_extendedssl().
 	 */
-	public function testCreate_extendedssl()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testCreate_extendedssl() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::DVOrder
 	 * @todo   Implement testDVOrder().
 	 */
-	public function testDVOrder()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testDVOrder() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::OVOrder
 	 * @todo   Implement testOVOrder().
 	 */
-	public function testOVOrder()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testOVOrder() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::OVOrderWithoutCSR
 	 * @todo   Implement testOVOrderWithoutCSR().
 	 */
-	public function testOVOrderWithoutCSR()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testOVOrderWithoutCSR() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::EVOrder
 	 * @todo   Implement testEVOrder().
 	 */
-	public function testEVOrder()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testEVOrder() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::GetDVApproverList
 	 * @todo   Implement testGetDVApproverList().
 	 */
-	public function testGetDVApproverList()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testGetDVApproverList() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::ResendEmail
 	 * @todo   Implement testResendEmail().
 	 */
-	public function testResendEmail()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testResendEmail() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::ChangeApproverEmail
 	 * @todo   Implement testChangeApproverEmail().
 	 */
-	public function testChangeApproverEmail()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testChangeApproverEmail() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::renewValidateOrderParameters
 	 * @todo   Implement testRenewValidateOrderParameters().
 	 */
-	public function testRenewValidateOrderParameters()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testRenewValidateOrderParameters() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::renewAlphaDomain
 	 * @todo   Implement testRenewAlphaDomain().
 	 */
-	public function testRenewAlphaDomain()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testRenewAlphaDomain() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::renewDVOrder
 	 * @todo   Implement testRenewDVOrder().
 	 */
-	public function testRenewDVOrder()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testRenewDVOrder() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::renewOVOrder
 	 * @todo   Implement testRenewOVOrder().
 	 */
-	public function testRenewOVOrder()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testRenewOVOrder() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::renewOrganizationSSL
 	 * @todo   Implement testRenewOrganizationSSL().
 	 */
-	public function testRenewOrganizationSSL()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testRenewOrganizationSSL() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::renewEVOrder
 	 * @todo   Implement testRenewEVOrder().
 	 */
-	public function testRenewEVOrder()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testRenewEVOrder() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::renewExtendedSSL
 	 * @todo   Implement testRenewExtendedSSL().
 	 */
-	public function testRenewExtendedSSL()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testRenewExtendedSSL() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::ReIssue
 	 * @todo   Implement testReIssue().
 	 */
-	public function testReIssue()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testReIssue() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
 	 * @covers GlobalSign::DVOrderWithoutCSR
 	 * @todo   Implement testDVOrderWithoutCSR().
 	 */
-	public function testDVOrderWithoutCSR()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	public function testDVOrderWithoutCSR() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 }
