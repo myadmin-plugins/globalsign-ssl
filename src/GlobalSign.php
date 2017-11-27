@@ -233,7 +233,7 @@ class GlobalSign {
 						'CSR' => $csr,
 						'RenewalTargetOrderID' => $orderId,
 					],
-					//'FQDN' => $fqdn
+					'FQDN' => $fqdn
 		]]];
 		//if ($csr != '')
 			//unset($params['ValidateOrderParameters']['Request']['FQDN']);
@@ -259,9 +259,9 @@ class GlobalSign {
 	/**
 	 * Change the email address that the approval request is sent to for domain validated products
 	 *
-	 * @param $orderID
-	 * @param $approverEmail
-	 * @param $fqdn
+	 * @param string $orderID
+	 * @param string $approverEmail
+	 * @param string $fqdn
 	 * @return string
 	 * @internal param mixed $fdqn
 	 */
@@ -285,8 +285,8 @@ class GlobalSign {
 	/**
 	 * Certificate ReIssue
 	 *
-	 * @param $orderID
-	 * @param $csr
+	 * @param string $orderID
+	 * @param string $csr
 	 * @return mixed
 	 */
 	public function ReIssue($orderID, $csr) {
@@ -1012,16 +1012,16 @@ class GlobalSign {
 	/**
 	 * GlobalSIgn::renewAlphaDomain()
 	 *
-	 * @param $fqdn
-	 * @param $csr
-	 * @param $firstname
-	 * @param $lastname
-	 * @param $phone
-	 * @param $email
-	 * @param $approverEmail
+	 * @param string $fqdn
+	 * @param string $csr
+	 * @param string $firstname
+	 * @param string $lastname
+	 * @param string $phone
+	 * @param string $email
+	 * @param string $approverEmail
 	 * @param bool $wildcard
-	 * @param $sslType
-	 * @param $oldOrderId
+	 * @param string $sslType
+	 * @param string $oldOrderId
 	 * @return array
 	 */
 	public function renewAlphaDomain($fqdn, $csr, $firstname, $lastname, $phone, $email, $approverEmail, $wildcard = FALSE, $sslType, $oldOrderId) {
@@ -1303,7 +1303,7 @@ class GlobalSign {
 	 * @param string $zip
 	 * @param string $businessCategory
 	 * @param string $agency
-	 * @param $oldOrderId
+	 * @param string $oldOrderId
 	 * @return mixed
 	 */
 	public function renewEVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $businessCategory, $agency, $oldOrderId) {
@@ -1405,7 +1405,7 @@ class GlobalSign {
 	 * @param string $zip
 	 * @param string $businessCategory
 	 * @param string $agency
-	 * @param $oldOrderId
+	 * @param string $oldOrderId
 	 * @return array|bool
 	 */
 	public function renewExtendedSSL($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $businessCategory, $agency, $oldOrderId) {
