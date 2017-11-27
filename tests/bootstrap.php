@@ -1,10 +1,12 @@
 <?php
 require_once __DIR__.'/../vendor/autoload.php';
-
-function myadmin_log($section, $level, $text, $line, $file) {
-	//echo "{$section} {$level} {$line}@{$file}: {$text}\n";
+if (!function_exists('myadmin_log')) {
+	function myadmin_log($section, $level, $text, $line, $file) {
+		//echo "{$section} {$level} {$line}@{$file}: {$text}\n";
+	}
 }
 
+if (!function_exists('make_csr')) {
 /**
  * make_csr()
  * @param string $fqdn
@@ -18,7 +20,7 @@ function myadmin_log($section, $level, $text, $line, $file) {
  */
 function make_csr($fqdn, $email, $city, $state, $country, $company, $department) {
 	$SSLcnf = [
-		'config' => '/etc/pki/tls/openssl.cnf',
+		//'config' => '/etc/pki/tls/openssl.cnf',
 		//'config' => '/etc/ssl/openssl.cnf',
 		//'config' => '/etc/tinyca/openssl.cnf',
 		//'config' => '/etc/openvpn/easy-rsa/openssl.cnf',
@@ -53,7 +55,9 @@ function make_csr($fqdn, $email, $city, $state, $country, $company, $department)
 	//   echo $e . "\n";
 	return [$csrout, $certout, $pkeout];
 }
+}
 
+if (!function_exists('obj2array')) {
 function obj2array($obj) {
 	$out = [];
 	//myadmin_log('myadmin', 'debug', json_encode($obj), __LINE__, __FILE__);
@@ -72,4 +76,4 @@ function obj2array($obj) {
 	}
 	return $out;
 }
-
+}
