@@ -925,9 +925,8 @@ class GlobalSign {
 						'BaseOption' => $wild_card_str,
 						'CSR' => $csr,
 						'RenewalTargetOrderID' => $order_id,
-						'RenewaltargetOrderID' => $order_id,
 					],
-					'FQDN' => $fqdn
+					//'FQDN' => $fqdn
 		]]];
 		//if ($csr != '')
 			//unset($params['ValidateOrderParameters']['Request']['FQDN']);
