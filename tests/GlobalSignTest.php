@@ -178,7 +178,20 @@ class GlobalSignTest extends TestCase {
 	 * @todo   Implement testResendEmail().
 	 */
 	public function testResendEmail() {
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$response = $this->object->ResendEmail('CE198105220000');
+		$this->assertObjectHasAttribute('Response', $response, 'Ensuring Valid Respone Field "Response" Exists');
+		$this->assertObjectHasAttribute('OrderResponseHeader', $response->Response, 'Ensuring Valid Respone Field "OrderResponseHeader" Exists');
+		$this->assertObjectHasAttribute('SuccessCode', $response->Response->OrderResponseHeader, 'Ensuring Valid Respone Field "SuccessCode" Exists');
+		$this->assertEquals($response->Response->OrderResponseHeader->SuccessCode, -1, 'Invalid Order ID Returns Error');
+		$this->assertObjectHasAttribute('Errors', $response->Response->OrderResponseHeader, 'Ensuring Valid Respone Field "Errors" Exists');
+		$this->assertObjectHasAttribute('Error', $response->Response->OrderResponseHeader->Errors, 'Ensuring Valid Respone Field "Error" Exists');
+		$this->assertObjectHasAttribute('ErrorCode', $response->Response->OrderResponseHeader->Errors->Error, 'Ensuring Valid Respone Field "ErrorCode" Exists');
+		$this->assertObjectHasAttribute('ErrorMessage', $response->Response->OrderResponseHeader->Errors->Error, 'Ensuring Valid Respone Field "ErrorMessage" Exists');
+		$response = $this->object->ResendEmail('CE201011028514');
+		$this->assertObjectHasAttribute('Response', $response, 'Ensuring Valid Respone Field "Response" Exists');
+		$this->assertObjectHasAttribute('OrderResponseHeader', $response->Response, 'Ensuring Valid Respone Field "OrderResponseHeader" Exists');
+		$this->assertObjectHasAttribute('SuccessCode', $response->Response->OrderResponseHeader, 'Ensuring Valid Respone Field "SuccessCode" Exists');
+		$this->assertEquals($response->Response->OrderResponseHeader->SuccessCode, -1, 'Ensuring we got the proper SuccessCode (0)');
 	}
 
 	/**
