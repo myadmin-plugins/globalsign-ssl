@@ -47,7 +47,8 @@ class Plugin {
 			$settings = get_module_settings(self::$module);
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
-			$renew = substr($serviceClass->getOrderId(), 0, 2) == 'CE' && $GS->GetOrderByOrderID($serviceClass->getOrderId())['Response']['OrderResponseHeader']['SuccessCode'] == '0';
+			$orderData = $GS->GetOrderByOrderID($serviceClass->getOrderId());
+			$renew = $orderData['Response']['OrderDetail']['OrderInfo']['OrderStatus'] == 4 && (new \DateTime($orderData['Response']['OrderDetail']['CertificateInfo']['EndDate']))->diff(new \DateTime('now'))->invert == 1;
 			if (!isset($extra['csr']) || '' == $extra['csr'])
 				$extra = ensure_csr($serviceClass->getId());
 			if (!isset($extra['approver_email']))
