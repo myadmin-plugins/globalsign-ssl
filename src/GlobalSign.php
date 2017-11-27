@@ -185,6 +185,65 @@ class GlobalSign {
 	}
 
 	/**
+	 * Getting list of approver email addresses and OrderID for DVOrder (DomainSSL and AlphaSSL only)
+	 *
+	 * @param mixed $fqdn
+	 * @return mixed
+	 */
+	public function GetDVApproverList($fqdn) {
+		// 1.1 Receive List of Approver email addresses
+		$params = ['GetDVApproverList' => ['Request' => ['QueryRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]], 'FQDN' => $fqdn]]];
+		$this->extra['GetDVApproverList_params'] = $params;
+		myadmin_log('ssl', 'info', 'Calling GetDVApproverList', __LINE__, __FILE__);
+		myadmin_log('ssl', 'info', json_encode($params), __LINE__, __FILE__);
+		return $this->functions_client->__soapCall('GetDVApproverList', $params);
+	}
+
+	/**
+	 * GlobalSign::renewValidateOrderParameters()
+	 *
+	 * @param string  $product
+	 * @param mixed  $fqdn
+	 * @param string $csr
+	 * @param bool   $wildcard
+	 * @param bool   $order_id
+	 * @return mixed
+	 */
+	public function renewValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE, $order_id = FALSE) {
+		// 1.1 Extracting Common Name from the CSR and carrying out a Phishing DB Check
+		if($wildcard === TRUE) {
+			$wild_card_str = 'wildcard';
+		} else {
+			$wild_card_str = '';
+		}
+		$params = [
+			'ValidateOrderParameters' => [
+				'Request' => [
+					'OrderRequestHeader' => [
+						'AuthToken' => [
+							'UserName' => $this->username,
+							'Password' => $this->password
+					]],
+					'OrderRequestParameter' => [
+						'ProductCode' => $product,
+						'OrderKind' => 'renewal',
+						'Licenses' => '1',
+						'ValidityPeriod' => ['Months' => '12'],
+						'BaseOption' => $wild_card_str,
+						'CSR' => $csr,
+						'RenewalTargetOrderID' => $order_id,
+					],
+					//'FQDN' => $fqdn
+		]]];
+		//if ($csr != '')
+			//unset($params['ValidateOrderParameters']['Request']['FQDN']);
+		$this->extra['ValidateOrderParameters_params'] = $params;
+		myadmin_log('ssl', 'info', 'Params: '.json_encode($params), __LINE__, __FILE__);
+		$res = $this->query_client->__soapCall('ValidateOrderParameters', $params);
+		return $res;
+	}
+
+	/**
 	 * GlobalSign::create_alphassl()
 	 * @param mixed $fqdn
 	 * @param mixed $csr
@@ -839,21 +898,6 @@ class GlobalSign {
 	}
 
 	/**
-	 * Getting list of approver email addresses and OrderID for DVOrder (DomainSSL and AlphaSSL only)
-	 *
-	 * @param mixed $fqdn
-	 * @return mixed
-	 */
-	public function GetDVApproverList($fqdn) {
-		// 1.1 Receive List of Approver email addresses
-		$params = ['GetDVApproverList' => ['Request' => ['QueryRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]], 'FQDN' => $fqdn]]];
-		$this->extra['GetDVApproverList_params'] = $params;
-		myadmin_log('ssl', 'info', 'Calling GetDVApproverList', __LINE__, __FILE__);
-		myadmin_log('ssl', 'info', json_encode($params), __LINE__, __FILE__);
-		return $this->functions_client->__soapCall('GetDVApproverList', $params);
-	}
-
-	/**
 	 * Resend Approver Emails for AlphaSSL & DomainSSL orders
 	 *
 	 * @param string $orderID
@@ -890,50 +934,6 @@ class GlobalSign {
 					'FQDN'=>$fqdn
 		]]];
 		return $this->functions_client->__soapCall('ChangeApproverEmail', $params);
-	}
-
-	/**
-	 * GlobalSign::renewValidateOrderParameters()
-	 *
-	 * @param string  $product
-	 * @param mixed  $fqdn
-	 * @param string $csr
-	 * @param bool   $wildcard
-	 * @param bool   $order_id
-	 * @return mixed
-	 */
-	public function renewValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE, $order_id = FALSE) {
-		// 1.1 Extracting Common Name from the CSR and carrying out a Phishing DB Check
-		if($wildcard === TRUE) {
-			$wild_card_str = 'wildcard';
-		} else {
-			$wild_card_str = '';
-		}
-		$params = [
-			'ValidateOrderParameters' => [
-				'Request' => [
-					'OrderRequestHeader' => [
-						'AuthToken' => [
-							'UserName' => $this->username,
-							'Password' => $this->password
-					]],
-					'OrderRequestParameter' => [
-						'ProductCode' => $product,
-						'OrderKind' => 'renewal',
-						'Licenses' => '1',
-						'ValidityPeriod' => ['Months' => '12'],
-						'BaseOption' => $wild_card_str,
-						'CSR' => $csr,
-						'RenewalTargetOrderID' => $order_id,
-					],
-					//'FQDN' => $fqdn
-		]]];
-		//if ($csr != '')
-			//unset($params['ValidateOrderParameters']['Request']['FQDN']);
-		$this->extra['ValidateOrderParameters_params'] = $params;
-		myadmin_log('ssl', 'info', 'Params: '.json_encode($params), __LINE__, __FILE__);
-		$res = $this->query_client->__soapCall('ValidateOrderParameters', $params);
-		return $res;
 	}
 
 	/**

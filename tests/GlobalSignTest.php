@@ -142,6 +142,40 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
+	 * @covers GlobalSign::GetDVApproverList
+	 * @todo   Implement testGetDVApproverList().
+	 */
+	public function testGetDVApproverList() {
+		$response = $this->object->GetDVApproverList('interserver.net');
+		$this->assertArrayHasKey('Response', $response, 'Ensuring Valid Respone Field "Response" Exists');
+		$this->assertArrayHasKey('QueryResponseHeader', $response['Response'], 'Ensuring Valid Respone Field "QueryResponseHeader" Exists');
+		$this->assertArrayHasKey('SuccessCode', $response['Response']['QueryResponseHeader'], 'Ensuring Valid Respone Field "SuccessCode" Exists');
+		$this->assertEquals($response['Response']['QueryResponseHeader']['SuccessCode'], 0, 'Ensuring we got the proper SuccessCode (0)');
+		$this->assertArrayHasKey('Approvers', $response['Response'], 'Ensuring Valid Respone Field "Approvers" Exists');
+		$this->assertArrayHasKey('OrderID', $response['Response'], 'Ensuring Valid Respone Field "OrderID" Exists');
+		$this->assertTrue(is_array($response['Response']['Approvers']['SearchOrderDetail']));
+		$this->assertArrayHasKey(0, $response['Response']['Approvers']['SearchOrderDetail'], 'Ensuring Response Field is an Array with at least 1 item');
+		$this->assertArrayHasKey('ApproverType', $response['Response']['Approvers']['SearchOrderDetail'][0], 'Ensuring Valid Respone Field "ApproverType" Exists');
+		$this->assertArrayHasKey('ApproverEmail', $response['Response']['Approvers']['SearchOrderDetail'][0], 'Ensuring Valid Respone Field "ApproverEmail" Exists');
+	}
+
+	/**
+	 * @covers GlobalSign::renewValidateOrderParameters
+	 * @todo   Implement testRenewValidateOrderParameters().
+	 */
+	public function testRenewValidateOrderParameters() {
+		$response = $this->object->renewValidateOrderParameters('DV_LOW_SHA2', 'synergypublishers.com', "", FALSE, 'CE20171125014256');
+		$this->assertObjectHasAttribute('Response', $response, 'Ensuring Valid Respone Field "Response" Exists');
+		$this->assertObjectHasAttribute('OrderResponseHeader', $response->Response, 'Ensuring Valid Respone Field "OrderResponseHeader" Exists');
+		$this->assertObjectHasAttribute('SuccessCode', $response->Response->OrderResponseHeader, 'Ensuring Valid Respone Field "SuccessCode" Exists');
+		$this->assertEquals($response->Response->OrderResponseHeader->SuccessCode, -1, 'Invalid CSR Returns Error');
+		$this->assertObjectHasAttribute('Errors', $response->Response->OrderResponseHeader, 'Ensuring Valid Respone Field "Errors" Exists');
+		$this->assertObjectHasAttribute('Error', $response->Response->OrderResponseHeader->Errors, 'Ensuring Valid Respone Field "Error" Exists');
+		$this->assertObjectHasAttribute('ErrorCode', $response->Response->OrderResponseHeader->Errors->Error, 'Ensuring Valid Respone Field "ErrorCode" Exists');
+		$this->assertObjectHasAttribute('ErrorMessage', $response->Response->OrderResponseHeader->Errors->Error, 'Ensuring Valid Respone Field "ErrorMessage" Exists');
+	}
+
+	/**
 	 * @covers GlobalSign::create_alphassl
 	 * @todo   Implement testCreate_alphassl().
 	 */
@@ -222,24 +256,6 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::GetDVApproverList
-	 * @todo   Implement testGetDVApproverList().
-	 */
-	public function testGetDVApproverList() {
-		$response = $this->object->GetDVApproverList('interserver.net');
-		$this->assertArrayHasKey('Response', $response, 'Ensuring Valid Respone Field "Response" Exists');
-		$this->assertArrayHasKey('QueryResponseHeader', $response['Response'], 'Ensuring Valid Respone Field "QueryResponseHeader" Exists');
-		$this->assertArrayHasKey('SuccessCode', $response['Response']['QueryResponseHeader'], 'Ensuring Valid Respone Field "SuccessCode" Exists');
-		$this->assertEquals($response['Response']['QueryResponseHeader']['SuccessCode'], 0, 'Ensuring we got the proper SuccessCode (0)');
-		$this->assertArrayHasKey('Approvers', $response['Response'], 'Ensuring Valid Respone Field "Approvers" Exists');
-		$this->assertArrayHasKey('OrderID', $response['Response'], 'Ensuring Valid Respone Field "OrderID" Exists');
-		$this->assertTrue(is_array($response['Response']['Approvers']['SearchOrderDetail']));
-		$this->assertArrayHasKey(0, $response['Response']['Approvers']['SearchOrderDetail'], 'Ensuring Response Field is an Array with at least 1 item');
-		$this->assertArrayHasKey('ApproverType', $response['Response']['Approvers']['SearchOrderDetail'][0], 'Ensuring Valid Respone Field "ApproverType" Exists');
-		$this->assertArrayHasKey('ApproverEmail', $response['Response']['Approvers']['SearchOrderDetail'][0], 'Ensuring Valid Respone Field "ApproverEmail" Exists');
-	}
-
-	/**
 	 * @covers GlobalSign::ResendEmail
 	 * @todo   Implement testResendEmail().
 	 */
@@ -253,22 +269,6 @@ class GlobalSignTest extends TestCase {
 	 */
 	public function testChangeApproverEmail() {
 		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
-	 * @covers GlobalSign::renewValidateOrderParameters
-	 * @todo   Implement testRenewValidateOrderParameters().
-	 */
-	public function testRenewValidateOrderParameters() {
-		$response = $this->object->renewValidateOrderParameters('DV_LOW_SHA2', 'synergypublishers.com', "", FALSE, 'CE20171125014256');
-		$this->assertObjectHasAttribute('Response', $response, 'Ensuring Valid Respone Field "Response" Exists');
-		$this->assertObjectHasAttribute('OrderResponseHeader', $response->Response, 'Ensuring Valid Respone Field "OrderResponseHeader" Exists');
-		$this->assertObjectHasAttribute('SuccessCode', $response->Response->OrderResponseHeader, 'Ensuring Valid Respone Field "SuccessCode" Exists');
-		$this->assertEquals($response->Response->OrderResponseHeader->SuccessCode, -1, 'Invalid CSR Returns Error');
-		$this->assertObjectHasAttribute('Errors', $response->Response->OrderResponseHeader, 'Ensuring Valid Respone Field "Errors" Exists');
-		$this->assertObjectHasAttribute('Error', $response->Response->OrderResponseHeader->Errors, 'Ensuring Valid Respone Field "Error" Exists');
-		$this->assertObjectHasAttribute('ErrorCode', $response->Response->OrderResponseHeader->Errors->Error, 'Ensuring Valid Respone Field "ErrorCode" Exists');
-		$this->assertObjectHasAttribute('ErrorMessage', $response->Response->OrderResponseHeader->Errors->Error, 'Ensuring Valid Respone Field "ErrorMessage" Exists');
 	}
 
 	/**
