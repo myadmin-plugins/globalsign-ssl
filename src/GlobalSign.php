@@ -244,6 +244,57 @@ class GlobalSign {
 	}
 
 	/**
+	 * Resend Approver Emails for AlphaSSL & DomainSSL orders
+	 *
+	 * @param string $orderID
+	 * @return mixed
+	 */
+	public function ResendEmail($orderID) {
+		myadmin_log('ssl', 'info', "In function : ResendEmail($orderID)", __LINE__, __FILE__);
+		$params = ['ResendEmail' => ['Request' => ['OrderRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]], 'OrderID' => $orderID, 'ResendEmailType' =>'APPROVEREMAIL']]];
+		myadmin_log('ssl', 'info', 'Params: '.json_encode($params), __LINE__, __FILE__);
+		return $this->functions_client->__soapCall('ResendEmail', $params);
+	}
+
+	/**
+	 * Change the email address that the approval request is sent to for domain validated products
+	 *
+	 * @param $orderID
+	 * @param $approverEmail
+	 * @param $fqdn
+	 * @return string
+	 * @internal param mixed $fdqn
+	 */
+	public function ChangeApproverEmail($orderID, $approverEmail, $fqdn) {
+		$params = [
+			'ChangeApproverEmail' => [
+				'Request' => [
+					'OrderRequestHeader' => [
+						'AuthToken' => [
+							'UserName' => $this->username,
+							'Password' => $this->password
+						]
+					],
+					'OrderID' => $orderID,
+					'ApproverEmail'=>$approverEmail,
+					'FQDN'=>$fqdn
+		]]];
+		return $this->functions_client->__soapCall('ChangeApproverEmail', $params);
+	}
+
+	/**
+	 * Certificate ReIssue
+	 *
+	 * @param $orderID
+	 * @param $csr
+	 * @return mixed
+	 */
+	public function ReIssue($orderID, $csr) {
+		$params = ['ReIssue' => ['Request' => ['OrderRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]], 'OrderParameter' => ['CSR' => $csr], 'TargetOrderID' => $orderID, 'HashAlgorithm' =>'SHA256']]];
+		return $this->query_client->__soapCall('ReIssue', $params);
+	}
+
+	/**
 	 * GlobalSign::create_alphassl()
 	 * @param mixed $fqdn
 	 * @param mixed $csr
@@ -898,45 +949,6 @@ class GlobalSign {
 	}
 
 	/**
-	 * Resend Approver Emails for AlphaSSL & DomainSSL orders
-	 *
-	 * @param string $orderID
-	 * @return mixed
-	 */
-	public function ResendEmail($orderID) {
-		myadmin_log('ssl', 'info', "In function : ResendEmail($orderID)", __LINE__, __FILE__);
-		$params = ['ResendEmail' => ['Request' => ['OrderRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]], 'OrderID' => $orderID, 'ResendEmailType' =>'APPROVEREMAIL']]];
-		myadmin_log('ssl', 'info', 'Params: '.json_encode($params), __LINE__, __FILE__);
-		return $this->functions_client->__soapCall('ResendEmail', $params);
-	}
-
-	/**
-	 * Change the email address that the approval request is sent to for domain validated products
-	 *
-	 * @param $orderID
-	 * @param $approverEmail
-	 * @param $fqdn
-	 * @return string
-	 * @internal param mixed $fdqn
-	 */
-	public function ChangeApproverEmail($orderID, $approverEmail, $fqdn) {
-		$params = [
-			'ChangeApproverEmail' => [
-				'Request' => [
-					'OrderRequestHeader' => [
-						'AuthToken' => [
-							'UserName' => $this->username,
-							'Password' => $this->password
-						]
-					],
-					'OrderID' => $orderID,
-					'ApproverEmail'=>$approverEmail,
-					'FQDN'=>$fqdn
-		]]];
-		return $this->functions_client->__soapCall('ChangeApproverEmail', $params);
-	}
-
-	/**
 	 * GlobalSIgn::renewAlphaDomain()
 	 *
 	 * @param $fqdn
@@ -1371,18 +1383,6 @@ class GlobalSign {
 		}
 		$this->extra['order_id'] = $order_id;
 		return $this->extra;
-	}
-
-	/**
-	 * Certificate ReIssue
-	 *
-	 * @param $orderID
-	 * @param $csr
-	 * @return mixed
-	 */
-	public function ReIssue($orderID, $csr) {
-		$params = ['ReIssue' => ['Request' => ['OrderRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]], 'OrderParameter' => ['CSR' => $csr], 'TargetOrderID' => $orderID, 'HashAlgorithm' =>'SHA256']]];
-		return $this->query_client->__soapCall('ReIssue', $params);
 	}
 
 	/**

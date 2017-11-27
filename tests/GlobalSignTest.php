@@ -174,6 +174,30 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
+	 * @covers GlobalSign::ResendEmail
+	 * @todo   Implement testResendEmail().
+	 */
+	public function testResendEmail() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
+	}
+
+	/**
+	 * @covers GlobalSign::ChangeApproverEmail
+	 * @todo   Implement testChangeApproverEmail().
+	 */
+	public function testChangeApproverEmail() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
+	}
+
+	/**
+	 * @covers GlobalSign::ReIssue
+	 * @todo   Implement testReIssue().
+	 */
+	public function testReIssue() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
+	}
+
+	/**
 	 * @covers GlobalSign::create_alphassl
 	 * @todo   Implement testCreate_alphassl().
 	 */
@@ -254,22 +278,6 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::ResendEmail
-	 * @todo   Implement testResendEmail().
-	 */
-	public function testResendEmail() {
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
-	 * @covers GlobalSign::ChangeApproverEmail
-	 * @todo   Implement testChangeApproverEmail().
-	 */
-	public function testChangeApproverEmail() {
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
 	 * @covers GlobalSign::renewAlphaDomain
 	 * @todo   Implement testRenewAlphaDomain().
 	 */
@@ -314,14 +322,6 @@ class GlobalSignTest extends TestCase {
 	 * @todo   Implement testRenewExtendedSSL().
 	 */
 	public function testRenewExtendedSSL() {
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
-	 * @covers GlobalSign::ReIssue
-	 * @todo   Implement testReIssue().
-	 */
-	public function testReIssue() {
 		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
