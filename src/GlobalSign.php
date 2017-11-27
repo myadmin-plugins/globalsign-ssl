@@ -229,9 +229,10 @@ class GlobalSign {
 						'OrderKind' => 'renewal',
 						'Licenses' => '1',
 						'ValidityPeriod' => ['Months' => '12'],
-						'BaseOption' => $wild_card_str,
+						//'BaseOption' => $wild_card_str,
 						'CSR' => $csr,
 						'RenewalTargetOrderID' => $orderId,
+						'RenewaltargetOrderID' => $orderId,
 					],
 					'FQDN' => $fqdn
 		]]];
@@ -1048,6 +1049,8 @@ class GlobalSign {
 			$this->extra['error'] = 'Error In order';
 			return $this->extra;
 		}
+		$orderId = $res->Response->OrderID;
+		$this->extra['order_id'] = $orderId;
 		$this->__construct($this->username, $this->password);
 		$res = $this->GetDVApproverList($fqdn);
 		$this->extra['laststep'] = 'GetDVApproverList';
@@ -1057,8 +1060,6 @@ class GlobalSign {
 			myadmin_log('ssl', 'info', 'SSL Renew Order Error in GetDVApproverList - renewAlphaDomain', __LINE__, __FILE__);
 			myadmin_log('ssl', 'info', json_encode($res), __LINE__, __FILE__);
 		}
-		$orderId = $res->Response->OrderID;
-		$this->extra['order_id'] = $orderId;
 		if ($approverEmail == '')
 			$approverEmail = $res->Response->Approvers->SearchOrderDetail[0]->ApproverEmail;
 		myadmin_log('ssl', 'info', "renewDVOrder($product, $orderId, $approverEmail, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderId)", __LINE__, __FILE__);
@@ -1116,7 +1117,6 @@ class GlobalSign {
 						'OrderKind' => 'renewal',
 						'Licenses' => '1',
 						'ValidityPeriod' => ['Months' => '12'],
-						'RenewaltargetOrderID' => $oldOrderID,
 						'RenewalTargetOrderID' => $oldOrderID,
 						'CSR' => $csr
 					],
