@@ -21,7 +21,12 @@ class GlobalSignTest extends TestCase {
 			$dotenv = new Dotenv\Dotenv(__DIR__);
 			$dotenv->load();
 		}
-		$this->object = new GlobalSign(getenv('GLOBALSIGN_USERNAME'), getenv('GLOBALSIGN_PASSWORD'));
+		$testing = FALSE;
+		if ($testing == TRUE)
+			$this->object = new GlobalSign(getenv('GLOBALSIGN_TEST_USERNAME'), getenv('GLOBALSIGN_TEST_PASSWORD'), TRUE);
+		else
+			$this->object = new GlobalSign(getenv('GLOBALSIGN_USERNAME'), getenv('GLOBALSIGN_PASSWORD'));
+
 	}
 
 	/**
