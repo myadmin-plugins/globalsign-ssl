@@ -71,32 +71,32 @@ class Plugin {
 				if ($res !== FALSE) {
 					foreach ($res as $key => $value)
 						$extra[$key] = $value;
-					$order_id = $extra['order_id'];
-					$serviceClass->setOrderId($order_id)->setExtra(base64_encode(gzcompress(myadmin_stringify($extra))))->save();
+					$orderId = $extra['order_id'];
+					$serviceClass->setOrderId($orderId)->setExtra(base64_encode(gzcompress(myadmin_stringify($extra))))->save();
 				}
 			} else {
 				// renewing ssl order
 				switch ($event['field1']) {
 					case 'DV_LOW':
 					case 'DV_SKIP':
-						myadmin_log('ssl', 'info', "renewAlphaDomain($hostname, $csr, $firstname, $lastname, $phone, $email, $approver_email, FALSE, {$ssl_typeArray[$servicename]}, $order_id)", __LINE__, __FILE__);
-						$res = $GS->renewAlphaDomain($hostname, $csr, $firstname, $lastname, $phone, $email, $approver_email, $event['field2'] == 'wildcard', $ssl_typeArray[$servicename], $order_id);
+						myadmin_log('ssl', 'info', "renewAlphaDomain($hostname, $csr, $firstname, $lastname, $phone, $email, $approverEmail, FALSE, {$ssl_typeArray[$servicename]}, $orderId)", __LINE__, __FILE__);
+						$res = $GS->renewAlphaDomain($hostname, $csr, $firstname, $lastname, $phone, $email, $approverEmail, $event['field2'] == 'wildcard', $ssl_typeArray[$servicename], $orderId);
 						break;
 					case 'EV':
-						myadmin_log('ssl', 'info', "renewExtendedSSL($hostname, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, {$extra['business_category']}, {$extra['agency']}, $approver_email, $order_id)", __LINE__, __FILE__);
-						$res = $GS->renewExtendedSSL($hostname, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $extra['business_category'], $extra['agency'], $approver_email, $order_id);
+						myadmin_log('ssl', 'info', "renewExtendedSSL($hostname, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, {$extra['business_category']}, {$extra['agency']}, $approverEmail, $orderId)", __LINE__, __FILE__);
+						$res = $GS->renewExtendedSSL($hostname, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $extra['business_category'], $extra['agency'], $approverEmail, $orderId);
 						break;
 					case 'OV_SKIP':
-						myadmin_log('ssl', 'info', "renewOrganizationSSL($hostname, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, TRUE, $order_id)", __LINE__, __FILE__);
-						$res = $GS->renewOrganizationSSL($hostname, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, $event['field2'] == 'wildcard', $order_id);
+						myadmin_log('ssl', 'info', "renewOrganizationSSL($hostname, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approverEmail, TRUE, $orderId)", __LINE__, __FILE__);
+						$res = $GS->renewOrganizationSSL($hostname, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approverEmail, $event['field2'] == 'wildcard', $orderId);
 						break;
 				}
 				if ($res != FALSE && isset($res['finished']) && $res['finished'] == 1) {
-					$order_id = $res['order_id'];
-					$serviceClass->setOrderId($order_id)->save();
+					$orderId = $res['order_id'];
+					$serviceClass->setOrderId($orderId)->save();
 				}
 			}
-			if (!isset($order_id)) {
+			if (!isset($orderId)) {
 				dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
 				$headers = '';
 				$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;

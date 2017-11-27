@@ -44,14 +44,14 @@ class GlobalSign {
 	private $password = '';
 
 	public $testing = FALSE;
-	public $connection_timeout = 1000;
+	public $connectionTimeout = 1000;
 
 	public $functionsClient;
 	public $accountClient;
 	public $queryClient;
 
-	public $user_agent = 'MyAdmin GlobalSign Plugin';
-	public $trace_connections = 1;
+	public $userAgent = 'MyAdmin GlobalSign Plugin';
+	public $traceConnections = 1;
 
 	public $extra;
 
@@ -68,9 +68,9 @@ class GlobalSign {
 		$this->password = $password;
 		$this->testing = $testing;
 		$soapOptions = [
-			'user_agent' => $this->user_agent,
-			'connection_timeout' => $this->connection_timeout,
-			'trace' => $this->trace_connections,
+			'user_agent' => $this->userAgent,
+			'connection_timeout' => $this->connectionTimeout,
+			'trace' => $this->traceConnections,
 			'cache_wsdl' => WSDL_CACHE_BOTH
 		];
 		$this->functionsClient = new \SoapClient($this->testing != TRUE ? $this->functionsWsdl : $this->testFunctionsWsdl, $soapOptions);
@@ -81,15 +81,15 @@ class GlobalSign {
 	/**
 	 * Searching order information by Order ID
 	 *
-	 * @param mixed $order_id
+	 * @param mixed $orderId
 	 * @return array
 	 */
-	public function GetOrderByOrderID($order_id) {
+	public function GetOrderByOrderID($orderId) {
 		$params = [
 			'GetOrderByOrderID' => [
 				'Request' => [
 					'QueryRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]],
-					'OrderID' => $order_id,
+					'OrderID' => $orderId,
 					'OrderQueryOption' => [
 						'ReturnOrderOption' => 'true',
 						'ReturnCertificateInfo' => 'true',
@@ -206,10 +206,10 @@ class GlobalSign {
 	 * @param mixed  $fqdn
 	 * @param string $csr
 	 * @param bool   $wildcard
-	 * @param bool   $order_id
+	 * @param bool   $orderId
 	 * @return mixed
 	 */
-	public function renewValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE, $order_id = FALSE) {
+	public function renewValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE, $orderId = FALSE) {
 		// 1.1 Extracting Common Name from the CSR and carrying out a Phishing DB Check
 		if ($wildcard === TRUE) {
 			$wild_card_str = 'wildcard';
@@ -231,7 +231,7 @@ class GlobalSign {
 						'ValidityPeriod' => ['Months' => '12'],
 						'BaseOption' => $wild_card_str,
 						'CSR' => $csr,
-						'RenewalTargetOrderID' => $order_id,
+						'RenewalTargetOrderID' => $orderId,
 					],
 					//'FQDN' => $fqdn
 		]]];
@@ -298,8 +298,8 @@ class GlobalSign {
 	 * Order AlphaSSL or DomainSSL Certificate with Approver Email validation
 	 *
 	 * @param string $product
-	 * @param mixed $order_id
-	 * @param mixed $approver_email
+	 * @param mixed $orderId
+	 * @param mixed $approverEmail
 	 * @param mixed $fqdn
 	 * @param mixed $csr
 	 * @param mixed $firstname
@@ -309,7 +309,7 @@ class GlobalSign {
 	 * @param bool  $wildcard
 	 * @return mixed
 	 */
-	public function DVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = FALSE) {
+	public function DVOrder($product, $orderId, $approverEmail, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = FALSE) {
 
 		/*
 		* $Options = array(
@@ -350,8 +350,8 @@ class GlobalSign {
 						'ValidityPeriod' => ['Months' => '12'],
 						'CSR' => $csr
 					],
-					'OrderID' => $order_id,
-					'ApproverEmail' => $approver_email,
+					'OrderID' => $orderId,
+					'ApproverEmail' => $approverEmail,
 					'ContactInfo' => [
 				'FirstName' => $firstname,
 				'LastName' => $lastname,
@@ -373,8 +373,8 @@ class GlobalSign {
 	 * GlobalSign::DVOrderWithoutCSR()
 	 *
 	 * @param mixed $fqdn
-	 * @param mixed $order_id
-	 * @param mixed $approver_email
+	 * @param mixed $orderId
+	 * @param mixed $approverEmail
 	 * @param mixed $firstname
 	 * @param mixed $lastname
 	 * @param mixed $phone
@@ -382,7 +382,7 @@ class GlobalSign {
 	 * @param bool $wildcard
 	 * @return mixed
 	 */
-	public function DVOrderWithoutCSR($fqdn, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $wildcard = FALSE) {
+	public function DVOrderWithoutCSR($fqdn, $orderId, $approverEmail, $firstname, $lastname, $phone, $email, $wildcard = FALSE) {
 		$params = [
 			'DVOrderWithoutCSR' => [
 				'Request' => [
@@ -406,10 +406,10 @@ class GlobalSign {
 							]
 						]
 					],
-					'OrderID' => $order_id,
+					'OrderID' => $orderId,
 					'FQDN' => $fqdn,
 					'DVCSRInfo' => ['Country' => 'US'],
-					'ApproverEmail' => $approver_email,
+					'ApproverEmail' => $approverEmail,
 					'ContactInfo' => [
 						'FirstName' => $firstname,
 						'LastName' => $lastname,
@@ -437,8 +437,8 @@ class GlobalSign {
 	 *
 	 * @param mixed $fqdn
 	 * @param mixed $csr
-	 * @param mixed $order_id
-	 * @param mixed $approver_email
+	 * @param mixed $orderId
+	 * @param mixed $approverEmail
 	 * @param mixed $firstname
 	 * @param mixed $lastname
 	 * @param mixed $phone
@@ -451,7 +451,7 @@ class GlobalSign {
 	 * @param bool  $wildcard
 	 * @return mixed
 	 */
-	public function OVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE) {
+	public function OVOrder($fqdn, $csr, $orderId, $approverEmail, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE) {
 		$params = [
 			'OVOrder' => [
 				'Request' => [
@@ -476,8 +476,8 @@ class GlobalSign {
 						* ),
 						*/
 					],
-					'OrderID' => $order_id,
-					'ApproverEmail' => $approver_email,
+					'OrderID' => $orderId,
+					'ApproverEmail' => $approverEmail,
 					'OrganizationInfo' => [
 						'OrganizationName' => $company, 'OrganizationAddress' => [
 						'AddressLine1' => $address,
@@ -610,11 +610,11 @@ class GlobalSign {
 	 * @param mixed $city
 	 * @param mixed $state
 	 * @param mixed $zip
-	 * @param mixed $business_category PO, GE, or BE for Private Organization, Government Entity, or Business Entity
+	 * @param mixed $businessCategory PO, GE, or BE for Private Organization, Government Entity, or Business Entity
 	 * @param mixed $agency
 	 * @return mixed
 	 */
-	public function EVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency) {
+	public function EVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $businessCategory, $agency) {
 
 		$params = [
 			'EVOrder' => [
@@ -641,7 +641,7 @@ class GlobalSign {
 						*/
 					],
 					'OrganizationInfoEV' => [
-						'BusinessCategoryCode' => $business_category,
+						'BusinessCategoryCode' => $businessCategory,
 						'OrganizationAddress' => [
 							'AddressLine1' => $address,
 							'City' => $city,
@@ -722,11 +722,11 @@ class GlobalSign {
 	 * @param mixed $lastname
 	 * @param mixed $phone
 	 * @param mixed $email
-	 * @param mixed $approver_email
+	 * @param mixed $approverEmail
 	 * @param bool  $wildcard
 	 * @return array
 	 */
-	public function create_alphassl($fqdn, $csr, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = FALSE) {
+	public function create_alphassl($fqdn, $csr, $firstname, $lastname, $phone, $email, $approverEmail, $wildcard = FALSE) {
 		$product = 'DV_LOW_SHA2';
 		$res = $this->ValidateOrderParameters($product, $fqdn, $csr, $wildcard);
 		$this->extra = [];
@@ -742,13 +742,13 @@ class GlobalSign {
 			$this->extra['error'] = 'Error In order';
 			//			return $this->extra;
 		}
-		$order_id = $res->Response->OrderID;
-		$this->extra['order_id'] = $order_id;
-		if ($approver_email == '')
-			$approver_email = $res->Response->Approvers->SearchOrderDetail[0]->ApproverEmail;
-		myadmin_log('ssl', 'info', "DVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard)", __LINE__, __FILE__);
+		$orderId = $res->Response->OrderID;
+		$this->extra['order_id'] = $orderId;
+		if ($approverEmail == '')
+			$approverEmail = $res->Response->Approvers->SearchOrderDetail[0]->ApproverEmail;
+		myadmin_log('ssl', 'info', "DVOrder($product, $orderId, $approverEmail, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard)", __LINE__, __FILE__);
 		$this->__construct($this->username, $this->password);
-		$res = $this->DVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard);
+		$res = $this->DVOrder($product, $orderId, $approverEmail, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard);
 		myadmin_log('ssl', 'info', json_encode($res), __LINE__, __FILE__);
 		$this->extra['laststep'] = 'DVOrder';
 		$this->extra['DVOrder'] = obj2array($res);
@@ -767,11 +767,11 @@ class GlobalSign {
 	 * @param mixed $lastname
 	 * @param mixed $phone
 	 * @param mixed $email
-	 * @param mixed $approver_email
+	 * @param mixed $approverEmail
 	 * @param bool  $wildcard
 	 * @return array|bool
 	 */
-	public function create_domainssl($fqdn, $csr, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = FALSE) {
+	public function create_domainssl($fqdn, $csr, $firstname, $lastname, $phone, $email, $approverEmail, $wildcard = FALSE) {
 		$product = 'DV_SHA2';
 		$res = $this->ValidateOrderParameters($product, $fqdn, $csr, $wildcard);
 		myadmin_log('ssl', 'info', "ValidateOrderParameters($product, $fqdn, [CSR], $wildcard) returned: ".json_encode($res), __LINE__, __FILE__);
@@ -793,13 +793,13 @@ class GlobalSign {
 			myadmin_log('ssl', 'info', 'create_domainssl returned: '.json_encode($res), __LINE__, __FILE__);
 			return FALSE;
 		}
-		$order_id = $res->Response->OrderID;
-		$this->extra['order_id'] = $order_id;
-		if ($approver_email == '')
-			$approver_email = $res->Response->Approvers->SearchOrderDetail[0]->ApproverEmail;
+		$orderId = $res->Response->OrderID;
+		$this->extra['order_id'] = $orderId;
+		if ($approverEmail == '')
+			$approverEmail = $res->Response->Approvers->SearchOrderDetail[0]->ApproverEmail;
 		$this->__construct($this->username, $this->password);
-		$res = $this->DVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard);
-		myadmin_log('ssl', 'info', "DVOrder($product, $order_id, $approver_email, $fqdn, [CSR], $firstname, $lastname, $phone, $email, $wildcard) returned: ".json_encode($res), __LINE__, __FILE__);
+		$res = $this->DVOrder($product, $orderId, $approverEmail, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard);
+		myadmin_log('ssl', 'info', "DVOrder($product, $orderId, $approverEmail, $fqdn, [CSR], $firstname, $lastname, $phone, $email, $wildcard) returned: ".json_encode($res), __LINE__, __FILE__);
 		$this->extra['laststep'] = 'DVOrder';
 		$this->extra['DVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
@@ -826,23 +826,23 @@ class GlobalSign {
 	 * @param mixed $lastname
 	 * @param mixed $phone
 	 * @param mixed $email
-	 * @param mixed $approver_email
+	 * @param mixed $approverEmail
 	 * @param bool  $wildcard
 	 * @return bool
 	 */
-	public function create_domainssl_autocsr($fqdn, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = FALSE) {
+	public function create_domainssl_autocsr($fqdn, $firstname, $lastname, $phone, $email, $approverEmail, $wildcard = FALSE) {
 		$res = $this->GetDVApproverList($fqdn);
 		if ($res->Response->QueryResponseHeader->SuccessCode != 0) {
 			echo "Error In order\n";
 			print_r($res->Response->OrderResponseHeader->Errors);
 			return FALSE;
 		}
-		$order_id = $res->Response->OrderID;
-		if ($approver_email == '')
-			$approver_email = $res->Response->Approvers->SearchOrderDetail[0]->ApproverEmail;
+		$orderId = $res->Response->OrderID;
+		if ($approverEmail == '')
+			$approverEmail = $res->Response->Approvers->SearchOrderDetail[0]->ApproverEmail;
 
 		$this->__construct($this->username, $this->password);
-		$res = $this->DVOrderWithoutCSR($fqdn, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $wildcard);
+		$res = $this->DVOrderWithoutCSR($fqdn, $orderId, $approverEmail, $firstname, $lastname, $phone, $email, $wildcard);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
@@ -856,7 +856,7 @@ class GlobalSign {
 		} else {
 			echo 'Your Order Has Been Completed';
 		}
-		return $order_id;
+		return $orderId;
 	}
 
 	/**
@@ -873,11 +873,11 @@ class GlobalSign {
 	 * @param mixed $city
 	 * @param mixed $state
 	 * @param mixed $zip
-	 * @param mixed $approver_email
+	 * @param mixed $approverEmail
 	 * @param bool  $wildcard
 	 * @return array|bool
 	 */
-	public function create_organizationssl($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, $wildcard = FALSE) {
+	public function create_organizationssl($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approverEmail, $wildcard = FALSE) {
 		$res = $this->ValidateOrderParameters('OV_SHA2', $fqdn, $csr, $wildcard);
 		myadmin_log('ssl', 'info', 'ValidateOrderParameters returned '.json_encode($res), __LINE__, __FILE__);
 		$this->extra = [];
@@ -890,9 +890,9 @@ class GlobalSign {
 			myadmin_log('ssl', 'info', json_encode($res), __LINE__, __FILE__);
 			return FALSE;
 		}
-		$order_id = $res->Response->OrderID;
+		$orderId = $res->Response->OrderID;
 		$this->__construct($this->username, $this->password);
-		$res = $this->OVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard);
+		$res = $this->OVOrder($fqdn, $csr, $orderId, $approverEmail, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard);
 		$this->extra['laststep'] = 'OVOrder';
 		$this->extra['OVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
@@ -911,7 +911,7 @@ class GlobalSign {
 			myadmin_log('ssl', 'info', 'SSL Renew Order Success - create_organizationssl', __LINE__, __FILE__);
 			myadmin_log('ssl', 'info', json_encode($res), __LINE__, __FILE__);
 		}
-		$this->extra['order_id'] = $order_id;
+		$this->extra['order_id'] = $orderId;
 		return $this->extra;
 	}
 
@@ -928,11 +928,11 @@ class GlobalSign {
 	 * @param mixed $city
 	 * @param mixed $state
 	 * @param mixed $zip
-	 * @param mixed $approver_email
+	 * @param mixed $approverEmail
 	 * @param       $wildcard
 	 * @return bool
 	 */
-	public function create_organizationssl_autocsr($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, $wildcard) {
+	public function create_organizationssl_autocsr($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approverEmail, $wildcard) {
 		$res = $this->OVOrderWithoutCSR($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
@@ -947,8 +947,8 @@ class GlobalSign {
 		} else {
 			echo 'Your Order Has Been Completed';
 		}
-		$order_id = $res->Response->OrderID;
-		return $order_id;
+		$orderId = $res->Response->OrderID;
+		return $orderId;
 	}
 
 	/**
@@ -965,12 +965,12 @@ class GlobalSign {
 	 * @param mixed $city
 	 * @param mixed $state
 	 * @param mixed $zip
-	 * @param mixed $business_category
+	 * @param mixed $businessCategory
 	 * @param mixed $agency
-	 * @param mixed $approver_email
+	 * @param mixed $approverEmail
 	 * @return array|bool
 	 */
-	public function create_extendedssl($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency, $approver_email) {
+	public function create_extendedssl($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $businessCategory, $agency, $approverEmail) {
 		$res = $this->ValidateOrderParameters('EV_SHA2', $fqdn, $csr);
 
 		$this->extra = [];
@@ -989,8 +989,8 @@ class GlobalSign {
 		}
 		$this->__construct($this->username, $this->password);
 
-		$res = $this->EVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency);
-		$order_id = $res->Response->OrderID;
+		$res = $this->EVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $businessCategory, $agency);
+		$orderId = $res->Response->OrderID;
 		$this->extra['laststep'] = 'EVOrder';
 		$this->extra['EVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
@@ -1007,7 +1007,7 @@ class GlobalSign {
 			$this->extra['finished'] = 1;
 			echo 'Your Order Has Been Completed';
 		}
-		$this->extra['order_id'] = $order_id;
+		$this->extra['order_id'] = $orderId;
 		return $this->extra;
 	}
 
@@ -1020,15 +1020,15 @@ class GlobalSign {
 	 * @param $lastname
 	 * @param $phone
 	 * @param $email
-	 * @param $approver_email
+	 * @param $approverEmail
 	 * @param bool $wildcard
-	 * @param $SSLType
+	 * @param $sslType
 	 * @param $oldOrderId
 	 * @return array
 	 */
-	public function renewAlphaDomain($fqdn, $csr, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = FALSE, $SSLType, $oldOrderId) {
-		myadmin_log('ssl', 'info', "renew AlphaDomain called - renewAlphaDomain($fqdn, $csr, $firstname, $lastname, $phone, $email, $approver_email, $wildcard, $SSLType, $oldOrderId)", __LINE__, __FILE__);
-		if ($SSLType == 1) {
+	public function renewAlphaDomain($fqdn, $csr, $firstname, $lastname, $phone, $email, $approverEmail, $wildcard = FALSE, $sslType, $oldOrderId) {
+		myadmin_log('ssl', 'info', "renew AlphaDomain called - renewAlphaDomain($fqdn, $csr, $firstname, $lastname, $phone, $email, $approverEmail, $wildcard, $sslType, $oldOrderId)", __LINE__, __FILE__);
+		if ($sslType == 1) {
 			$product = 'DV_LOW_SHA2';
 		} else {
 			$product = 'DV_SHA2';
@@ -1059,13 +1059,13 @@ class GlobalSign {
 			myadmin_log('ssl', 'info', 'SSL Renew Order Error in GetDVApproverList - renewAlphaDomain', __LINE__, __FILE__);
 			myadmin_log('ssl', 'info', json_encode($res), __LINE__, __FILE__);
 		}
-		$order_id = $res->Response->OrderID;
-		$this->extra['order_id'] = $order_id;
-		if ($approver_email == '')
-			$approver_email = $res->Response->Approvers->SearchOrderDetail[0]->ApproverEmail;
-		myadmin_log('ssl', 'info', "renewDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderId)", __LINE__, __FILE__);
+		$orderId = $res->Response->OrderID;
+		$this->extra['order_id'] = $orderId;
+		if ($approverEmail == '')
+			$approverEmail = $res->Response->Approvers->SearchOrderDetail[0]->ApproverEmail;
+		myadmin_log('ssl', 'info', "renewDVOrder($product, $orderId, $approverEmail, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderId)", __LINE__, __FILE__);
 		$this->__construct($this->username, $this->password);
-		$res = $this->renewDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderId);
+		$res = $this->renewDVOrder($product, $orderId, $approverEmail, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderId);
 		$this->extra['laststep'] = 'DVOrder';
 		$this->extra['DVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
@@ -1090,8 +1090,8 @@ class GlobalSign {
 	 * GlobalSign::renewDVOrder()
 	 *
 	 * @param string $product
-	 * @param mixed $order_id
-	 * @param mixed $approver_email
+	 * @param mixed $orderId
+	 * @param mixed $approverEmail
 	 * @param mixed $fqdn
 	 * @param mixed $csr
 	 * @param mixed $firstname
@@ -1102,8 +1102,8 @@ class GlobalSign {
 	 * @param mixed $oldOrderID
 	 * @return mixed
 	 */
-	public function renewDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = FALSE, $oldOrderID) {
-		myadmin_log('ssl', 'info', "Called renewDVOrder - renewDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderID)", __LINE__, __FILE__);
+	public function renewDVOrder($product, $orderId, $approverEmail, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = FALSE, $oldOrderID) {
+		myadmin_log('ssl', 'info', "Called renewDVOrder - renewDVOrder($product, $orderId, $approverEmail, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderID)", __LINE__, __FILE__);
 		$params = [
 			'DVOrder' => [
 				'Request' => [
@@ -1122,8 +1122,8 @@ class GlobalSign {
 						'RenewalTargetOrderID' => $oldOrderID,
 						'CSR' => $csr
 					],
-					'OrderID' => $order_id,
-					'ApproverEmail' => $approver_email,
+					'OrderID' => $orderId,
+					'ApproverEmail' => $approverEmail,
 					'ContactInfo' => [
 						'FirstName' => $firstname,
 						'LastName' => $lastname,
@@ -1147,8 +1147,8 @@ class GlobalSign {
 	 *
 	 * @param mixed $fqdn
 	 * @param mixed $csr
-	 * @param mixed $order_id
-	 * @param mixed $approver_email
+	 * @param mixed $orderId
+	 * @param mixed $approverEmail
 	 * @param mixed $firstname
 	 * @param mixed $lastname
 	 * @param mixed $phone
@@ -1162,7 +1162,7 @@ class GlobalSign {
 	 * @param string $oldOrderId
 	 * @return mixed
 	 */
-	public function renewOVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE, $oldOrderId) {
+	public function renewOVOrder($fqdn, $csr, $orderId, $approverEmail, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE, $oldOrderId) {
 		$params = [
 			'OVOrder' => [
 				'Request' => [
@@ -1189,8 +1189,8 @@ class GlobalSign {
 						* ),
 						*/
 					],
-					'OrderID' => $order_id,
-					'ApproverEmail' => $approver_email,
+					'OrderID' => $orderId,
+					'ApproverEmail' => $approverEmail,
 					'OrganizationInfo' => [
 						'OrganizationName' => $company, 'OrganizationAddress' => [
 							'AddressLine1' => $address,
@@ -1243,12 +1243,12 @@ class GlobalSign {
 	 * @param mixed $city
 	 * @param mixed $state
 	 * @param mixed $zip
-	 * @param mixed $approver_email
+	 * @param mixed $approverEmail
 	 * @param bool  $wildcard
 	 * @param string $oldOrderId
 	 * @return array|bool
 	 */
-	public function renewOrganizationSSL($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, $wildcard = FALSE, $oldOrderId) {
+	public function renewOrganizationSSL($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approverEmail, $wildcard = FALSE, $oldOrderId) {
 		$res = $this->renewValidateOrderParameters('OV_SHA2', $fqdn, $csr, $wildcard);
 		$this->extra = [];
 		$this->extra['laststep'] = 'ValidateOrderParameters';
@@ -1264,9 +1264,9 @@ class GlobalSign {
 			myadmin_log('ssl', 'info', 'renewOrganizationSSL returned: '.json_encode($res), __LINE__, __FILE__);
 			return FALSE;
 		}
-		$order_id = $res->Response->OrderID;
+		$orderId = $res->Response->OrderID;
 		$this->__construct($this->username, $this->password);
-		$res = $this->renewOVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard, $oldOrderId);
+		$res = $this->renewOVOrder($fqdn, $csr, $orderId, $approverEmail, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard, $oldOrderId);
 		$this->extra['laststep'] = 'OVOrder';
 		$this->extra['OVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
@@ -1285,7 +1285,7 @@ class GlobalSign {
 			myadmin_log('ssl', 'info', 'SSL Renew Order Success - renewOrganizationSSL', __LINE__, __FILE__);
 			myadmin_log('ssl', 'info', json_encode($res), __LINE__, __FILE__);
 		}
-		$this->extra['order_id'] = $order_id;
+		$this->extra['order_id'] = $orderId;
 		return $this->extra;
 	}
 
@@ -1303,12 +1303,12 @@ class GlobalSign {
 	 * @param mixed $city
 	 * @param mixed $state
 	 * @param mixed $zip
-	 * @param mixed $business_category
+	 * @param mixed $businessCategory
 	 * @param mixed $agency
 	 * @param $oldOrderId
 	 * @return mixed
 	 */
-	public function renewEVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency, $oldOrderId) {
+	public function renewEVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $businessCategory, $agency, $oldOrderId) {
 		$params = [
 			'EVOrder' => [
 				'Request' => [
@@ -1328,7 +1328,7 @@ class GlobalSign {
 						'CSR' => $csr
 					],
 					'OrganizationInfoEV' => [
-						'BusinessCategoryCode' => $business_category, 'OrganizationAddress' => [
+						'BusinessCategoryCode' => $businessCategory, 'OrganizationAddress' => [
 						'AddressLine1' => $address,
 						'City' => $city,
 						'Region' => $state,
@@ -1405,13 +1405,13 @@ class GlobalSign {
 	 * @param mixed $city
 	 * @param mixed $state
 	 * @param mixed $zip
-	 * @param mixed $business_category
+	 * @param mixed $businessCategory
 	 * @param mixed $agency
-	 * @param mixed $approver_email
+	 * @param mixed $approverEmail
 	 * @param $oldOrderId
 	 * @return array|bool
 	 */
-	public function renewExtendedSSL($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency, $approver_email, $oldOrderId) {
+	public function renewExtendedSSL($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $businessCategory, $agency, $approverEmail, $oldOrderId) {
 		$res = $this->renewValidateOrderParameters('EV_SHA2', $fqdn, $csr, FALSE);
 		$this->extra = [];
 		$this->extra['laststep'] = 'ValidateOrderParameters';
@@ -1424,8 +1424,8 @@ class GlobalSign {
 		}
 		$this->__construct($this->username, $this->password);
 
-		$order_id = $res->Response->OrderID;
-		$res = $this->renewEVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency, $oldOrderId);
+		$orderId = $res->Response->OrderID;
+		$res = $this->renewEVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $businessCategory, $agency, $oldOrderId);
 		$this->extra['laststep'] = 'EVOrder';
 		$this->extra['EVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
@@ -1444,7 +1444,7 @@ class GlobalSign {
 			myadmin_log('ssl', 'info', 'SSL Renew Order Success - renewExtendedSSL', __LINE__, __FILE__);
 			myadmin_log('ssl', 'info', json_encode($res), __LINE__, __FILE__);
 		}
-		$this->extra['order_id'] = $order_id;
+		$this->extra['order_id'] = $orderId;
 		return $this->extra;
 	}
 }
