@@ -52,6 +52,7 @@ class Plugin {
 				$extra = ensure_csr($serviceClass->getId());
 			myadmin_log('ssl', 'info', "starting SSL Hostname {$serviceClass->getHostname()} Type ".$event['field1'].' Got CSR Size: '.mb_strlen($extra['csr']), __LINE__, __FILE__);
 			myadmin_log(self::$module, 'info', $renew === TRUE ? 'found order_id already set and GetOrderByOrderID is returning a vald order so decided to renew the cert' : 'order_id is either not seto or invalid so placing a new order', __LINE__, __FILE__);
+			$ssl_typeArray = ['AlphaSSL' =>1, 'DomainSSL' =>2, 'OrganizationSSL' =>3, 'ExtendedSSL' =>4, 'Alpha SSL w/ WildCard' => 5, 'DomainSSL w/ WildCard' => 6, 'OrganizationSSL w/ WildCard' => 7];
 			if ($renew === FALSE) {
 				// placing new ssl order
 				switch ($event['field1']) {
@@ -79,8 +80,8 @@ class Plugin {
 				switch ($event['field1']) {
 					case 'DV_LOW':
 					case 'DV_SKIP':
-						myadmin_log('ssl', 'info', "renewAlphaDomain({$serviceClass->getHostname()}, {$extra['csr']}, {$serviceClass->getFirstname()}, {$serviceClass->getLastname()}, {$serviceClass->getPhone()}, {$serviceClass->getEmail()}, {$extra['approver_email']}, FALSE, {$ssl_typeArray[$servicename]}, {$serviceClass->getOrderId()})", __LINE__, __FILE__);
-						$res = $GS->renewAlphaDomain($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $extra['approver_email'], $event['field2'] == 'wildcard', $ssl_typeArray[$servicename], $serviceClass->getOrderId());
+						myadmin_log('ssl', 'info', "renewAlphaDomain({$serviceClass->getHostname()}, {$extra['csr']}, {$serviceClass->getFirstname()}, {$serviceClass->getLastname()}, {$serviceClass->getPhone()}, {$serviceClass->getEmail()}, {$extra['approver_email']}, FALSE, {$ssl_typeArray[$serviceTypes[$serviceClass->getType()]['services_name']]}, {$serviceClass->getOrderId()})", __LINE__, __FILE__);
+						$res = $GS->renewAlphaDomain($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $extra['approver_email'], $event['field2'] == 'wildcard', $ssl_typeArray[$serviceTypes[$serviceClass->getType()]['services_name']], $serviceClass->getOrderId());
 						break;
 					case 'EV':
 						myadmin_log('ssl', 'info', "renewExtendedSSL({$serviceClass->getHostname()}, {$extra['csr']}, {$serviceClass->getFirstname()}, {$serviceClass->getLastname()}, {$serviceClass->getPhone()}, {$serviceClass->getEmail()}, {$serviceClass->getCompany()}, {$serviceClass->getAddress()}, {$serviceClass->getCity()}, {$serviceClass->getState()}, {$serviceClass->getZip()}, {$extra['business_category']}, {$extra['agency']}, {$serviceClass->getOrderId()})", __LINE__, __FILE__);
