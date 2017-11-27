@@ -32,13 +32,13 @@ namespace Detain\MyAdminGlobalSign;
  * @access public
  */
 class GlobalSign {
-	public $functions_wsdl = 'https://system.globalsign.com/kb/ws/v1/ServerSSLService?wsdl';
-	public $query_wsdl = 'https://system.globalsign.com/kb/ws/v1/GASService?wsdl';
-	public $account_wsdl = 'https://system.globalsign.com/kb/ws/v1/AccountService?wsdl';
+	public $functionsWsdl = 'https://system.globalsign.com/kb/ws/v1/ServerSSLService?wsdl';
+	public $queryWsdl = 'https://system.globalsign.com/kb/ws/v1/GASService?wsdl';
+	public $accountWsdl = 'https://system.globalsign.com/kb/ws/v1/AccountService?wsdl';
 
-	public $test_functions_wsdl = 'https://test-gcc.globalsign.com/kb/ws/v1/ServerSSLService?wsdl';
-	public $test_query_wsdl = 'https://test-gcc.globalsign.com/kb/ws/v1/GASService?wsdl';
-	public $test_account_wsdl = 'https://test-gcc.globalsign.com/kb/ws/v1/AccountService?wsdl';
+	public $testFunctionsWsdl = 'https://test-gcc.globalsign.com/kb/ws/v1/ServerSSLService?wsdl';
+	public $testQueryWsdl = 'https://test-gcc.globalsign.com/kb/ws/v1/GASService?wsdl';
+	public $testAccountWsdl = 'https://test-gcc.globalsign.com/kb/ws/v1/AccountService?wsdl';
 
 	private $username = '';
 	private $password = '';
@@ -46,9 +46,9 @@ class GlobalSign {
 	public $testing = FALSE;
 	public $connection_timeout = 1000;
 
-	public $functions_client;
-	public $account_client;
-	public $query_client;
+	public $functionsClient;
+	public $accountClient;
+	public $queryClient;
 
 	public $user_agent = 'MyAdmin GlobalSign Plugin';
 	public $trace_connections = 1;
@@ -73,9 +73,9 @@ class GlobalSign {
 			'trace' => $this->trace_connections,
 			'cache_wsdl' => WSDL_CACHE_BOTH
 		];
-		$this->functions_client = new \SoapClient($this->testing != TRUE ? $this->functions_wsdl : $this->test_functions_wsdl, $soapOptions);
-		$this->account_client = new \SoapClient($this->testing != TRUE ? $this->account_wsdl : $this->test_account_wsdl, $soapOptions);
-		$this->query_client = new \SoapClient($this->testing != TRUE ? $this->query_wsdl : $this->test_query_wsdl, $soapOptions);
+		$this->functionsClient = new \SoapClient($this->testing != TRUE ? $this->functionsWsdl : $this->testFunctionsWsdl, $soapOptions);
+		$this->accountClient = new \SoapClient($this->testing != TRUE ? $this->accountWsdl : $this->testAccountWsdl, $soapOptions);
+		$this->queryClient = new \SoapClient($this->testing != TRUE ? $this->queryWsdl : $this->testQueryWsdl, $soapOptions);
 	}
 
 	/**
@@ -97,7 +97,7 @@ class GlobalSign {
 						'ReturnCACerts' => 'true'
 		]]]];
 		$this->extra['GetOrderByOrderID_params'] = $params;
-		return obj2array($this->query_client->__soapCall('GetOrderByOrderID', $params));
+		return obj2array($this->queryClient->__soapCall('GetOrderByOrderID', $params));
 	}
 
 	/**
@@ -116,7 +116,7 @@ class GlobalSign {
 					'ToDate' => $todate
 		]]];
 		$this->extra['GetOrderByDateRange_params'] = $params;
-		return $this->query_client->__soapCall('GetOrderByDateRange', $params);
+		return $this->queryClient->__soapCall('GetOrderByDateRange', $params);
 	}
 
 	/**
@@ -146,7 +146,7 @@ class GlobalSign {
 		if ($status != '')
 			$params['GetCertificateOrders']['Request']['OrderStatus'] = $status;
 		$this->extra['GetCertificateOrders'] = $params;
-		return $this->query_client->__soapCall('GetCertificateOrders', $params);
+		return $this->queryClient->__soapCall('GetCertificateOrders', $params);
 	}
 
 	/**
@@ -180,7 +180,7 @@ class GlobalSign {
 			unset($params['ValidateOrderParameters']['Request']['FQDN']);
 		}
 		$this->extra['ValidateOrderParameters_params'] = $params;
-		$res = $this->query_client->__soapCall('ValidateOrderParameters', $params);
+		$res = $this->queryClient->__soapCall('ValidateOrderParameters', $params);
 		return $res;
 	}
 
@@ -196,7 +196,7 @@ class GlobalSign {
 		$this->extra['GetDVApproverList_params'] = $params;
 		myadmin_log('ssl', 'info', 'Calling GetDVApproverList', __LINE__, __FILE__);
 		myadmin_log('ssl', 'info', json_encode($params), __LINE__, __FILE__);
-		return $this->functions_client->__soapCall('GetDVApproverList', $params);
+		return $this->functionsClient->__soapCall('GetDVApproverList', $params);
 	}
 
 	/**
@@ -239,7 +239,7 @@ class GlobalSign {
 			//unset($params['ValidateOrderParameters']['Request']['FQDN']);
 		$this->extra['ValidateOrderParameters_params'] = $params;
 		myadmin_log('ssl', 'info', 'Params: '.json_encode($params), __LINE__, __FILE__);
-		$res = $this->query_client->__soapCall('ValidateOrderParameters', $params);
+		$res = $this->queryClient->__soapCall('ValidateOrderParameters', $params);
 		return $res;
 	}
 
@@ -253,7 +253,7 @@ class GlobalSign {
 		myadmin_log('ssl', 'info', "In function : ResendEmail($orderID)", __LINE__, __FILE__);
 		$params = ['ResendEmail' => ['Request' => ['OrderRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]], 'OrderID' => $orderID, 'ResendEmailType' =>'APPROVEREMAIL']]];
 		myadmin_log('ssl', 'info', 'Params: '.json_encode($params), __LINE__, __FILE__);
-		return $this->functions_client->__soapCall('ResendEmail', $params);
+		return $this->functionsClient->__soapCall('ResendEmail', $params);
 	}
 
 	/**
@@ -279,7 +279,7 @@ class GlobalSign {
 					'ApproverEmail'=>$approverEmail,
 					'FQDN'=>$fqdn
 		]]];
-		return $this->functions_client->__soapCall('ChangeApproverEmail', $params);
+		return $this->functionsClient->__soapCall('ChangeApproverEmail', $params);
 	}
 
 	/**
@@ -291,7 +291,7 @@ class GlobalSign {
 	 */
 	public function ReIssue($orderID, $csr) {
 		$params = ['ReIssue' => ['Request' => ['OrderRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]], 'OrderParameter' => ['CSR' => $csr], 'TargetOrderID' => $orderID, 'HashAlgorithm' =>'SHA256']]];
-		return $this->query_client->__soapCall('ReIssue', $params);
+		return $this->queryClient->__soapCall('ReIssue', $params);
 	}
 
 	/**
@@ -365,7 +365,7 @@ class GlobalSign {
 		//	        ini_set("max_execution_time", -1);
 		ini_set('max_execution_time', 1000); // just put a lot of time
 		ini_set('default_socket_timeout', 1000); // same
-		$res = $this->functions_client->__soapCall('DVOrder', $params);
+		$res = $this->functionsClient->__soapCall('DVOrder', $params);
 		return $res;
 	}
 
@@ -429,7 +429,7 @@ class GlobalSign {
 		if ($wildcard === TRUE)
 			$params['DVOrderWithoutCSR']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		$this->extra['DVOrderWithoutCSR_params'] = $params;
-		return $this->functions_client->__soapCall('DVOrderWithoutCSR', $params);
+		return $this->functionsClient->__soapCall('DVOrderWithoutCSR', $params);
 	}
 
 	/**
@@ -512,7 +512,7 @@ class GlobalSign {
 		if ($wildcard === TRUE)
 			$params['OVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		$this->extra['OVOrder_params'] = $params;
-		$res = $this->functions_client->__soapCall('OVOrder', $params);
+		$res = $this->functionsClient->__soapCall('OVOrder', $params);
 		return $res;
 	}
 
@@ -592,7 +592,7 @@ class GlobalSign {
 		if ($wildcard === TRUE)
 			$params['OVOrderWithoutCSR']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		$this->extra['OVOrderWithoutCSR_params'] = $params;
-		$res = $this->functions_client->__soapCall('OVOrderWithoutCSR', $params);
+		$res = $this->functionsClient->__soapCall('OVOrderWithoutCSR', $params);
 		return $res;
 	}
 
@@ -710,7 +710,7 @@ class GlobalSign {
 					*/
 		]]];
 		$this->extra['EVOrder_params'] = $params;
-		$res = $this->functions_client->__soapCall('EVOrder', $params);
+		$res = $this->functionsClient->__soapCall('EVOrder', $params);
 		return $res;
 	}
 
@@ -1138,7 +1138,7 @@ class GlobalSign {
 		ini_set('max_execution_time', 1000); // just put a lot of time
 		ini_set('default_socket_timeout', 1000); // same
 		myadmin_log('ssl', 'info', 'Params - '.json_encode($params), __LINE__, __FILE__);
-		$res = $this->functions_client->__soapCall('DVOrder', $params);
+		$res = $this->functionsClient->__soapCall('DVOrder', $params);
 		return $res;
 	}
 
@@ -1225,7 +1225,7 @@ class GlobalSign {
 		if ($wildcard === TRUE)
 			$params['OVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		$this->extra['OVOrder_params'] = $params;
-		$res = $this->functions_client->__soapCall('OVOrder', $params);
+		$res = $this->functionsClient->__soapCall('OVOrder', $params);
 		return $res;
 	}
 
@@ -1381,7 +1381,7 @@ class GlobalSign {
 		]]]];
 		$this->extra = [];
 		$this->extra['EVOrder_params'] = $params;
-		$res = $this->functions_client->__soapCall('EVOrder', $params);
+		$res = $this->functionsClient->__soapCall('EVOrder', $params);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			return FALSE;
 		} else {
