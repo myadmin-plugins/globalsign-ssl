@@ -1,8 +1,10 @@
 <?php
 require_once __DIR__.'/../vendor/autoload.php';
+
 function myadmin_log($section, $level, $text, $line, $file) {
 	//echo "{$section} {$level} {$line}@{$file}: {$text}\n";
 }
+
 /**
  * make_csr()
  * @param string $fqdn
@@ -51,3 +53,23 @@ function make_csr($fqdn, $email, $city, $state, $country, $company, $department)
 	//   echo $e . "\n";
 	return [$csrout, $certout, $pkeout];
 }
+
+function obj2array($obj) {
+	$out = [];
+	//myadmin_log('myadmin', 'debug', json_encode($obj), __LINE__, __FILE__);
+	foreach ($obj as $key => $val) {
+		switch (true) {
+			case is_object($val):
+				$out[$key] = obj2array($val);
+				break;
+			case is_array($val):
+				$out[$key] = obj2array($val);
+				break;
+			default:
+				$out[$key] = $val;
+				break;
+		}
+	}
+	return $out;
+}
+

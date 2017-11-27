@@ -43,17 +43,15 @@ class GlobalSignTest extends TestCase {
 	public function testGetOrderByOrderID() {
 		$response = $this->object->GetOrderByOrderID('CE201011028514');
 		$this->assertArrayHasKey('Response', $response, 'Ensuring Valid Respone Field "Response" Exists');
-		$this->assertArrayHasKey('QueryResponseHeader', $response['Response'], 'Ensuring Valid Respone Field "QueryResponseHeader" Exists');
-		$this->assertArrayHasKey('SuccessCode', $response['Response']['QueryResponseHeader'], 'Ensuring Valid Respone Field "SuccessCode" Exists');
-		$this->assertEquals($response['Response']['QueryResponseHeader']['SuccessCode'], 0, 'Ensuring we got the proper SuccessCode (0)');
-		$this->assertArrayHasKey('SearchOrderDetails', $response['Response'], 'Ensuring Valid Respone Field "SearchOrderDetails" Exists');
-		$this->assertTrue(is_array($response['Response']['SearchOrderDetails']['SearchOrderDetail']));
-		$this->assertArrayHasKey(0, $response['Response']['SearchOrderDetails']['SearchOrderDetail'], 'Ensuring Response Field is an Array with at least 1 item');
-		$this->assertArrayHasKey('OrderID', $response['Response']['SearchOrderDetails']['SearchOrderDetail'][0], 'Ensuring Valid Respone Field "OrderID" Exists');
-		$this->assertArrayHasKey('OrderKind', $response['Response']['SearchOrderDetails']['SearchOrderDetail'][0], 'Ensuring Valid Respone Field "OrderKind" Exists');
-		$this->assertArrayHasKey('OrderStatus', $response['Response']['SearchOrderDetails']['SearchOrderDetail'][0], 'Ensuring Valid Respone Field "OrderStatus" Exists');
-		$this->assertArrayHasKey('FQDN', $response['Response']['SearchOrderDetails']['SearchOrderDetail'][0], 'Ensuring Valid Respone Field "FQDN" Exists');
-		$this->assertTrue(strpos($response['Response']['SearchOrderDetails']['SearchOrderDetail'][0]['FQDN'], 'interserver.net') !== FALSE);
+		$this->assertArrayHasKey('OrderResponseHeader', $response['Response'], 'Ensuring Valid Respone Field "OrderResponseHeader" Exists');
+		$this->assertArrayHasKey('SuccessCode', $response['Response']['OrderResponseHeader'], 'Ensuring Valid Respone Field "SuccessCode" Exists');
+		$this->assertEquals($response['Response']['OrderResponseHeader']['SuccessCode'], 0, 'Ensuring we got the proper SuccessCode (0)');
+		$this->assertArrayHasKey('OrderDetail', $response['Response'], 'Ensuring Valid Respone Field "OrderDetail" Exists');
+		$this->assertArrayHasKey('OrderId', $response['Response']['OrderDetail']['OrderInfo'], 'Ensuring Valid Respone Field "OrderID" Exists');
+		$this->assertArrayHasKey('ProductCode', $response['Response']['OrderDetail']['OrderInfo'], 'Ensuring Valid Respone Field "OrderKind" Exists');
+		$this->assertArrayHasKey('OrderStatus', $response['Response']['OrderDetail']['OrderInfo'], 'Ensuring Valid Respone Field "OrderStatus" Exists');
+		$this->assertArrayHasKey('DomainName', $response['Response']['OrderDetail']['OrderInfo'], 'Ensuring Valid Respone Field "FQDN" Exists');
+		$this->assertEquals($response['Response']['OrderDetail']['OrderInfo']['DomainName'], 'inssl.net', 'Ensuring Valid Respone Field "DomainName" has expected inssl.net value');
 	}
 
 	/**
@@ -147,16 +145,16 @@ class GlobalSignTest extends TestCase {
 	 */
 	public function testGetDVApproverList() {
 		$response = $this->object->GetDVApproverList('interserver.net');
-		$this->assertArrayHasKey('Response', $response, 'Ensuring Valid Respone Field "Response" Exists');
-		$this->assertArrayHasKey('QueryResponseHeader', $response['Response'], 'Ensuring Valid Respone Field "QueryResponseHeader" Exists');
-		$this->assertArrayHasKey('SuccessCode', $response['Response']['QueryResponseHeader'], 'Ensuring Valid Respone Field "SuccessCode" Exists');
-		$this->assertEquals($response['Response']['QueryResponseHeader']['SuccessCode'], 0, 'Ensuring we got the proper SuccessCode (0)');
-		$this->assertArrayHasKey('Approvers', $response['Response'], 'Ensuring Valid Respone Field "Approvers" Exists');
-		$this->assertArrayHasKey('OrderID', $response['Response'], 'Ensuring Valid Respone Field "OrderID" Exists');
-		$this->assertTrue(is_array($response['Response']['Approvers']['SearchOrderDetail']));
-		$this->assertArrayHasKey(0, $response['Response']['Approvers']['SearchOrderDetail'], 'Ensuring Response Field is an Array with at least 1 item');
-		$this->assertArrayHasKey('ApproverType', $response['Response']['Approvers']['SearchOrderDetail'][0], 'Ensuring Valid Respone Field "ApproverType" Exists');
-		$this->assertArrayHasKey('ApproverEmail', $response['Response']['Approvers']['SearchOrderDetail'][0], 'Ensuring Valid Respone Field "ApproverEmail" Exists');
+		$this->assertObjectHasAttribute('Response', $response, 'Ensuring Valid Respone Field "Response" Exists');
+		$this->assertObjectHasAttribute('QueryResponseHeader', $response->Response, 'Ensuring Valid Respone Field "QueryResponseHeader" Exists');
+		$this->assertObjectHasAttribute('SuccessCode', $response->Response->QueryResponseHeader, 'Ensuring Valid Respone Field "SuccessCode" Exists');
+		$this->assertEquals($response->Response->QueryResponseHeader->SuccessCode, 0, 'Ensuring we got the proper SuccessCode (0)');
+		$this->assertObjectHasAttribute('Approvers', $response->Response, 'Ensuring Valid Respone Field "Approvers" Exists');
+		$this->assertObjectHasAttribute('OrderID', $response->Response, 'Ensuring Valid Respone Field "OrderID" Exists');
+		$this->assertTrue(is_array($response->Response->Approvers->SearchOrderDetail));
+		$this->assertArrayHasKey(0, $response->Response->Approvers->SearchOrderDetail, 'Ensuring Response Field is an Array with at least 1 item');
+		$this->assertObjectHasAttribute('ApproverType', $response->Response->Approvers->SearchOrderDetail[0], 'Ensuring Valid Respone Field "ApproverType" Exists');
+		$this->assertObjectHasAttribute('ApproverEmail', $response->Response->Approvers->SearchOrderDetail[0], 'Ensuring Valid Respone Field "ApproverEmail" Exists');
 	}
 
 	/**
