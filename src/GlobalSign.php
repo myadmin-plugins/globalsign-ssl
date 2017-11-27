@@ -295,6 +295,426 @@ class GlobalSign {
 	}
 
 	/**
+	 * Order AlphaSSL or DomainSSL Certificate with Approver Email validation
+	 *
+	 * @param string $product
+	 * @param mixed $order_id
+	 * @param mixed $approver_email
+	 * @param mixed $fqdn
+	 * @param mixed $csr
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param bool  $wildcard
+	 * @return mixed
+	 */
+	public function DVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = FALSE) {
+
+		/*
+		* $Options = array(
+		* 'Option' => array(
+		* 'OptionName' => 'SAN',
+		* 'OptionValue' => 'true',
+		* ),
+		* );
+		* $params['DVOrder']['Request']['OrderRequestParameter']['Options'] = $Options;
+
+		* $SANEntries => array(
+		* 'SANEntry' => array(
+		* array(
+		* 'SANOptionType' => '1',
+		* 'SubjectAltName' => 'mail.test12345.com',
+		* ),
+		* array(
+		* 'SANOptionType' => '3',
+		* 'SubjectAltName' => 'tester.test12345.com',
+		* ),
+		* ),
+		* );
+		* $params['DVOrder']['Request']['SANEntries'] = $SANEntries;
+		*/
+		$params = [
+			'DVOrder' => [
+				'Request' => [
+					'OrderRequestHeader' => [
+						'AuthToken' => [
+					'UserName' => $this->username,
+					'Password' => $this->password
+						]
+					],
+					'OrderRequestParameter' => [
+						'ProductCode' => $product,
+						'OrderKind' => 'new',
+						'Licenses' => '1',
+						'ValidityPeriod' => ['Months' => '12'],
+						'CSR' => $csr
+					],
+					'OrderID' => $order_id,
+					'ApproverEmail' => $approver_email,
+					'ContactInfo' => [
+				'FirstName' => $firstname,
+				'LastName' => $lastname,
+				'Phone' => $phone,
+				'Email' => $email
+		]]]];
+		if ($wildcard === TRUE)
+			$params['DVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
+		$this->extra['DVOrder_params'] = $params;
+		//  	    ini_set("max_input_time", -1);
+		//	        ini_set("max_execution_time", -1);
+		ini_set('max_execution_time', 1000); // just put a lot of time
+		ini_set('default_socket_timeout', 1000); // same
+		$res = $this->functions_client->__soapCall('DVOrder', $params);
+		return $res;
+	}
+
+	/**
+	 * GlobalSign::DVOrderWithoutCSR()
+	 *
+	 * @param mixed $fqdn
+	 * @param mixed $order_id
+	 * @param mixed $approver_email
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param bool $wildcard
+	 * @return mixed
+	 */
+	public function DVOrderWithoutCSR($fqdn, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $wildcard = FALSE) {
+		$params = [
+			'DVOrderWithoutCSR' => [
+				'Request' => [
+					'OrderRequestHeader' => [
+						'AuthToken' => [
+							'UserName' => $this->username,
+							'Password' => $this->password
+						]
+					],
+					'OrderRequestParameterWithoutCSR' => [
+						'ProductCode' => 'DV_SKIP_SHA2',
+						'OrderKind' => 'new',
+						'Licenses' => '1',
+						'ValidityPeriod' => ['Months' => '12'],
+						'PIN' => '',
+						'KeyLength' => '',
+						'Options' => [
+							'Option' => [
+								'OptionName' => 'SAN',
+								'OptionValue' => 'true'
+							]
+						]
+					],
+					'OrderID' => $order_id,
+					'FQDN' => $fqdn,
+					'DVCSRInfo' => ['Country' => 'US'],
+					'ApproverEmail' => $approver_email,
+					'ContactInfo' => [
+						'FirstName' => $firstname,
+						'LastName' => $lastname,
+						'Phone' => $phone,
+						'Email' => $email
+					],
+					'SANEntries' => [
+						'SANEntry' => [
+							[
+								'SANOptionType' => '1',
+								'SubjectAltName' => 'mail.test12345.com'
+							],
+							[
+								'SANOptionType' => '3',
+								'SubjectAltName' => 'tester.test12345.com'
+		]]]]]];
+		if ($wildcard === TRUE)
+			$params['DVOrderWithoutCSR']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
+		$this->extra['DVOrderWithoutCSR_params'] = $params;
+		return $this->functions_client->__soapCall('DVOrderWithoutCSR', $params);
+	}
+
+	/**
+	 * Order OrganizationSSL Certificate
+	 *
+	 * @param mixed $fqdn
+	 * @param mixed $csr
+	 * @param mixed $order_id
+	 * @param mixed $approver_email
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param mixed $company
+	 * @param mixed $address
+	 * @param mixed $city
+	 * @param mixed $state
+	 * @param mixed $zip
+	 * @param bool  $wildcard
+	 * @return mixed
+	 */
+	public function OVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE) {
+		$params = [
+			'OVOrder' => [
+				'Request' => [
+					'OrderRequestHeader' => [
+						'AuthToken' => [
+						'UserName' => $this->username,
+						'Password' => $this->password
+						]
+					],
+					'OrderRequestParameter' => [
+						'ProductCode' => 'OV_SHA2',
+						'OrderKind' => 'new',
+						'Licenses' => '1',
+						'ValidityPeriod' => ['Months' => '12'],
+						'CSR' => $csr,
+						/*
+						* 'Options' => array(
+						* 'Option' => array(
+						* 'OptionName' => 'SAN',
+						* 'OptionValue' => 'true',
+						* ),
+						* ),
+						*/
+					],
+					'OrderID' => $order_id,
+					'ApproverEmail' => $approver_email,
+					'OrganizationInfo' => [
+						'OrganizationName' => $company, 'OrganizationAddress' => [
+						'AddressLine1' => $address,
+						'City' => $city,
+						'Region' => $state,
+						'PostalCode' => $zip,
+						'Country' => 'US',
+						'Phone' => $phone
+						]
+					],
+					'ContactInfo' => [
+					'FirstName' => $firstname,
+					'LastName' => $lastname,
+					'Phone' => $phone,
+					'Email' => $email
+					],
+					/*
+					* 'SANEntries' => array(
+					* 'SANEntry' => array(
+					* array(
+					* 'SANOptionType' => '1',
+					* 'SubjectAltName' => 'mail.test12345.com',
+					* ),
+					* array(
+					* 'SANOptionType' => '3',
+					* 'SubjectAltName' => 'tester.test12345.com',
+					* ),
+					* ),
+					* ),
+					*/
+		]]];
+		if ($wildcard === TRUE)
+			$params['OVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
+		$this->extra['OVOrder_params'] = $params;
+		$res = $this->functions_client->__soapCall('OVOrder', $params);
+		return $res;
+	}
+
+	/**
+	 * GlobalSign::OVOrderWithoutCSR()
+	 *
+	 * @param mixed $fqdn
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param mixed $company
+	 * @param mixed $address
+	 * @param mixed $city
+	 * @param mixed $state
+	 * @param mixed $zip
+	 * @param bool  $wildcard
+	 * @return mixed
+	 */
+	public function OVOrderWithoutCSR($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE) {
+		$params = [
+			'OVOrderWithoutCSR' => [
+				'Request' => [
+					'OrderRequestHeader' => [
+						'AuthToken' => [
+							'UserName' => $this->username,
+							'Password' => $this->password
+						]
+					],
+					'OrderRequestParameterWithoutCSR' => [
+						'ProductCode' => 'OV_SKIP_SHA2',
+						'OrderKind' => 'new',
+						'Licenses' => '1',
+						'ValidityPeriod' => ['Months' => '12'],
+						'PIN' => '',
+						'KeyLength' => '',
+						'Options' => [
+							'Option' => [
+								'OptionName' => 'SAN',
+								'OptionValue' => 'true'
+							]
+						]
+					],
+					'OrganizationInfo' => [
+						'OrganizationName' => $company, 'OrganizationAddress' => [
+							'AddressLine1' => $address,
+							'City' => $city,
+							'Region' => $state,
+							'PostalCode' => $zip,
+							'Country' => 'US',
+							'Phone' => $phone
+						]
+					],
+					'FQDN' => $fqdn,
+					'OVCSRInfo' => [
+						'OrganizationName' => $company,
+						'Locality' => $city,
+						'StateOrProvince' => $state,
+						'Country' => 'US'
+					],
+					'ContactInfo' => [
+						'FirstName' => $firstname,
+						'LastName' => $lastname,
+						'Phone' => $phone,
+						'Email' => $email
+					],
+					'SANEntries' => [
+						'SANEntry' => [
+							[
+								'SANOptionType' => '1',
+								'SubjectAltName' => 'mail.test12345.com'
+							],
+							[
+								'SANOptionType' => '3',
+								'SubjectAltName' => 'tester.test12345.com'
+		]]]]]];
+		if ($wildcard === TRUE)
+			$params['OVOrderWithoutCSR']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
+		$this->extra['OVOrderWithoutCSR_params'] = $params;
+		$res = $this->functions_client->__soapCall('OVOrderWithoutCSR', $params);
+		return $res;
+	}
+
+	/**
+	 * Order ExtendedSSL Certificate
+	 *
+	 * @param mixed $fqdn
+	 * @param mixed $csr
+	 * @param mixed $firstname
+	 * @param mixed $lastname
+	 * @param mixed $phone
+	 * @param mixed $email
+	 * @param mixed $company
+	 * @param mixed $address
+	 * @param mixed $city
+	 * @param mixed $state
+	 * @param mixed $zip
+	 * @param mixed $business_category PO, GE, or BE for Private Organization, Government Entity, or Business Entity
+	 * @param mixed $agency
+	 * @return mixed
+	 */
+	public function EVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency) {
+
+		$params = [
+			'EVOrder' => [
+				'Request' => [
+					'OrderRequestHeader' => [
+						'AuthToken' => [
+							'UserName' => $this->username,
+							'Password' => $this->password
+						]
+					],
+					'OrderRequestParameter' => [
+						'ProductCode' => 'EV_SHA2',
+						'OrderKind' => 'new',
+						'Licenses' => '1',
+						'ValidityPeriod' => ['Months' => '12'],
+						'CSR' => $csr,
+						/*
+						* 'Options' => array(
+						* 'Option' => array(
+						* 'OptionName' => 'SAN',
+						* 'OptionValue' => 'true',
+						* ),
+						* ),
+						*/
+					],
+					'OrganizationInfoEV' => [
+						'BusinessCategoryCode' => $business_category,
+						'OrganizationAddress' => [
+							'AddressLine1' => $address,
+							'City' => $city,
+							'Region' => $state,
+							'PostalCode' => $zip,
+							'Country' => 'US',
+							'Phone' => $phone
+						]
+					],
+					'RequestorInfo' => [
+						'FirstName' => $firstname,
+						'LastName' => $lastname,
+						'Phone' => $phone,
+						'Email' => $email,
+						'OrganizationName' => $company
+					],
+					'ApproverInfo' => [
+						'FirstName' => $firstname,
+						'LastName' => $lastname,
+						'Phone' => $phone,
+						'Email' => $email,
+						'OrganizationName' => $company
+					],
+					'AuthorizedSignerInfo' => [
+						'FirstName' => $firstname,
+						'LastName' => $lastname,
+						'Phone' => $phone,
+						'Email' => $email
+					],
+					'JurisdictionInfo' => [
+						'Country' => 'US',
+						'StateOrProvince' => $state,
+						'Locality' => $city,
+						'IncorporatingAgencyRegistrationNumber' => $agency
+					],
+					'OrganizationInfo' => [
+						'OrganizationName' => $company,
+						'OrganizationAddress' => [
+							'AddressLine1' => $address,
+							'City' => $city,
+							'Region' => $state,
+							'PostalCode' => $zip,
+							'Country' => 'US',
+							'Phone' => $phone
+						]
+					],
+					'ContactInfo' => [
+						'FirstName' => $firstname,
+						'LastName' => $lastname,
+						'Phone' => $phone,
+						'Email' => $email
+					],
+					/*
+					* 'SANEntries' => array(
+					* 'SANEntry' => array(
+					* array(
+					* 'SANOptionType' => '1',
+					* 'SubjectAltName' => 'mail.test12345.com',
+					* ),
+					* array(
+					* 'SANOptionType' => '3',
+					* 'SubjectAltName' => 'tester.test12345.com',
+					* ),
+					* ),
+					* ),
+					*/
+		]]];
+		$this->extra['EVOrder_params'] = $params;
+		$res = $this->functions_client->__soapCall('EVOrder', $params);
+		return $res;
+	}
+
+	/**
 	 * GlobalSign::create_alphassl()
 	 * @param mixed $fqdn
 	 * @param mixed $csr
@@ -589,363 +1009,6 @@ class GlobalSign {
 		}
 		$this->extra['order_id'] = $order_id;
 		return $this->extra;
-	}
-
-	/**
-	 * Order AlphaSSL or DomainSSL Certificate with Approver Email validation
-	 *
-	 * @param string $product
-	 * @param mixed $order_id
-	 * @param mixed $approver_email
-	 * @param mixed $fqdn
-	 * @param mixed $csr
-	 * @param mixed $firstname
-	 * @param mixed $lastname
-	 * @param mixed $phone
-	 * @param mixed $email
-	 * @param bool  $wildcard
-	 * @return mixed
-	 */
-	public function DVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = FALSE) {
-
-		/*
-		* $Options = array(
-		* 'Option' => array(
-		* 'OptionName' => 'SAN',
-		* 'OptionValue' => 'true',
-		* ),
-		* );
-		* $params['DVOrder']['Request']['OrderRequestParameter']['Options'] = $Options;
-
-		* $SANEntries => array(
-		* 'SANEntry' => array(
-		* array(
-		* 'SANOptionType' => '1',
-		* 'SubjectAltName' => 'mail.test12345.com',
-		* ),
-		* array(
-		* 'SANOptionType' => '3',
-		* 'SubjectAltName' => 'tester.test12345.com',
-		* ),
-		* ),
-		* );
-		* $params['DVOrder']['Request']['SANEntries'] = $SANEntries;
-		*/
-		$params = [
-			'DVOrder' => [
-				'Request' => [
-					'OrderRequestHeader' => [
-						'AuthToken' => [
-					'UserName' => $this->username,
-					'Password' => $this->password
-						]
-					],
-					'OrderRequestParameter' => [
-						'ProductCode' => $product,
-						'OrderKind' => 'new',
-						'Licenses' => '1',
-						'ValidityPeriod' => ['Months' => '12'],
-						'CSR' => $csr
-					],
-					'OrderID' => $order_id,
-					'ApproverEmail' => $approver_email,
-					'ContactInfo' => [
-				'FirstName' => $firstname,
-				'LastName' => $lastname,
-				'Phone' => $phone,
-				'Email' => $email
-		]]]];
-		if ($wildcard === TRUE)
-			$params['DVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		$this->extra['DVOrder_params'] = $params;
-		//  	    ini_set("max_input_time", -1);
-		//	        ini_set("max_execution_time", -1);
-		ini_set('max_execution_time', 1000); // just put a lot of time
-		ini_set('default_socket_timeout', 1000); // same
-		$res = $this->functions_client->__soapCall('DVOrder', $params);
-		return $res;
-	}
-
-	/**
-	 * Order OrganizationSSL Certificate
-	 *
-	 * @param mixed $fqdn
-	 * @param mixed $csr
-	 * @param mixed $order_id
-	 * @param mixed $approver_email
-	 * @param mixed $firstname
-	 * @param mixed $lastname
-	 * @param mixed $phone
-	 * @param mixed $email
-	 * @param mixed $company
-	 * @param mixed $address
-	 * @param mixed $city
-	 * @param mixed $state
-	 * @param mixed $zip
-	 * @param bool  $wildcard
-	 * @return mixed
-	 */
-	public function OVOrder($fqdn, $csr, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE) {
-		$params = [
-			'OVOrder' => [
-				'Request' => [
-					'OrderRequestHeader' => [
-						'AuthToken' => [
-						'UserName' => $this->username,
-						'Password' => $this->password
-						]
-					],
-					'OrderRequestParameter' => [
-						'ProductCode' => 'OV_SHA2',
-						'OrderKind' => 'new',
-						'Licenses' => '1',
-						'ValidityPeriod' => ['Months' => '12'],
-						'CSR' => $csr,
-						/*
-						* 'Options' => array(
-						* 'Option' => array(
-						* 'OptionName' => 'SAN',
-						* 'OptionValue' => 'true',
-						* ),
-						* ),
-						*/
-					],
-					'OrderID' => $order_id,
-					'ApproverEmail' => $approver_email,
-					'OrganizationInfo' => [
-						'OrganizationName' => $company, 'OrganizationAddress' => [
-						'AddressLine1' => $address,
-						'City' => $city,
-						'Region' => $state,
-						'PostalCode' => $zip,
-						'Country' => 'US',
-						'Phone' => $phone
-						]
-					],
-					'ContactInfo' => [
-					'FirstName' => $firstname,
-					'LastName' => $lastname,
-					'Phone' => $phone,
-					'Email' => $email
-					],
-					/*
-					* 'SANEntries' => array(
-					* 'SANEntry' => array(
-					* array(
-					* 'SANOptionType' => '1',
-					* 'SubjectAltName' => 'mail.test12345.com',
-					* ),
-					* array(
-					* 'SANOptionType' => '3',
-					* 'SubjectAltName' => 'tester.test12345.com',
-					* ),
-					* ),
-					* ),
-					*/
-		]]];
-		if ($wildcard === TRUE)
-			$params['OVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		$this->extra['OVOrder_params'] = $params;
-		$res = $this->functions_client->__soapCall('OVOrder', $params);
-		return $res;
-	}
-
-	/**
-	 * GlobalSign::OVOrderWithoutCSR()
-	 *
-	 * @param mixed $fqdn
-	 * @param mixed $firstname
-	 * @param mixed $lastname
-	 * @param mixed $phone
-	 * @param mixed $email
-	 * @param mixed $company
-	 * @param mixed $address
-	 * @param mixed $city
-	 * @param mixed $state
-	 * @param mixed $zip
-	 * @param bool  $wildcard
-	 * @return mixed
-	 */
-	public function OVOrderWithoutCSR($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = FALSE) {
-		$params = [
-			'OVOrderWithoutCSR' => [
-				'Request' => [
-					'OrderRequestHeader' => [
-						'AuthToken' => [
-							'UserName' => $this->username,
-							'Password' => $this->password
-						]
-					],
-					'OrderRequestParameterWithoutCSR' => [
-						'ProductCode' => 'OV_SKIP_SHA2',
-						'OrderKind' => 'new',
-						'Licenses' => '1',
-						'ValidityPeriod' => ['Months' => '12'],
-						'PIN' => '',
-						'KeyLength' => '',
-						'Options' => [
-							'Option' => [
-								'OptionName' => 'SAN',
-								'OptionValue' => 'true'
-							]
-						]
-					],
-					'OrganizationInfo' => [
-						'OrganizationName' => $company, 'OrganizationAddress' => [
-							'AddressLine1' => $address,
-							'City' => $city,
-							'Region' => $state,
-							'PostalCode' => $zip,
-							'Country' => 'US',
-							'Phone' => $phone
-						]
-					],
-					'FQDN' => $fqdn,
-					'OVCSRInfo' => [
-						'OrganizationName' => $company,
-						'Locality' => $city,
-						'StateOrProvince' => $state,
-						'Country' => 'US'
-					],
-					'ContactInfo' => [
-						'FirstName' => $firstname,
-						'LastName' => $lastname,
-						'Phone' => $phone,
-						'Email' => $email
-					],
-					'SANEntries' => [
-						'SANEntry' => [
-							[
-								'SANOptionType' => '1',
-								'SubjectAltName' => 'mail.test12345.com'
-							],
-							[
-								'SANOptionType' => '3',
-								'SubjectAltName' => 'tester.test12345.com'
-		]]]]]];
-		if ($wildcard === TRUE)
-			$params['OVOrderWithoutCSR']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		$this->extra['OVOrderWithoutCSR_params'] = $params;
-		$res = $this->functions_client->__soapCall('OVOrderWithoutCSR', $params);
-		return $res;
-	}
-
-	/**
-	 * Order ExtendedSSL Certificate
-	 *
-	 * @param mixed $fqdn
-	 * @param mixed $csr
-	 * @param mixed $firstname
-	 * @param mixed $lastname
-	 * @param mixed $phone
-	 * @param mixed $email
-	 * @param mixed $company
-	 * @param mixed $address
-	 * @param mixed $city
-	 * @param mixed $state
-	 * @param mixed $zip
-	 * @param mixed $business_category PO, GE, or BE for Private Organization, Government Entity, or Business Entity
-	 * @param mixed $agency
-	 * @return mixed
-	 */
-	public function EVOrder($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $business_category, $agency) {
-
-		$params = [
-			'EVOrder' => [
-				'Request' => [
-					'OrderRequestHeader' => [
-						'AuthToken' => [
-							'UserName' => $this->username,
-							'Password' => $this->password
-						]
-					],
-					'OrderRequestParameter' => [
-						'ProductCode' => 'EV_SHA2',
-						'OrderKind' => 'new',
-						'Licenses' => '1',
-						'ValidityPeriod' => ['Months' => '12'],
-						'CSR' => $csr,
-						/*
-						* 'Options' => array(
-						* 'Option' => array(
-						* 'OptionName' => 'SAN',
-						* 'OptionValue' => 'true',
-						* ),
-						* ),
-						*/
-					],
-					'OrganizationInfoEV' => [
-						'BusinessCategoryCode' => $business_category,
-						'OrganizationAddress' => [
-							'AddressLine1' => $address,
-							'City' => $city,
-							'Region' => $state,
-							'PostalCode' => $zip,
-							'Country' => 'US',
-							'Phone' => $phone
-						]
-					],
-					'RequestorInfo' => [
-						'FirstName' => $firstname,
-						'LastName' => $lastname,
-						'Phone' => $phone,
-						'Email' => $email,
-						'OrganizationName' => $company
-					],
-					'ApproverInfo' => [
-						'FirstName' => $firstname,
-						'LastName' => $lastname,
-						'Phone' => $phone,
-						'Email' => $email,
-						'OrganizationName' => $company
-					],
-					'AuthorizedSignerInfo' => [
-						'FirstName' => $firstname,
-						'LastName' => $lastname,
-						'Phone' => $phone,
-						'Email' => $email
-					],
-					'JurisdictionInfo' => [
-						'Country' => 'US',
-						'StateOrProvince' => $state,
-						'Locality' => $city,
-						'IncorporatingAgencyRegistrationNumber' => $agency
-					],
-					'OrganizationInfo' => [
-						'OrganizationName' => $company,
-						'OrganizationAddress' => [
-							'AddressLine1' => $address,
-							'City' => $city,
-							'Region' => $state,
-							'PostalCode' => $zip,
-							'Country' => 'US',
-							'Phone' => $phone
-						]
-					],
-					'ContactInfo' => [
-						'FirstName' => $firstname,
-						'LastName' => $lastname,
-						'Phone' => $phone,
-						'Email' => $email
-					],
-					/*
-					* 'SANEntries' => array(
-					* 'SANEntry' => array(
-					* array(
-					* 'SANOptionType' => '1',
-					* 'SubjectAltName' => 'mail.test12345.com',
-					* ),
-					* array(
-					* 'SANOptionType' => '3',
-					* 'SubjectAltName' => 'tester.test12345.com',
-					* ),
-					* ),
-					* ),
-					*/
-		]]];
-		$this->extra['EVOrder_params'] = $params;
-		$res = $this->functions_client->__soapCall('EVOrder', $params);
-		return $res;
 	}
 
 	/**
@@ -1384,68 +1447,4 @@ class GlobalSign {
 		$this->extra['order_id'] = $order_id;
 		return $this->extra;
 	}
-
-	/**
-	 * GlobalSign::DVOrderWithoutCSR()
-	 *
-	 * @param mixed $fqdn
-	 * @param mixed $order_id
-	 * @param mixed $approver_email
-	 * @param mixed $firstname
-	 * @param mixed $lastname
-	 * @param mixed $phone
-	 * @param mixed $email
-	 * @param bool $wildcard
-	 * @return mixed
-	 */
-	public function DVOrderWithoutCSR($fqdn, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $wildcard = FALSE) {
-		$params = [
-			'DVOrderWithoutCSR' => [
-				'Request' => [
-					'OrderRequestHeader' => [
-						'AuthToken' => [
-							'UserName' => $this->username,
-							'Password' => $this->password
-						]
-					],
-					'OrderRequestParameterWithoutCSR' => [
-						'ProductCode' => 'DV_SKIP_SHA2',
-						'OrderKind' => 'new',
-						'Licenses' => '1',
-						'ValidityPeriod' => ['Months' => '12'],
-						'PIN' => '',
-						'KeyLength' => '',
-						'Options' => [
-							'Option' => [
-								'OptionName' => 'SAN',
-								'OptionValue' => 'true'
-							]
-						]
-					],
-					'OrderID' => $order_id,
-					'FQDN' => $fqdn,
-					'DVCSRInfo' => ['Country' => 'US'],
-					'ApproverEmail' => $approver_email,
-					'ContactInfo' => [
-						'FirstName' => $firstname,
-						'LastName' => $lastname,
-						'Phone' => $phone,
-						'Email' => $email
-					],
-					'SANEntries' => [
-						'SANEntry' => [
-							[
-								'SANOptionType' => '1',
-								'SubjectAltName' => 'mail.test12345.com'
-							],
-							[
-								'SANOptionType' => '3',
-								'SubjectAltName' => 'tester.test12345.com'
-		]]]]]];
-		if ($wildcard === TRUE)
-			$params['DVOrderWithoutCSR']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
-		$this->extra['DVOrderWithoutCSR_params'] = $params;
-		return $this->functions_client->__soapCall('DVOrderWithoutCSR', $params);
-	}
-
 }

@@ -211,6 +211,47 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
+	 * @covers GlobalSign::DVOrder
+	 * @todo   Implement testDVOrder().
+	 */
+	public function testDVOrder() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
+	}
+
+	/**
+	 * @covers GlobalSign::DVOrderWithoutCSR
+	 * @todo   Implement testDVOrderWithoutCSR().
+	 */
+	public function testDVOrderWithoutCSR() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
+	}
+
+	/**
+	 * @covers GlobalSign::OVOrder
+	 * @todo   Implement testOVOrder().
+	 */
+	public function testOVOrder() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
+	}
+
+	/**
+	 * @covers GlobalSign::OVOrderWithoutCSR
+	 * @todo   Implement testOVOrderWithoutCSR().
+	 */
+	public function testOVOrderWithoutCSR() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
+	}
+
+	/**
+	 * @covers GlobalSign::EVOrder
+	 * @todo   Implement testEVOrder().
+	 */
+	public function testEVOrder() {
+		$this->markTestIncomplete('This test has not been implemented yet.');
+	}
+
+
+	/**
 	 * @covers GlobalSign::create_alphassl
 	 * @todo   Implement testCreate_alphassl().
 	 */
@@ -257,39 +298,6 @@ class GlobalSignTest extends TestCase {
 	public function testCreate_extendedssl() {
 		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
-
-	/**
-	 * @covers GlobalSign::DVOrder
-	 * @todo   Implement testDVOrder().
-	 */
-	public function testDVOrder() {
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
-	 * @covers GlobalSign::OVOrder
-	 * @todo   Implement testOVOrder().
-	 */
-	public function testOVOrder() {
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
-	 * @covers GlobalSign::OVOrderWithoutCSR
-	 * @todo   Implement testOVOrderWithoutCSR().
-	 */
-	public function testOVOrderWithoutCSR() {
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
-	 * @covers GlobalSign::EVOrder
-	 * @todo   Implement testEVOrder().
-	 */
-	public function testEVOrder() {
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
 	/**
 	 * @covers GlobalSign::renewAlphaDomain
 	 * @todo   Implement testRenewAlphaDomain().
@@ -335,14 +343,6 @@ class GlobalSignTest extends TestCase {
 	 * @todo   Implement testRenewExtendedSSL().
 	 */
 	public function testRenewExtendedSSL() {
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
-	 * @covers GlobalSign::DVOrderWithoutCSR
-	 * @todo   Implement testDVOrderWithoutCSR().
-	 */
-	public function testDVOrderWithoutCSR() {
 		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 }
