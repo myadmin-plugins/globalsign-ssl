@@ -101,22 +101,22 @@ class GlobalSign {
 	}
 
 	/**
-	 * GlobalSign::GetOrderByDataRange()
+	 * GlobalSign::GetOrderByDateRange()
 	 *
 	 * @param string $fromdate optional from date for lookup in YYYY-MM-DDTHH:MM:SS.000Z format
 	 * @param string $todate optional to date for lookup in YYYY-MM-DDTHH:MM:SS.000Z format
 	 * @return mixed
 	 */
-	public function GetOrderByDataRange($fromdate, $todate) {
+	public function GetOrderByDateRange($fromdate, $todate) {
 		$params = [
-			'GetOrderByDataRange' => [
+			'GetOrderByDateRange' => [
 				'Request' => [
 					'QueryRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]],
 					'FromDate' => $fromdate,
 					'ToDate' => $todate
 		]]];
-		$this->extra['GetOrderByDataRange_params'] = $params;
-		return $this->query_client->__soapCall('GetOrderByDataRange', $params);
+		$this->extra['GetOrderByDateRange_params'] = $params;
+		return $this->query_client->__soapCall('GetOrderByDateRange', $params);
 	}
 
 	/**

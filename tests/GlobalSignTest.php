@@ -53,11 +53,17 @@ class GlobalSignTest extends TestCase {
 	}
 
 	/**
-	 * @covers GlobalSign::GetOrderByDataRange
-	 * @todo   Implement testGetOrderByDataRange().
+	 * @covers GlobalSign::GetOrderByDateRange
+	 * @todo   Implement testGetOrderByDateRange().
 	 */
-	public function testGetOrderByDataRange() {
-		$this->markTestIncomplete('This test has not been implemented yet.');
+	public function testGetOrderByDateRange() {
+		$response = $this->object->GetOrderByDateRange('2017-11-24T00:00:01.000-05:00', '2017-11-24T23:23:59.000-05:00');
+		$this->assertObjectHasAttribute('Response', $response);
+		$this->assertObjectHasAttribute('QueryResponseHeader', $response->Response);
+		$this->assertObjectHasAttribute('SuccessCode', $response->Response->QueryResponseHeader);
+		//var_export($response);
+		$this->assertEquals(0, $response->Response->QueryResponseHeader->SuccessCode);
+		$this->assertObjectHasAttribute('OrderDetails', $response->Response);
 	}
 
 	/**
