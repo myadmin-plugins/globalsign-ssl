@@ -46,11 +46,11 @@ class Plugin {
 			$serviceTypes = run_event('get_service_types', FALSE, self::$module);
 			$settings = get_module_settings(self::$module);
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
-			if ('' === $extra['csr'])
-				$extra = ensure_csr($serviceInfo[$prefix.'_id']);
-			myadmin_log('ssl', 'info', "starting SSL Hostname {$serviceClass->getHostname()} Type ".$event['field1'].' Got CSR Size: '.mb_strlen($extra['csr']), __LINE__, __FILE__);
 			$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
-			$renew = substr($serviceClass->getOrderId(), 0, 2) == 'CE' && $GS->GetOrderByOrderID($serviceClass->getOrderId())['Response']['QueryResponseHeader']['SuccessCode'] == '0';
+			$renew = substr($serviceClass->getOrderId(), 0, 2) == 'CE' && $GS->GetOrderByOrderID($serviceClass->getOrderId())['Response']['OrderResponseHeader']['SuccessCode'] == '0';
+			if (!isset($extra['csr']) || '' == $extra['csr'])
+				$extra = ensure_csr($serviceClass->getId());
+			myadmin_log('ssl', 'info', "starting SSL Hostname {$serviceClass->getHostname()} Type ".$event['field1'].' Got CSR Size: '.mb_strlen($extra['csr']), __LINE__, __FILE__);
 			myadmin_log(self::$module, 'info', $renew === TRUE ? 'found order_id already set and GetOrderByOrderID is returning a vald order so decided to renew the cert' : 'order_id is either not seto or invalid so placing a new order', __LINE__, __FILE__);
 			if ($renew === FALSE) {
 				// placing new ssl order
