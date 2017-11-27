@@ -50,7 +50,7 @@ class GlobalSign {
 	public $account_client;
 	public $query_client;
 
-	public $user_agent = '';
+	public $user_agent = 'MyAdmin GlobalSign Plugin';
 	public $trace_connections = 1;
 
 	public $extra;
@@ -95,10 +95,7 @@ class GlobalSign {
 						'ReturnCertificateInfo' => 'true',
 						'ReturnFulfillment' => 'true',
 						'ReturnCACerts' => 'true'
-					]
-				]
-			]
-		];
+		]]]];
 		$this->extra['GetOrderByOrderID_params'] = $params;
 		return obj2array($this->query_client->__soapCall('GetOrderByOrderID', $params));
 	}
@@ -117,9 +114,7 @@ class GlobalSign {
 					'QueryRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]],
 					'FromDate' => $fromdate,
 					'ToDate' => $todate
-				]
-			]
-		];
+		]]];
 		$this->extra['GetOrderByDataRange_params'] = $params;
 		return $this->query_client->__soapCall('GetOrderByDataRange', $params);
 	}
@@ -179,9 +174,7 @@ class GlobalSign {
 						'ValidityPeriod' => ['Months' => '12']
 					],
 					'FQDN' => $fqdn
-				]
-			]
-		];
+		]]];
 		if ($wildcard === TRUE)
 			$params['ValidateOrderParameters']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		if ($csr != '') {
@@ -190,15 +183,6 @@ class GlobalSign {
 		}
 		$this->extra['ValidateOrderParameters_params'] = $params;
 		$res = $this->query_client->__soapCall('ValidateOrderParameters', $params);
-		return $res;
-	}
-
-	/**
-	 * GlobalSign::list_certs()
-	 * @return mixed
-	 */
-	public function list_certs() {
-		$res = $this->GetCertificateOrders();
 		return $res;
 	}
 
@@ -562,11 +546,7 @@ class GlobalSign {
 				'LastName' => $lastname,
 				'Phone' => $phone,
 				'Email' => $email
-					]
-				]
-			]
-		];
-
+		]]]];
 		if ($wildcard === TRUE)
 			$params['DVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		$this->extra['DVOrder_params'] = $params;
@@ -654,10 +634,7 @@ class GlobalSign {
 					* ),
 					* ),
 					*/
-				]
-			]
-		];
-
+		]]];
 		if ($wildcard === TRUE)
 			$params['OVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		$this->extra['OVOrder_params'] = $params;
@@ -737,12 +714,7 @@ class GlobalSign {
 							[
 								'SANOptionType' => '3',
 								'SubjectAltName' => 'tester.test12345.com'
-							]
-						]
-					]
-				]
-			]
-		];
+		]]]]]];
 		if ($wildcard === TRUE)
 			$params['OVOrderWithoutCSR']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		$this->extra['OVOrderWithoutCSR_params'] = $params;
@@ -862,9 +834,7 @@ class GlobalSign {
 					* ),
 					* ),
 					*/
-				]
-			]
-		];
+		]]];
 		$this->extra['EVOrder_params'] = $params;
 		$res = $this->functions_client->__soapCall('EVOrder', $params);
 		return $res;
@@ -920,9 +890,7 @@ class GlobalSign {
 					'OrderID' => $orderID,
 					'ApproverEmail'=>$approverEmail,
 					'FQDN'=>$fqdn
-				]
-			]
-		];
+		]]];
 		return $this->functions_client->__soapCall('ChangeApproverEmail', $params);
 	}
 
@@ -962,9 +930,7 @@ class GlobalSign {
 						'RenewaltargetOrderID' => $order_id,
 					],
 					'FQDN' => $fqdn
-				]
-			]
-		];
+		]]];
 		//if ($csr != '')
 			//unset($params['ValidateOrderParameters']['Request']['FQDN']);
 		$this->extra['ValidateOrderParameters_params'] = $params;
@@ -1091,10 +1057,7 @@ class GlobalSign {
 						'LastName' => $lastname,
 						'Phone' => $phone,
 						'Email' => $email
-					]
-				]
-			]
-		];
+		]]]];
 		if ($wildcard === TRUE)
 			$params['DVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		$this->extra['DVOrder_params'] = $params;
@@ -1186,10 +1149,7 @@ class GlobalSign {
 					* ),
 					* ),
 					*/
-				]
-			]
-		];
-
+		]]];
 		if ($wildcard === TRUE)
 			$params['OVOrder']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		$this->extra['OVOrder_params'] = $params;
@@ -1346,10 +1306,7 @@ class GlobalSign {
 					'LastName' => $lastname,
 					'Phone' => $phone,
 					'Email' => $email
-					]
-				]
-			]
-		];
+		]]]];
 		$this->extra = [];
 		$this->extra['EVOrder_params'] = $params;
 		$res = $this->functions_client->__soapCall('EVOrder', $params);
@@ -1487,12 +1444,7 @@ class GlobalSign {
 							[
 								'SANOptionType' => '3',
 								'SubjectAltName' => 'tester.test12345.com'
-							]
-						]
-					]
-				]
-			]
-		];
+		]]]]]];
 		if ($wildcard === TRUE)
 			$params['DVOrderWithoutCSR']['Request']['OrderRequestParameter']['BaseOption'] = 'wildcard';
 		$this->extra['DVOrderWithoutCSR_params'] = $params;
