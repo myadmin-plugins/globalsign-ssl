@@ -215,7 +215,7 @@ class GlobalSign {
 		$order_id = $res->Response->OrderID;
 		$this->extra['order_id'] = $order_id;
 		if ($approver_email == '')
-			$approver_email = $res->Response->Approvers->Approver[0]->ApproverEmail;
+			$approver_email = $res->Response->Approvers->SearchOrderDetail[0]->ApproverEmail;
 		myadmin_log('ssl', 'info', "DVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard)", __LINE__, __FILE__);
 		$this->__construct($this->username, $this->password);
 		$res = $this->DVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard);
@@ -266,7 +266,7 @@ class GlobalSign {
 		$order_id = $res->Response->OrderID;
 		$this->extra['order_id'] = $order_id;
 		if ($approver_email == '')
-			$approver_email = $res->Response->Approvers->Approver[0]->ApproverEmail;
+			$approver_email = $res->Response->Approvers->SearchOrderDetail[0]->ApproverEmail;
 		$this->__construct($this->username, $this->password);
 		$res = $this->DVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard);
 		myadmin_log('ssl', 'info', "DVOrder($product, $order_id, $approver_email, $fqdn, [CSR], $firstname, $lastname, $phone, $email, $wildcard) returned: ".json_encode($res), __LINE__, __FILE__);
@@ -309,7 +309,7 @@ class GlobalSign {
 		}
 		$order_id = $res->Response->OrderID;
 		if ($approver_email == '')
-			$approver_email = $res->Response->Approvers->Approver[0]->ApproverEmail;
+			$approver_email = $res->Response->Approvers->SearchOrderDetail[0]->ApproverEmail;
 
 		$this->__construct($this->username, $this->password);
 		$res = $this->DVOrderWithoutCSR($fqdn, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $wildcard);
@@ -987,7 +987,7 @@ class GlobalSign {
 		$order_id = $res->Response->OrderID;
 		$this->extra['order_id'] = $order_id;
 		if ($approver_email == '')
-			$approver_email = $res->Response->Approvers->Approver[0]->ApproverEmail;
+			$approver_email = $res->Response->Approvers->SearchOrderDetail[0]->ApproverEmail;
 		myadmin_log('ssl', 'info', "renewDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderId)", __LINE__, __FILE__);
 		$this->__construct($this->username, $this->password);
 		$res = $this->renewDVOrder($product, $order_id, $approver_email, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderId);
