@@ -211,7 +211,7 @@ class GlobalSign {
 	 */
 	public function renewValidateOrderParameters($product, $fqdn, $csr = '', $wildcard = FALSE, $order_id = FALSE) {
 		// 1.1 Extracting Common Name from the CSR and carrying out a Phishing DB Check
-		if($wildcard === TRUE) {
+		if ($wildcard === TRUE) {
 			$wild_card_str = 'wildcard';
 		} else {
 			$wild_card_str = '';
