@@ -103,8 +103,8 @@ class GlobalSign {
 	/**
 	 * GlobalSign::GetOrderByDataRange()
 	 *
-	 * @param mixed $fromdate
-	 * @param mixed $todate
+	 * @param string $fromdate optional from date for lookup in YYYY-MM-DDTHH:MM:SS.000Z format
+	 * @param string $todate optional to date for lookup in YYYY-MM-DDTHH:MM:SS.000Z format
 	 * @return mixed
 	 */
 	public function GetOrderByDataRange($fromdate, $todate) {
@@ -132,13 +132,11 @@ class GlobalSign {
 	 * @return mixed
 	 */
 	public function GetCertificateOrders($fromdate = '', $todate = '', $fqdn = '', $status = '') {
-		$params = ['GetCertificateOrders' => [
-			'Request' => [
-				'QueryRequestHeader' => [
-					'AuthToken' => [
-						'UserName' => $this->username,
-						'Password' => $this->password
-		]]]]];
+		$params = [
+			'GetCertificateOrders' => [
+				'Request' => [
+					'QueryRequestHeader' => ['AuthToken' => ['UserName' => $this->username, 'Password' => $this->password]],
+				]]];
 		if ($fromdate != '')
 			$params['GetCertificateOrders']['Request']['FromDate'] = $fromdate;
 		if ($todate != '')
