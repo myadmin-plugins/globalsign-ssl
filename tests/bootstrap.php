@@ -52,7 +52,7 @@ function make_csr($fqdn, $email, $city, $state, $country, $company, $department)
 	openssl_pkey_export($privkey, $pkeout);
 	// Show any errors that occurred here
 	//while (($e = openssl_error_string()) !== false)
-	//   echo $e . "\n";
+	//   echo $e.PHP_EOL;
 	return [$csrout, $certout, $pkeout];
 }
 }
