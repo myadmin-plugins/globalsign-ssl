@@ -807,7 +807,7 @@ class GlobalSign {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
-				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin/ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
 			}
@@ -848,7 +848,7 @@ class GlobalSign {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
-				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin/ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
 			}
@@ -900,7 +900,7 @@ class GlobalSign {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
-				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin/ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
 			}
@@ -938,7 +938,7 @@ class GlobalSign {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
-				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin/ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
 			}
@@ -979,7 +979,7 @@ class GlobalSign {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
-				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin/ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
 			}
@@ -996,7 +996,7 @@ class GlobalSign {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
-				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin/ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.json_encode($res->Response->OrderResponseHeader->Errors));
 			}
@@ -1041,7 +1041,7 @@ class GlobalSign {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team.');
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
-				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin/ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team.');
 			}
@@ -1072,7 +1072,7 @@ class GlobalSign {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
-				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin/ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 			}
@@ -1255,7 +1255,7 @@ class GlobalSign {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
-				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin/ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 			}
@@ -1271,7 +1271,7 @@ class GlobalSign {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
-				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin/ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 			}
@@ -1429,7 +1429,7 @@ class GlobalSign {
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team.');
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
-				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), FALSE, FALSE, 'admin/ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team.');
 			}

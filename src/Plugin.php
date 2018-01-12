@@ -107,7 +107,7 @@ class Plugin {
 				$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
 				$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
 				$subject = 'Error Registering SSL Certificate '.$serviceClass->getHostname();
-				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
+				admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), $headers, FALSE, 'admin/ssl_error.tpl');
 				myadmin_log('ssl', 'info', $subject, __LINE__, __FILE__);
 				$event['success'] = FALSE;
 			}
