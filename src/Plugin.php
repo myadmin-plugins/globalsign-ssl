@@ -121,8 +121,8 @@ class Plugin {
 	public static function getMenu(GenericEvent $event) {
 		$menu = $event->getSubject();
 		if ($GLOBALS['tf']->ima == 'admin') {
-			$menu->add_link(self::$module, 'choice=none.reusable_globalsign', 'images/icons/database_warning_48.png', 'ReUsable GlobalSign Licenses');
-			$menu->add_link(self::$module, 'choice=none.globalsign_list', 'images/icons/database_warning_48.png', 'GlobalSign Licenses Breakdown');
+			$menu->add_link(self::$module, 'choice=none.reusable_globalsign', '/images/myadmin/to-do.png', 'ReUsable GlobalSign Licenses');
+			$menu->add_link(self::$module, 'choice=none.globalsign_list', '/images/myadmin/to-do.png', 'GlobalSign Licenses Breakdown');
 			$menu->add_link(self::$module.'api', 'choice=none.globalsign_licenses_list', '/images/whm/createacct.gif', 'List all GlobalSign Licenses');
 		}
 	}
