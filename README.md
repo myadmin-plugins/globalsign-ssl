@@ -24,5 +24,5 @@ composer require detain/myadmin-globalsign-ssl
 
 ## License
 
-The Globalsign Ssl Class class is licensed under the LGPL-v2 license.
+The Globalsign Ssl Class class is licensed under the LGPL-v2.1 license.
 
