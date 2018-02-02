@@ -2,3 +2,5 @@ composer.lock
 vendor/
 .bettercodehub.yml
 tests/.env
+.idea/workspace.xml
+.idea/libraries
