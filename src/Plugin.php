@@ -76,7 +76,7 @@ class Plugin {
 					foreach ($res as $key => $value)
 						$extra[$key] = $value;
 					$orderId = $extra['order_id'];
-					$serviceClass->setOrderId($orderId)->setExtra(base64_encode(gzcompress(myadmin_stringify($extra))))->save();
+					$serviceClass->setOrderId($orderId)->setExtra(myadmin_stringify($extra))->save();
 				}
 			} else {
 				// renewing ssl order
