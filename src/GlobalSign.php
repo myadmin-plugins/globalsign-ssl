@@ -192,7 +192,13 @@ class GlobalSign {
 		$this->extra['GetDVApproverList'] = obj2array($res);
 		if ($res->Response->QueryResponseHeader->SuccessCode != 0) {
 			$this->extra['error'] = 'Error In order';
-			//			return $this->extra;
+			$subject = 'GlobalSign SSL Error While Getting ApproverList for Registering '.$fqdn;
+			$headers = '';
+			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
+			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
+			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
+			admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
+			return FALSE;
 		}
 		$order_id = $res->Response->OrderID;
 		$this->extra['order_id'] = $order_id;
@@ -205,10 +211,21 @@ class GlobalSign {
 		myadmin_log('ssl', 'info', json_encode($res), __LINE__, __FILE__);
 		$this->extra['laststep'] = 'GSDVOrder';
 		$this->extra['GSDVOrder'] = obj2array($res);
-		if ($res->Response->OrderResponseHeader->SuccessCode != 0)
-			$this->extra['error'] = 'Error In order';
-		else
+		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
+			if (isset($res->Response->OrderResponseHeader->Errors) && (strpos($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage, 'Your account does not have enough remaining balance to process this request') !== false || $res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error'))
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
+			else
+				$subject = 'GlobalSign SSL Error While Registering '.$fqdn;
+			$headers = '';
+			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
+			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
+			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
+			admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
+			return FALSE;
+		} else {
 			$this->extra['finished'] = 1;
+			dialog('Order Completed', 'Your SSL Certificate order has been successfully processed.');
+		}
 		return $this->extra;
 	}
 
@@ -232,7 +249,12 @@ class GlobalSign {
 		$this->extra['laststep'] = 'GSValidateOrderParameters';
 		$this->extra['GSValidateOrderParameters'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
-			dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
+			$subject = 'GlobalSign SSL Error while processing order '.$fqdn;
+			$headers = '';
+			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
+			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
+			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
+			admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
 			myadmin_log('ssl', 'info', 'create_domainssl returned: '.json_encode($res), __LINE__, __FILE__);
 			return FALSE;
 		}
@@ -242,7 +264,12 @@ class GlobalSign {
 		$this->extra['laststep'] = 'GetDVApproverList';
 		$this->extra['GetDVApproverList'] = obj2array($res);
 		if ($res->Response->QueryResponseHeader->SuccessCode != 0) {
-			dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
+			$subject = 'GlobalSign SSL Error while processing order '.$fqdn;
+			$headers = '';
+			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
+			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
+			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
+			admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
 			myadmin_log('ssl', 'info', 'create_domainssl returned: '.json_encode($res), __LINE__, __FILE__);
 			return FALSE;
 		}
@@ -257,13 +284,15 @@ class GlobalSign {
 		$this->extra['laststep'] = 'GSDVOrder';
 		$this->extra['GSDVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
-			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
-				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
-			} else {
-				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-			}
+			if (isset($res->Response->OrderResponseHeader->Errors) && (strpos($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage, 'Your account does not have enough remaining balance to process this request') !== false || $res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error'))
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
+			else
+				$subject = 'GlobalSign SSL Error While Registering '.$fqdn;
+			$headers = '';
+			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
+			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
+			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
+			admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
 			myadmin_log('ssl', 'info', 'create_domainssl returned: '.json_encode($res), __LINE__, __FILE__);
 			return FALSE;
 		} else {
@@ -287,29 +316,33 @@ class GlobalSign {
 	public function create_domainssl_autocsr($fqdn, $firstname, $lastname, $phone, $email, $approver_email, $wildcard = FALSE) {
 		$res = $this->GetDVApproverList($fqdn);
 		if ($res->Response->QueryResponseHeader->SuccessCode != 0) {
-			echo "Error In order\n";
-			print_r($res->Response->OrderResponseHeader->Errors);
+			$subject = 'GlobalSign SSL Error While Registering '.$fqdn;	
+			$headers = '';
+			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
+			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
+			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
+			admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
 			return FALSE;
 		}
 		$order_id = $res->Response->OrderID;
-		if ($approver_email == '') {
+		if ($approver_email == '')
 			$approver_email = $res->Response->Approvers->Approver[0]->ApproverEmail;
-		}
-
 		$this->__construct($this->username, $this->password);
 		$res = $this->GSDVOrderWithoutCSR($fqdn, $order_id, $approver_email, $firstname, $lastname, $phone, $email, $wildcard);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
-			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
-				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
-			} else {
-				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-			}
+			if (isset($res->Response->OrderResponseHeader->Errors) && (strpos($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage, 'Your account does not have enough remaining balance to process this request') !== false || $res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error'))
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
+			else
+				$subject = 'GlobalSign SSL Error While Registering '.$fqdn;	
 			myadmin_log('ssl', 'info', 'create_domainssl_autocsrf returned: '.json_encode($res), __LINE__, __FILE__);
+			$headers = '';
+			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
+			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
+			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
+			admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
 			return FALSE;
 		} else {
-			echo 'Your Order Has Been Completed';
+			dialog('Order Completed', 'Your SSL Certificate order has been successfully processed.');
 		}
 		return $order_id;
 	}
@@ -351,14 +384,17 @@ class GlobalSign {
 		$this->extra['laststep'] = 'GSOVOrder';
 		$this->extra['GSOVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
-			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
-				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
+			if (isset($res->Response->OrderResponseHeader->Errors) && (strpos($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage, 'Your account does not have enough remaining balance to process this request') !== false || $res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error'))
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
-			} else {
-				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-			}
+			else
+				$subject = 'GlobalSign SSL Error While Registering '.$fqdn;
 			myadmin_log('ssl', 'info', 'create_organizationssl returned: '.json_encode($res), __LINE__, __FILE__);
+			$subject = 'GlobalSign SSL Error While Registering '.$fqdn;
+			$headers = '';
+			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
+			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
+			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
+			admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
 			return FALSE;
 		} else {
 			$this->extra['finished'] = 1;
@@ -390,13 +426,15 @@ class GlobalSign {
 	public function create_organizationssl_autocsr($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approver_email, $wildcard) {
 		$res = $this->GSOVOrderWithoutCSR($fqdn, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
-			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
-				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
-			} else {
-				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-			}
+			if (isset($res->Response->OrderResponseHeader->Errors) && (strpos($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage, 'Your account does not have enough remaining balance to process this request') !== false || $res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error'))
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
+			else
+				$subject = 'GlobalSign SSL Error While Registering '.$fqdn;
+			$headers = '';
+			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
+			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
+			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
+			admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
 			myadmin_log('ssl', 'info', 'create_organizationalssl_autocsr returned: '.json_encode($res), __LINE__, __FILE__);
 			return FALSE;
 		} else {
@@ -432,13 +470,15 @@ class GlobalSign {
 		$this->extra['laststep'] = 'GSValidateOrderParameters';
 		$this->extra['GSValidateOrderParameters'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
-			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
-				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
-			} else {
-				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-			}
+			if (isset($res->Response->OrderResponseHeader->Errors) && (strpos($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage, 'Your account does not have enough remaining balance to process this request') !== false || $res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error'))
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fdqn;
+			else
+				$subject = 'GlobalSign SSL Error While Registering '.$fqdn;
+			$headers = '';
+			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
+			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
+			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
+			admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
 			myadmin_log('ssl', 'info', 'create_extendedssl returned: '.json_encode($res), __LINE__, __FILE__);
 			return FALSE;
 		}
@@ -449,13 +489,15 @@ class GlobalSign {
 		$this->extra['laststep'] = 'GSEVOrder';
 		$this->extra['GSEVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
-			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
-				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), FALSE, FALSE, 'admin_email_ssl_error.tpl');
-			} else {
-				dialog('Error In Order', 'There was an error procesisng your order.<br>Response: '.print_r($res->Response->OrderResponseHeader->Errors, TRUE));
-			}
+			if (isset($res->Response->OrderResponseHeader->Errors) && (strpos($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage, 'Your account does not have enough remaining balance to process this request') !== false || $res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error'))
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fdqn;
+			else
+				$subject = 'GlobalSign SSL Error While Registering '.$fqdn;
+			$headers = '';
+			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
+			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
+			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
+			admin_mail($subject, $subject.'<br>'.print_r($res, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
 			myadmin_log('ssl', 'info', 'create_extendedssl returned: '.json_encode($res), __LINE__, __FILE__);
 			return FALSE;
 		} else {

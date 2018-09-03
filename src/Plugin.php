@@ -59,16 +59,20 @@ class Plugin {
 				$wildcard = FALSE;
 			switch ($event['field1']) {
 				case 'DV_LOW':
-					//myadmin_log('ssl', 'info', "Calling new GlobalSign(" . GLOBALSIGN_USERNAME . " , " . GLOBALSIGN_PASSWORD . ");", __LINE__, __FILE__);
 					$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
 					$ret = $GS->create_alphassl($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $extra['approver_email'], $wildcard);
 					if ($ret === FALSE) {
-						dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
+						myadmin_log('ssl', 'debug', 'Error so setting up status to pending', __LINE__, __FILE__);
+						$query = "UPDATE {$settings['TABLE']} SET {$settings['PREFIX']}_status='pending' WHERE {$settings['PREFIX']}_id='".$serviceClass->getId()."'";
+						myadmin_log('ssl', 'debug', $query, __LINE__, __FILE__);
+						$db->query($query, __LINE__, __FILE__);
+						dialog('Error Registering Cert', 'The order process did not complete successfully. Please contact support so they can get it registered.');
 					} else {
 						foreach ($ret as $key => $value)
 							$extra[$key] = $value;
 						$order_id = $extra['order_id'];
-						$query = "update {$settings['TABLE']} set ssl_order_id='$order_id', ssl_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' where ssl_id='".$serviceClass->getId()."'";
+						$query = "UPDATE {$settings['TABLE']} SET {$settings['PREFIX']}_order_id='$order_id', {$settings['PREFIX']}_extra='".$db->real_escape(base64_encode(gzcompress(myadmin_stringify($extra))))."' WHERE {$settings['PREFIX']}_id='".$serviceClass->getId()."'";
+						myadmin_log('ssl', 'debug', $query, __LINE__, __FILE__);
 						$db->query($query, __LINE__, __FILE__);
 					}
 					break;
@@ -76,7 +80,10 @@ class Plugin {
 					$GS = new GlobalSign(GLOBALSIGN_USERNAME, GLOBALSIGN_PASSWORD);
 					$ret = $GS->create_domainssl($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $extra['approver_email'], $wildcard);
 					if ($ret === FALSE) {
-						dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
+						$query = "UPDATE {$settings['TABLE']} SET {$settings['PREFIX']}_status='pending' WHERE {$settings['PREFIX']}_id='".$serviceClass->getId()."'";
+						myadmin_log('ssl', 'debug', $query, __LINE__, __FILE__);
+						$db->query($query, __LINE__, __FILE__);
+						dialog('Error Registering Cert', 'The order process did not complete successfully. Please contact support so they can get it registered.');
 					} else {
 						foreach ($ret as $key => $value)
 							$extra[$key] = $value;
@@ -103,7 +110,10 @@ class Plugin {
 						$extra['agency'],
 						$extra['approver_email']);
 					if ($ret === FALSE) {
-						dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
+						$query = "UPDATE {$settings['TABLE']} SET {$settings['PREFIX']}_status='pending' WHERE {$settings['PREFIX']}_id='".$serviceClass->getId()."'";
+						myadmin_log('ssl', 'debug', $query, __LINE__, __FILE__);
+						$db->query($query, __LINE__, __FILE__);
+						dialog('Error Registering Cert', 'The order process did not complete successfully. Please contact support so they can get it registered.');
 					} else {
 						foreach ($ret as $key => $value)
 							$extra[$key] = $value;
@@ -129,7 +139,10 @@ class Plugin {
 						$extra['approver_email'],
 						$wildcard);
 					if ($ret === FALSE) {
-						dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
+						$query = "UPDATE {$settings['TABLE']} SET {$settings['PREFIX']}_status='pending' WHERE {$settings['PREFIX']}_id='".$serviceClass->getId()."'";
+						myadmin_log('ssl', 'debug', $query, __LINE__, __FILE__);
+						$db->query($query, __LINE__, __FILE__);
+						dialog('Error Registering Cert', 'The order process did not complete successfully. Please contact support so they can get it registered.');
 					} else {
 						foreach ($ret as $key => $value)
 							$extra[$key] = $value;
@@ -140,12 +153,7 @@ class Plugin {
 					break;
 			}
 			if (!isset($order_id)) {
-				$headers = '';
-				$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
-				$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
-				$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
 				$subject = 'Error Registering SSL Certificate '.$serviceClass->getHostname();
-				admin_mail($subject, $subject.'<br>'.print_r($ret, TRUE), $headers, FALSE, 'admin_email_ssl_error.tpl');
 				myadmin_log('ssl', 'info', $subject, __LINE__, __FILE__);
 				$event['success'] = FALSE;
 			}
