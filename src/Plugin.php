@@ -53,7 +53,7 @@ class Plugin {
 				$extra = ensure_csr($serviceClass->getId());
 			if (!isset($extra['approver_email']))
 				$extra['approver_email'] = '';
-			myadmin_log('ssl', 'info', "starting SSL Hostname {$serviceClass->getHostname()} Type ".$event['field1'].' Got CSR Size: '.mb_strlen($extra['csr']), __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', "starting SSL Hostname {$serviceClass->getHostname()} Type ".$event['field1'].' Got CSR Size: '.mb_strlen($extra['csr']), __LINE__, __FILE__);
 			myadmin_log(self::$module, 'info', $renew === TRUE ? 'found order_id already set and GetOrderByOrderID is returning a vald order so decided to renew the cert' : 'order_id is either not seto or invalid so placing a new order', __LINE__, __FILE__);
 			$ssl_typeArray = ['AlphaSSL' =>1, 'DomainSSL' =>2, 'OrganizationSSL' =>3, 'ExtendedSSL' =>4, 'Alpha SSL w/ WildCard' => 5, 'DomainSSL w/ WildCard' => 6, 'OrganizationSSL w/ WildCard' => 7];
 			if ($renew === FALSE) {
@@ -77,6 +77,10 @@ class Plugin {
 						$extra[$key] = $value;
 					$orderId = $extra['order_id'];
 					$serviceClass->setOrderId($orderId)->setExtra(myadmin_stringify($extra))->save();
+				}
+				if ($res === FALSE) {
+					myadmin_log(self::$module, 'debug', 'Error so setting up status to pending', __LINE__, __FILE__);
+					$serviceClass->setStatus('pending')->save();
 				}
 			} else {
 				// renewing ssl order
