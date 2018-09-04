@@ -80,9 +80,7 @@ class Plugin {
 				}
 				if ($res === FALSE) {
 					myadmin_log(self::$module, 'debug', 'Error so setting up status to pending', __LINE__, __FILE__);
-					$query = "UPDATE {$settings['TABLE']} SET {$settings['PREFIX']}_status='pending' WHERE {$settings['PREFIX']}_id='".$serviceClass->getId()."'";
-					myadmin_log(self::$module, 'debug', $query, __LINE__, __FILE__);
-					$db->query($query, __LINE__, __FILE__);
+					$serviceClass->setStatus('pending')->save();
 				}
 			} else {
 				// renewing ssl order

@@ -937,7 +937,7 @@ class GlobalSign {
 		$this->extra['OVOrder'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			if (isset($res->Response->OrderResponseHeader->Errors) && (strpos($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage, 'Your account does not have enough remaining balance to process this request') !== false || $res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error'))
-				$subject = 'GlobalSign Balance/Funds Error While Registering '.$serviceInfo[$prefix.'_hostname'];
+				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
 			else
 				$subject = 'GlobalSign SSL Error While Registering '.$fqdn;
 			myadmin_log('ssl', 'info', 'create_organizationssl returned: '.json_encode($res), __LINE__, __FILE__);
