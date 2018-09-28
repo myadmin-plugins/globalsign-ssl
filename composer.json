@@ -1,5 +1,5 @@
 {
-	"name": "detain/myadmin-globalsign-ssl",
+	"name": "detain/globalsign-ssl",
 	"type": "myadmin-plugin",
 	"description": "Globalsign Ssl Class",
 	"keywords": [
