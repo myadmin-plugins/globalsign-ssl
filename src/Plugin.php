@@ -132,9 +132,9 @@ class Plugin
 	{
 		$menu = $event->getSubject();
 		if ($GLOBALS['tf']->ima == 'admin') {
-			$menu->add_link(self::$module, 'choice=none.reusable_globalsign', '/images/myadmin/to-do.png', 'ReUsable GlobalSign Licenses');
-			$menu->add_link(self::$module, 'choice=none.globalsign_list', '/images/myadmin/to-do.png', 'GlobalSign Licenses Breakdown');
-			$menu->add_link(self::$module.'api', 'choice=none.globalsign_licenses_list', '/images/whm/createacct.gif', 'List all GlobalSign Licenses');
+			$menu->add_link(self::$module, 'choice=none.reusable_globalsign', '/images/myadmin/to-do.png', __('ReUsable GlobalSign Licenses'));
+			$menu->add_link(self::$module, 'choice=none.globalsign_list', '/images/myadmin/to-do.png', __('GlobalSign Licenses Breakdown'));
+			$menu->add_link(self::$module.'api', 'choice=none.globalsign_licenses_list', '/images/whm/createacct.gif', __('List all GlobalSign Licenses'));
 		}
 	}
 
@@ -143,21 +143,27 @@ class Plugin
 	 */
 	public static function getRequirements(GenericEvent $event)
 	{
-		$loader = $event->getSubject();
+        /**
+         * @var \MyAdmin\Plugins\Loader $this->loader
+         */
+        $loader = $event->getSubject();
 		$loader->add_requirement('class.GlobalSign', '/../vendor/detain/myadmin-globalsign-ssl/src/GlobalSign.php', '\\Detain\\MyAdminGlobalSign\\');
 	}
 
 	/**
 	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
 	 */
-	public static function getSettings(GenericEvent $event)
-	{
-		$settings = $event->getSubject();
-		$settings->add_text_setting(self::$module, 'API Settings', 'globalsign_username', 'GlobalSign Username:', 'Username to use for GlobalSign API Authentication', $settings->get_setting('GLOBALSIGN_USERNAME'));
-		$settings->add_text_setting(self::$module, 'API Settings', 'globalsign_password', 'GlobalSign Password:', 'Password to use for GlobalSign API Authentication', $settings->get_setting('GLOBALSIGN_PASSWORD'));
-		$settings->add_text_setting(self::$module, 'API Settings', 'globalsign_test_username', 'GlobalSign Username:', 'Username to use for GlobalSign API Testing Authentication', $settings->get_setting('GLOBALSIGN_TEST_USERNAME'));
-		$settings->add_text_setting(self::$module, 'API Settings', 'globalsign_test_password', 'GlobalSign Password:', 'Password to use for GlobalSign API Testing Authentication', $settings->get_setting('GLOBALSIGN_TEST_PASSWORD'));
-		$settings->add_dropdown_setting(self::$module, 'Out of Stock', 'globalsign_testing', 'GlobalSign Test Mode', 'Enable API Test mode (doesnt create real certs or cost)', GLOBALSIGN_TESTING, ['false', 'true'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Out of Stock', 'outofstock_globalsign_ssl', 'Out Of Stock GlobalSign SSL', 'Enable/Disable Sales Of This Type', OUTOFSTOCK_GLOBALSIGN_SSL, ['0', '1'], ['No', 'Yes']);
+    public static function getSettings(GenericEvent $event)
+    {
+        /**
+         * @var \MyAdmin\Settings $settings
+         **/
+        $settings = $event->getSubject();
+		$settings->add_text_setting(self::$module, __('API Settings'), 'globalsign_username', __('GlobalSign Username'), __('Username to use for GlobalSign API Authentication'), $settings->get_setting('GLOBALSIGN_USERNAME'));
+		$settings->add_text_setting(self::$module, __('API Settings'), 'globalsign_password', __('GlobalSign Password'), __('Password to use for GlobalSign API Authentication'), $settings->get_setting('GLOBALSIGN_PASSWORD'));
+		$settings->add_text_setting(self::$module, __('API Settings'), 'globalsign_test_username', __('GlobalSign Username'), __('Username to use for GlobalSign API Testing Authentication'), $settings->get_setting('GLOBALSIGN_TEST_USERNAME'));
+		$settings->add_text_setting(self::$module, __('API Settings'), 'globalsign_test_password', __('GlobalSign Password'), __('Password to use for GlobalSign API Testing Authentication'), $settings->get_setting('GLOBALSIGN_TEST_PASSWORD'));
+		$settings->add_dropdown_setting(self::$module, __('Out of Stock'), 'globalsign_testing', __('GlobalSign Test Mode'), __('Enable API Test mode (doesnt create real certs or cost)'), GLOBALSIGN_TESTING, ['false', 'true'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Out of Stock'), 'outofstock_globalsign_ssl', __('Out Of Stock GlobalSign SSL'), __('Enable/Disable Sales Of This Type'), OUTOFSTOCK_GLOBALSIGN_SSL, ['0', '1'], ['No', 'Yes']);
 	}
 }
