@@ -132,9 +132,9 @@ class Plugin
 	{
 		$menu = $event->getSubject();
 		if ($GLOBALS['tf']->ima == 'admin') {
-			$menu->add_link(self::$module, 'choice=none.reusable_globalsign', '/images/myadmin/to-do.png', __('ReUsable GlobalSign Licenses'));
-			$menu->add_link(self::$module, 'choice=none.globalsign_list', '/images/myadmin/to-do.png', __('GlobalSign Licenses Breakdown'));
-			$menu->add_link(self::$module.'api', 'choice=none.globalsign_licenses_list', '/images/whm/createacct.gif', __('List all GlobalSign Licenses'));
+			$menu->add_link(self::$module, 'choice=none.reusable_globalsign', '/images/myadmin/to-do.png', _('ReUsable GlobalSign Licenses'));
+			$menu->add_link(self::$module, 'choice=none.globalsign_list', '/images/myadmin/to-do.png', _('GlobalSign Licenses Breakdown'));
+			$menu->add_link(self::$module.'api', 'choice=none.globalsign_licenses_list', '/images/whm/createacct.gif', _('List all GlobalSign Licenses'));
 		}
 	}
 
@@ -159,11 +159,11 @@ class Plugin
          * @var \MyAdmin\Settings $settings
          **/
         $settings = $event->getSubject();
-		$settings->add_text_setting(self::$module, __('API Settings'), 'globalsign_username', __('GlobalSign Username'), __('Username to use for GlobalSign API Authentication'), $settings->get_setting('GLOBALSIGN_USERNAME'));
-		$settings->add_text_setting(self::$module, __('API Settings'), 'globalsign_password', __('GlobalSign Password'), __('Password to use for GlobalSign API Authentication'), $settings->get_setting('GLOBALSIGN_PASSWORD'));
-		$settings->add_text_setting(self::$module, __('API Settings'), 'globalsign_test_username', __('GlobalSign Username'), __('Username to use for GlobalSign API Testing Authentication'), $settings->get_setting('GLOBALSIGN_TEST_USERNAME'));
-		$settings->add_text_setting(self::$module, __('API Settings'), 'globalsign_test_password', __('GlobalSign Password'), __('Password to use for GlobalSign API Testing Authentication'), $settings->get_setting('GLOBALSIGN_TEST_PASSWORD'));
-		$settings->add_dropdown_setting(self::$module, __('Out of Stock'), 'globalsign_testing', __('GlobalSign Test Mode'), __('Enable API Test mode (doesnt create real certs or cost)'), GLOBALSIGN_TESTING, ['false', 'true'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, __('Out of Stock'), 'outofstock_globalsign_ssl', __('Out Of Stock GlobalSign SSL'), __('Enable/Disable Sales Of This Type'), OUTOFSTOCK_GLOBALSIGN_SSL, ['0', '1'], ['No', 'Yes']);
+		$settings->add_text_setting(self::$module, _('API Settings'), 'globalsign_username', _('GlobalSign Username'), _('Username to use for GlobalSign API Authentication'), $settings->get_setting('GLOBALSIGN_USERNAME'));
+		$settings->add_text_setting(self::$module, _('API Settings'), 'globalsign_password', _('GlobalSign Password'), _('Password to use for GlobalSign API Authentication'), $settings->get_setting('GLOBALSIGN_PASSWORD'));
+		$settings->add_text_setting(self::$module, _('API Settings'), 'globalsign_test_username', _('GlobalSign Username'), _('Username to use for GlobalSign API Testing Authentication'), $settings->get_setting('GLOBALSIGN_TEST_USERNAME'));
+		$settings->add_text_setting(self::$module, _('API Settings'), 'globalsign_test_password', _('GlobalSign Password'), _('Password to use for GlobalSign API Testing Authentication'), $settings->get_setting('GLOBALSIGN_TEST_PASSWORD'));
+		$settings->add_dropdown_setting(self::$module, _('Out of Stock'), 'globalsign_testing', _('GlobalSign Test Mode'), _('Enable API Test mode (doesnt create real certs or cost)'), GLOBALSIGN_TESTING, ['false', 'true'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, _('Out of Stock'), 'outofstock_globalsign_ssl', _('Out Of Stock GlobalSign SSL'), _('Enable/Disable Sales Of This Type'), OUTOFSTOCK_GLOBALSIGN_SSL, ['0', '1'], ['No', 'Yes']);
 	}
 }
