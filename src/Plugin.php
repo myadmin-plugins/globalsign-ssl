@@ -44,8 +44,8 @@ class Plugin
 	public static function getActivate(GenericEvent $event)
 	{
 		if ($event['category'] == get_service_define('GLOBALSIGN')) {
-			myadmin_log(self::$module, 'info', 'GlobalSign Activation', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
+            myadmin_log(self::$module, 'info', 'GlobalSign Activation', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$serviceTypes = run_event('get_service_types', false, self::$module);
 			$settings = get_module_settings(self::$module);
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
@@ -58,8 +58,8 @@ class Plugin
 			if (!isset($extra['approver_email'])) {
 				$extra['approver_email'] = '';
 			}
-			myadmin_log(self::$module, 'info', "starting SSL Hostname {$serviceClass->getHostname()} Type ".$event['field1'].' Got CSR Size: '.mb_strlen($extra['csr']), __LINE__, __FILE__);
-			myadmin_log(self::$module, 'info', $renew === true ? 'found order_id already set and GetOrderByOrderID is returning a vald order so decided to renew the cert' : 'order_id is either not seto or invalid so placing a new order', __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', "starting SSL Hostname {$serviceClass->getHostname()} Type ".$event['field1'].' Got CSR Size: '.mb_strlen($extra['csr']), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+			myadmin_log(self::$module, 'info', $renew === true ? 'found order_id already set and GetOrderByOrderID is returning a vald order so decided to renew the cert' : 'order_id is either not seto or invalid so placing a new order', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$ssl_typeArray = ['AlphaSSL' =>1, 'DomainSSL' =>2, 'OrganizationSSL' =>3, 'ExtendedSSL' =>4, 'Alpha SSL w/ WildCard' => 5, 'DomainSSL w/ WildCard' => 6, 'OrganizationSSL w/ WildCard' => 7];
 			if ($renew === false) {
 				// placing new ssl order
@@ -85,7 +85,7 @@ class Plugin
 					$serviceClass->setOrderId($orderId)->setExtra(myadmin_stringify($extra))->save();
 				}
 				if ($res === false) {
-					myadmin_log(self::$module, 'debug', 'Error so setting up status to pending', __LINE__, __FILE__);
+					myadmin_log(self::$module, 'debug', 'Error so setting up status to pending', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					$serviceClass->setStatus('pending')->save();
 				}
 			} else {
@@ -93,15 +93,15 @@ class Plugin
 				switch ($event['field1']) {
 					case 'DV_LOW':
 					case 'DV_SKIP':
-						myadmin_log('ssl', 'info', "renewAlphaDomain({$serviceClass->getHostname()}, {$extra['csr']}, {$serviceClass->getFirstname()}, {$serviceClass->getLastname()}, {$serviceClass->getPhone()}, {$serviceClass->getEmail()}, {$extra['approver_email']}, FALSE, {$ssl_typeArray[$serviceTypes[$serviceClass->getType()]['services_name']]}, {$serviceClass->getOrderId()})", __LINE__, __FILE__);
+						myadmin_log('ssl', 'info', "renewAlphaDomain({$serviceClass->getHostname()}, {$extra['csr']}, {$serviceClass->getFirstname()}, {$serviceClass->getLastname()}, {$serviceClass->getPhone()}, {$serviceClass->getEmail()}, {$extra['approver_email']}, FALSE, {$ssl_typeArray[$serviceTypes[$serviceClass->getType()]['services_name']]}, {$serviceClass->getOrderId()})", __LINE__, __FILE__, self::$module, $serviceClass->getId());
 						$res = $GS->renewAlphaDomain($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $extra['approver_email'], $event['field2'] == 'wildcard', $ssl_typeArray[$serviceTypes[$serviceClass->getType()]['services_name']], $serviceClass->getOrderId());
 						break;
 					case 'EV':
-						myadmin_log('ssl', 'info', "renewExtendedSSL({$serviceClass->getHostname()}, {$extra['csr']}, {$serviceClass->getFirstname()}, {$serviceClass->getLastname()}, {$serviceClass->getPhone()}, {$serviceClass->getEmail()}, {$serviceClass->getCompany()}, {$serviceClass->getAddress()}, {$serviceClass->getCity()}, {$serviceClass->getState()}, {$serviceClass->getZip()}, {$extra['business_category']}, {$extra['agency']}, {$serviceClass->getOrderId()})", __LINE__, __FILE__);
+						myadmin_log('ssl', 'info', "renewExtendedSSL({$serviceClass->getHostname()}, {$extra['csr']}, {$serviceClass->getFirstname()}, {$serviceClass->getLastname()}, {$serviceClass->getPhone()}, {$serviceClass->getEmail()}, {$serviceClass->getCompany()}, {$serviceClass->getAddress()}, {$serviceClass->getCity()}, {$serviceClass->getState()}, {$serviceClass->getZip()}, {$extra['business_category']}, {$extra['agency']}, {$serviceClass->getOrderId()})", __LINE__, __FILE__, self::$module, $serviceClass->getId());
 						$res = $GS->renewExtendedSSL($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $serviceClass->getCompany(), $serviceClass->getAddress(), $serviceClass->getCity(), $serviceClass->getState(), $serviceClass->getZip(), $extra['business_category'], $extra['agency'], $serviceClass->getOrderId());
 						break;
 					case 'OV_SKIP':
-						myadmin_log('ssl', 'info', "renewOrganizationSSL({$serviceClass->getHostname()}, {$extra['csr']}, {$serviceClass->getFirstname()}, {$serviceClass->getLastname()}, {$serviceClass->getPhone()}, {$serviceClass->getEmail()}, {$serviceClass->getCompany()}, {$serviceClass->getAddress()}, {$serviceClass->getCity()}, {$serviceClass->getState()}, {$serviceClass->getZip()}, {$extra['approver_email']}, TRUE, {$serviceClass->getOrderId()})", __LINE__, __FILE__);
+						myadmin_log('ssl', 'info', "renewOrganizationSSL({$serviceClass->getHostname()}, {$extra['csr']}, {$serviceClass->getFirstname()}, {$serviceClass->getLastname()}, {$serviceClass->getPhone()}, {$serviceClass->getEmail()}, {$serviceClass->getCompany()}, {$serviceClass->getAddress()}, {$serviceClass->getCity()}, {$serviceClass->getState()}, {$serviceClass->getZip()}, {$extra['approver_email']}, TRUE, {$serviceClass->getOrderId()})", __LINE__, __FILE__, self::$module, $serviceClass->getId());
 						$res = $GS->renewOrganizationSSL($serviceClass->getHostname(), $extra['csr'], $serviceClass->getFirstname(), $serviceClass->getLastname(), $serviceClass->getPhone(), $serviceClass->getEmail(), $serviceClass->getCompany(), $serviceClass->getAddress(), $serviceClass->getCity(), $serviceClass->getState(), $serviceClass->getZip(), $extra['approver_email'], $event['field2'] == 'wildcard', $serviceClass->getOrderId());
 						break;
 				}
