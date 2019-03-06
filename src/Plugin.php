@@ -118,7 +118,7 @@ class Plugin
 				$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.PHP_EOL;
 				$subject = 'Error Registering SSL Certificate '.$serviceClass->getHostname();
 				admin_mail($subject, $subject.'<br>'.print_r($res, true), $headers, false, 'admin/ssl_error.tpl');
-				myadmin_log('ssl', 'info', $subject, __LINE__, __FILE__, self::$module);
+				myadmin_log('ssl', 'info', $subject, __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				$event['success'] = false;
 			}
 			$event->stopPropagation();
