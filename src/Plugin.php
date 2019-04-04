@@ -45,7 +45,7 @@ class Plugin
 	{
 		if ($event['category'] == get_service_define('GLOBALSIGN')) {
 			$serviceClass = $event->getSubject();
-            myadmin_log(self::$module, 'info', 'GlobalSign Activation', __LINE__, __FILE__, self::$module, $serviceClass->getId());
+			myadmin_log(self::$module, 'info', 'GlobalSign Activation', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$serviceTypes = run_event('get_service_types', false, self::$module);
 			$settings = get_module_settings(self::$module);
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
@@ -143,22 +143,22 @@ class Plugin
 	 */
 	public static function getRequirements(GenericEvent $event)
 	{
-        /**
-         * @var \MyAdmin\Plugins\Loader $this->loader
-         */
-        $loader = $event->getSubject();
+		/**
+		 * @var \MyAdmin\Plugins\Loader $this->loader
+		 */
+		$loader = $event->getSubject();
 		$loader->add_requirement('class.GlobalSign', '/../vendor/detain/myadmin-globalsign-ssl/src/GlobalSign.php', '\\Detain\\MyAdminGlobalSign\\');
 	}
 
 	/**
 	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
 	 */
-    public static function getSettings(GenericEvent $event)
-    {
-        /**
-         * @var \MyAdmin\Settings $settings
-         **/
-        $settings = $event->getSubject();
+	public static function getSettings(GenericEvent $event)
+	{
+		/**
+		 * @var \MyAdmin\Settings $settings
+		 **/
+		$settings = $event->getSubject();
 		$settings->add_text_setting(self::$module, _('API Settings'), 'globalsign_username', _('GlobalSign Username'), _('Username to use for GlobalSign API Authentication'), $settings->get_setting('GLOBALSIGN_USERNAME'));
 		$settings->add_text_setting(self::$module, _('API Settings'), 'globalsign_password', _('GlobalSign Password'), _('Password to use for GlobalSign API Authentication'), $settings->get_setting('GLOBALSIGN_PASSWORD'));
 		$settings->add_text_setting(self::$module, _('API Settings'), 'globalsign_test_username', _('GlobalSign Username'), _('Username to use for GlobalSign API Testing Authentication'), $settings->get_setting('GLOBALSIGN_TEST_USERNAME'));

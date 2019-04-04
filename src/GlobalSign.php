@@ -81,29 +81,33 @@ class GlobalSign
 		$this->accountClient = new \SoapClient($this->testing != true ? $this->accountWsdl : $this->testAccountWsdl, $soapOptions);
 		$this->queryClient = new \SoapClient($this->testing != true ? $this->queryWsdl : $this->testQueryWsdl, $soapOptions);
 	}
-    
-    public function queryCall($function, $params) {
-        return $this->soapCall($this->queryClient, $function , $params);
-    }
-    
-    public function functionsCall($function, $params) {
-        return $this->soapCall($this->functionsClient, $function , $params);
-    }
-    
-    public function accountCall($function, $params) {
-        return $this->soapCall($this->accountClient, $function , $params);
-    }
-    
-    public function soapCall(&$client, $function, $params) {
-        \StatisticClient::tick('GlobalSign', $function);        
-        try {
-            $response = $client->__soapCall($function, $params);
-            \StatisticClient::report('GlobalSign', $function, true, 0, '', STATISTICS_SERVER);
-        } catch (SoapFault $exception) {
-            \StatisticClient::report('GlobalSign', $function, false, $e->getCode(), $e->getMessage(), STATISTICS_SERVER);
-        }
-        return $response;
-    }
+	
+	public function queryCall($function, $params)
+	{
+		return $this->soapCall($this->queryClient, $function, $params);
+	}
+	
+	public function functionsCall($function, $params)
+	{
+		return $this->soapCall($this->functionsClient, $function, $params);
+	}
+	
+	public function accountCall($function, $params)
+	{
+		return $this->soapCall($this->accountClient, $function, $params);
+	}
+	
+	public function soapCall(&$client, $function, $params)
+	{
+		\StatisticClient::tick('GlobalSign', $function);
+		try {
+			$response = $client->__soapCall($function, $params);
+			\StatisticClient::report('GlobalSign', $function, true, 0, '', STATISTICS_SERVER);
+		} catch (SoapFault $exception) {
+			\StatisticClient::report('GlobalSign', $function, false, $e->getCode(), $e->getMessage(), STATISTICS_SERVER);
+		}
+		return $response;
+	}
 
 	/**
 	 * Searching order information by Order ID
