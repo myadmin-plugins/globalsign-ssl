@@ -47,7 +47,7 @@ class GlobalSign
 	private $password = '';
 
 	public $testing = false;
-	public $connectionTimeout = 1000;
+	public $connectionTimeout = 10;
 
 	public $functionsClient;
 	public $accountClient;
