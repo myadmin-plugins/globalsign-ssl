@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/myadmin-globalsign-ssl.iml" filepath="$PROJECT_DIR$/.idea/myadmin-globalsign-ssl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/globalsign-ssl.iml" filepath="$PROJECT_DIR$/.idea/globalsign-ssl.iml" />
     </modules>
   </component>
 </project>
