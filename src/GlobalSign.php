@@ -47,7 +47,7 @@ class GlobalSign
 	private $password = '';
 
 	public $testing = false;
-	public $connectionTimeout = 10;
+	public $connectionTimeout = 1000;
 
 	public $functionsClient;
 	public $accountClient;
@@ -101,6 +101,8 @@ class GlobalSign
 	{
 		\StatisticClient::tick('GlobalSign', $function);
 		try {
+			myadmin_log('ssl', 'info', $function, __LINE__, __FILE__);
+			myadmin_log('ssl', 'info', json_encode($params), __LINE__, __FILE__);
 			$response = $client->__soapCall($function, $params);
 			\StatisticClient::report('GlobalSign', $function, true, 0, '', STATISTICS_SERVER);
 		} catch (SoapFault $exception) {
