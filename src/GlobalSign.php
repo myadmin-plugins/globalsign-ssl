@@ -531,6 +531,7 @@ class GlobalSign
 					],
 					'OrderID' => $orderId,
 					'ApproverEmail' => $approverEmail,
+					'SubID' => null,
 					'OrganizationInfo' => [
 						'OrganizationName' => $company, 'OrganizationAddress' => [
 						'AddressLine1' => $address,
