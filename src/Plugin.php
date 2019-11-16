@@ -113,7 +113,7 @@ class Plugin
 			if (!isset($orderId)) {
 				dialog('Error Registering Cert', 'The order process did not complete successfully.   Please contact support so they can get it registered.');
 				$subject = 'Error Registering SSL Certificate '.$serviceClass->getHostname();
-				(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin/ssl_error.tpl');
+				(new \MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin/ssl_error.tpl');
 				myadmin_log('ssl', 'info', $subject, __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				$event['success'] = false;
 			}
