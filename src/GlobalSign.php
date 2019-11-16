@@ -801,11 +801,7 @@ class GlobalSign
 			$this->extra['error'] = 'Error In order';
 			//			return $this->extra;
 			$subject = 'GlobalSign SSL Error While Getting ApproverList for Registering '.$fqdn;
-			$headers = '';
-			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
-			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
-			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
-			admin_mail($subject, $subject.'<br>'.print_r($res, true), $headers, false, 'admin_email_ssl_error.tpl');
+			(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin_email_ssl_error.tpl');
 			return false;
 		}
 		$orderId = $res->Response->OrderID;
@@ -825,11 +821,7 @@ class GlobalSign
 			} else {
 				$subject = 'GlobalSign SSL Error While Registering '.$fqdn;
 			}
-			$headers = '';
-			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
-			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
-			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
-			admin_mail($subject, $subject.'<br>'.print_r($res, true), $headers, false, 'admin_email_ssl_error.tpl');
+			(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin_email_ssl_error.tpl');
 			return false;
 		} else {
 			$this->extra['finished'] = 1;
@@ -860,11 +852,7 @@ class GlobalSign
 		$this->extra['ValidateOrderParameters'] = obj2array($res);
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			$subject = 'GlobalSign SSL Error while validating order '.$fqdn;
-			$headers = '';
-			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
-			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
-			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
-			admin_mail($subject, $subject.'<br>'.print_r($res, true), $headers, false, 'admin_email_ssl_error.tpl');
+			(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin_email_ssl_error.tpl');
 			myadmin_log('ssl', 'info', 'create_domainssl returned: '.json_encode($res), __LINE__, __FILE__);
 			return false;
 		}
@@ -875,11 +863,7 @@ class GlobalSign
 		$this->extra['GetDVApproverList'] = obj2array($res);
 		if ($res->Response->QueryResponseHeader->SuccessCode != 0) {
 			$subject = 'GlobalSign SSL Error while processing order '.$fqdn;
-			$headers = '';
-			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
-			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
-			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
-			admin_mail($subject, $subject.'<br>'.print_r($res, true), $headers, false, 'admin_email_ssl_error.tpl');
+			(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin_email_ssl_error.tpl');
 			myadmin_log('ssl', 'info', 'create_domainssl returned: '.json_encode($res), __LINE__, __FILE__);
 			return false;
 		}
@@ -899,11 +883,7 @@ class GlobalSign
 			} else {
 				$subject = 'GlobalSign SSL Error While Registering '.$fqdn;
 			}
-			$headers = '';
-			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
-			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
-			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
-			admin_mail($subject, $subject.'<br>'.print_r($res, true), $headers, false, 'admin_email_ssl_error.tpl');
+			(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin_email_ssl_error.tpl');
 			myadmin_log('ssl', 'info', 'create_domainssl returned: '.json_encode($res), __LINE__, __FILE__);
 			return false;
 		} else {
@@ -929,11 +909,7 @@ class GlobalSign
 		$res = $this->GetDVApproverList($fqdn);
 		if ($res->Response->QueryResponseHeader->SuccessCode != 0) {
 			$subject = 'GlobalSign SSL Error processing Registering '.$fqdn;
-			$headers = '';
-			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
-			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
-			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
-			admin_mail($subject, $subject.'<br>'.print_r($res, true), $headers, false, 'admin_email_ssl_error.tpl');
+			(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin_email_ssl_error.tpl');
 			return false;
 		}
 		$orderId = $res->Response->OrderID;
@@ -950,11 +926,7 @@ class GlobalSign
 				$subject = 'GlobalSign SSL Error While Registering '.$fqdn;
 			}
 			myadmin_log('ssl', 'info', 'create_domainssl_autocsrf returned: '.json_encode($res), __LINE__, __FILE__);
-			$headers = '';
-			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
-			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
-			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
-			admin_mail($subject, $subject.'<br>'.print_r($res, true), $headers, false, 'admin_email_ssl_error.tpl');
+			(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin_email_ssl_error.tpl');
 			return false;
 		} else {
 			echo 'Your Order Has Been Completed';
@@ -990,11 +962,7 @@ class GlobalSign
 		if ($res->Response->OrderResponseHeader->SuccessCode != 0) {
 			myadmin_log('ssl', 'info', 'create_organizationssl returned: '.json_encode($res), __LINE__, __FILE__);
 			$subject = 'GlobalSign SSL Error While processing order '.$fqdn;
-			$headers = '';
-			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
-			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
-			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
-			admin_mail($subject, $subject.'<br>'.print_r($res, true), $headers, false, 'admin_email_ssl_error.tpl');
+			(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin_email_ssl_error.tpl');
 			return false;
 		}
 		$orderId = $res->Response->OrderID;
@@ -1009,11 +977,7 @@ class GlobalSign
 				$subject = 'GlobalSign SSL Error While Registering '.$fqdn;
 			}
 			myadmin_log('ssl', 'info', 'create_organizationssl returned: '.json_encode($res), __LINE__, __FILE__);
-			$headers = '';
-			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
-			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
-			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
-			admin_mail($subject, $subject.'<br>'.print_r($res, true), $headers, false, 'admin_email_ssl_error.tpl');
+			(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin_email_ssl_error.tpl');
 			return false;
 		} else {
 			$this->extra['finished'] = 1;
@@ -1050,11 +1014,7 @@ class GlobalSign
 			} else {
 				$subject = 'GlobalSign SSL Error While Registering '.$fqdn;
 			}
-			$headers = '';
-			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
-			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
-			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
-			admin_mail($subject, $subject.'<br>'.print_r($res, true), $headers, false, 'admin_email_ssl_error.tpl');
+			(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin_email_ssl_error.tpl');
 			myadmin_log('ssl', 'info', 'create_organizationalssl_autocsr returned: '.json_encode($res), __LINE__, __FILE__);
 			return false;
 		} else {
@@ -1095,11 +1055,7 @@ class GlobalSign
 			} else {
 				$subject = 'GlobalSign SSL Error While Registering '.$fqdn;
 			}
-			$headers = '';
-			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
-			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
-			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
-			admin_mail($subject, $subject.'<br>'.print_r($res, true), $headers, false, 'admin_email_ssl_error.tpl');
+			(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin_email_ssl_error.tpl');
 			myadmin_log('ssl', 'info', 'create_extendedssl returned: '.json_encode($res), __LINE__, __FILE__);
 			return false;
 		}
@@ -1115,11 +1071,7 @@ class GlobalSign
 			} else {
 				$subject = 'GlobalSign SSL Error While Registering '.$fqdn;
 			}
-			$headers = '';
-			$headers .= 'MIME-Version: 1.0'.EMAIL_NEWLINE;
-			$headers .= 'Content-type: text/html; charset=UTF-8'.EMAIL_NEWLINE;
-			$headers .= 'From: '.TITLE.' <'.EMAIL_FROM.'>'.EMAIL_NEWLINE;
-			admin_mail($subject, $subject.'<br>'.print_r($res, true), $headers, false, 'admin_email_ssl_error.tpl');
+			(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin_email_ssl_error.tpl');
 			myadmin_log('ssl', 'info', 'create_extendedssl returned: '.json_encode($res), __LINE__, __FILE__);
 			return false;
 		} else {
@@ -1162,7 +1114,7 @@ class GlobalSign
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team.');
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
-				admin_mail($subject, $subject.'<br>'.print_r($res, true), false, false, 'admin/ssl_error.tpl');
+				(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin/ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team.');
 			}
@@ -1194,7 +1146,7 @@ class GlobalSign
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
-				admin_mail($subject, $subject.'<br>'.print_r($res, true), false, false, 'admin/ssl_error.tpl');
+				(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin/ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 			}
@@ -1382,7 +1334,7 @@ class GlobalSign
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
-				admin_mail($subject, $subject.'<br>'.print_r($res, true), false, false, 'admin/ssl_error.tpl');
+				(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin/ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 			}
@@ -1398,7 +1350,7 @@ class GlobalSign
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
-				admin_mail($subject, $subject.'<br>'.print_r($res, true), false, false, 'admin/ssl_error.tpl');
+				(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin/ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team');
 			}
@@ -1558,7 +1510,7 @@ class GlobalSign
 			if ($res->Response->OrderResponseHeader->Errors->Error->ErrorMessage == 'Balance Error') {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team.');
 				$subject = 'GlobalSign Balance/Funds Error While Registering '.$fqdn;
-				admin_mail($subject, $subject.'<br>'.print_r($res, true), false, false, 'admin/ssl_error.tpl');
+				(new MyAdmin\Mail())->adminMail($subject, $subject.PHP_EOL.print_r($res, false), false, 'admin/ssl_error.tpl');
 			} else {
 				dialog('Error In Order', 'There was an error procesisng your order. Please contact our support team.');
 			}
