@@ -21,23 +21,23 @@ $GLOBALS['tf']->session->create(160306, 'admin');
 $sid = $GLOBALS['tf']->session->sessionid;
 */
 if (file_exists(__DIR__.'/.make_cert.last')) {
-	include __DIR__.'/.make_cert.last';
+    include __DIR__.'/.make_cert.last';
 }
 $vars = ['fqdn' => 'Fully Qualified Domain Name', 'email' => 'Email Address', 'city' => 'City', 'state' => 'State (Full State Not Abbreviation)', 'country' => 'Country (2 Letters)', 'company' => 'Company', department => 'Department'];
 $fout = "<?php\n";
 foreach ($vars as $var => $description) {
-	if (isset($settings[$var])) {
-		fwrite(STDOUT, "$description [" . $settings[$var] . ']? ');
-		$t = trim(fgets(STDIN));
-		if ($t == '') {
-			$t = $settings[$var];
-		}
-	} else {
-		fwrite(STDOUT, "$description? ");
-		$t = trim(fgets(STDIN));
-	}
-	$fout .= "\$settings['{$var}'] = '{$t}';\n";
-	eval('$'.$var.' = "$t";');
+    if (isset($settings[$var])) {
+        fwrite(STDOUT, "$description [" . $settings[$var] . ']? ');
+        $t = trim(fgets(STDIN));
+        if ($t == '') {
+            $t = $settings[$var];
+        }
+    } else {
+        fwrite(STDOUT, "$description? ");
+        $t = trim(fgets(STDIN));
+    }
+    $fout .= "\$settings['{$var}'] = '{$t}';\n";
+    eval('$'.$var.' = "$t";');
 }
 $fout .= "?>\n";
 $fd = fopen(__DIR__.'/.make_cert.last', 'wb');
