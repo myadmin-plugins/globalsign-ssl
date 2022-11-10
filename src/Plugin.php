@@ -156,9 +156,9 @@ class Plugin
          **/
         $settings = $event->getSubject();
         $settings->add_text_setting(self::$module, _('API Settings'), 'globalsign_username', _('GlobalSign Username'), _('Username to use for GlobalSign API Authentication'), $settings->get_setting('GLOBALSIGN_USERNAME'));
-        $settings->add_text_setting(self::$module, _('API Settings'), 'globalsign_password', _('GlobalSign Password'), _('Password to use for GlobalSign API Authentication'), $settings->get_setting('GLOBALSIGN_PASSWORD'));
+        $settings->add_password_setting(self::$module, _('API Settings'), 'globalsign_password', _('GlobalSign Password'), _('Password to use for GlobalSign API Authentication'), $settings->get_setting('GLOBALSIGN_PASSWORD'));
         $settings->add_text_setting(self::$module, _('API Settings'), 'globalsign_test_username', _('GlobalSign Username'), _('Username to use for GlobalSign API Testing Authentication'), $settings->get_setting('GLOBALSIGN_TEST_USERNAME'));
-        $settings->add_text_setting(self::$module, _('API Settings'), 'globalsign_test_password', _('GlobalSign Password'), _('Password to use for GlobalSign API Testing Authentication'), $settings->get_setting('GLOBALSIGN_TEST_PASSWORD'));
+        $settings->add_password_setting(self::$module, _('API Settings'), 'globalsign_test_password', _('GlobalSign Password'), _('Password to use for GlobalSign API Testing Authentication'), $settings->get_setting('GLOBALSIGN_TEST_PASSWORD'));
         $settings->add_dropdown_setting(self::$module, _('Out of Stock'), 'globalsign_testing', _('GlobalSign Test Mode'), _('Enable API Test mode (doesnt create real certs or cost)'), GLOBALSIGN_TESTING, ['false', 'true'], ['No', 'Yes']);
         $settings->add_dropdown_setting(self::$module, _('Out of Stock'), 'outofstock_globalsign_ssl', _('Out Of Stock GlobalSign SSL'), _('Enable/Disable Sales Of This Type'), OUTOFSTOCK_GLOBALSIGN_SSL, ['0', '1'], ['No', 'Yes']);
     }
