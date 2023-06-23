@@ -143,7 +143,7 @@ class Plugin
          * @var \MyAdmin\Plugins\Loader $this->loader
          */
         $loader = $event->getSubject();
-        $loader->add_requirement('class.GlobalSign', '/../vendor/detain/myadmin-globalsign-ssl/src/GlobalSign.php', '\\Detain\\MyAdminGlobalSign\\');
+//        $loader->add_requirement('class.GlobalSign', '/../vendor/detain/myadmin-globalsign-ssl/src/GlobalSign.php', '\\Detain\\MyAdminGlobalSign\\');
     }
 
     /**
