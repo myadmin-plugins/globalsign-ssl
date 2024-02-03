@@ -117,7 +117,7 @@ class GlobalSignTest extends TestCase
     public function testValidateOrderParameters()
     {
         $fqdn = 'somerandomnewdomain.net';
-        list($csr, $cert, $pke) = make_csr($fqdn, 'my@interserver.net', 'Secaucus', 'NJ', 'US', 'none', 'Administration') ;
+        [$csr, $cert, $pke] = make_csr($fqdn, 'my@interserver.net', 'Secaucus', 'NJ', 'US', 'none', 'Administration') ;
         $response = $this->object->ValidateOrderParameters('DV_SHA2', $fqdn, $csr, false);
         $this->assertObjectHasAttribute('Response', $response, 'Ensuring Valid Respone Field "Response" Exists');
         $this->assertObjectHasAttribute('OrderResponseHeader', $response->Response, 'Ensuring Valid Respone Field "OrderResponseHeader" Exists');

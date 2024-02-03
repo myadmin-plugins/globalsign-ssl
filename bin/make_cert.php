@@ -44,7 +44,7 @@ $fd = fopen(__DIR__.'/.make_cert.last', 'wb');
 fwrite($fd, $fout);
 fclose($fd);
 //echo "Calling  make_csr($fqdn, $email, $city, $state, $country, $company, $department);\n";
-list($csr, $sspublic, $ssprivate) = make_csr($fqdn, $email, $city, $state, $country, $company, $department);
+[$csr, $sspublic, $ssprivate] = make_csr($fqdn, $email, $city, $state, $country, $company, $department);
 echo "Here is your CSR:\n$csr\n\n";
 echo "Here is your Self Signed Public Key:\n$sspublic\n\n";
 echo "Here is your Self Signed Private Key:\n$ssprivate\n\n";
