@@ -5,7 +5,7 @@
 * @author Joe Huss <detain@interserver.net>
 * @package MyAdmin
 * @category make_cert
-* @copyright 2020
+* @copyright 2025
 */
 
 $_SERVER['HTTP_HOST'] = 'inssl.net';
