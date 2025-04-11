@@ -1097,7 +1097,7 @@ class GlobalSign
      * @param string $oldOrderId
      * @return array
      */
-    public function renewAlphaDomain($fqdn, $csr, $firstname, $lastname, $phone, $email, $approverEmail, $wildcard = false, $sslType, $oldOrderId)
+    public function renewAlphaDomain($fqdn, $csr, $firstname, $lastname, $phone, $email, $approverEmail, $wildcard, $sslType, $oldOrderId)
     {
         myadmin_log('ssl', 'info', "renew AlphaDomain called - renewAlphaDomain($fqdn, $csr, $firstname, $lastname, $phone, $email, $approverEmail, $wildcard, $sslType, $oldOrderId)", __LINE__, __FILE__);
         if ($sslType == 1) {
@@ -1175,7 +1175,7 @@ class GlobalSign
      * @param string $oldOrderID
      * @return mixed
      */
-    public function renewDVOrder($product, $orderId, $approverEmail, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard = false, $oldOrderID)
+    public function renewDVOrder($product, $orderId, $approverEmail, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderID)
     {
         myadmin_log('ssl', 'info', "Called renewDVOrder - renewDVOrder($product, $orderId, $approverEmail, $fqdn, $csr, $firstname, $lastname, $phone, $email, $wildcard, $oldOrderID)", __LINE__, __FILE__);
         $params = [
@@ -1236,7 +1236,7 @@ class GlobalSign
      * @param string $oldOrderId
      * @return mixed
      */
-    public function renewOVOrder($fqdn, $csr, $orderId, $approverEmail, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard = false, $oldOrderId)
+    public function renewOVOrder($fqdn, $csr, $orderId, $approverEmail, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $wildcard, $oldOrderId)
     {
         $params = [
             'OVOrder' => [
@@ -1324,7 +1324,7 @@ class GlobalSign
      * @param string $oldOrderId
      * @return array|bool
      */
-    public function renewOrganizationSSL($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approverEmail, $wildcard = false, $oldOrderId)
+    public function renewOrganizationSSL($fqdn, $csr, $firstname, $lastname, $phone, $email, $company, $address, $city, $state, $zip, $approverEmail, $wildcard, $oldOrderId)
     {
         $res = $this->renewValidateOrderParameters('OV_SHA2', $fqdn, $csr, $wildcard);
         $this->extra = [];
