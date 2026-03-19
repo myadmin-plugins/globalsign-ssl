@@ -1,28 +1,50 @@
-# Globalsign Ssl Class
+# MyAdmin GlobalSign SSL Plugin
 
-Globalsign Ssl Class
+[![Tests](https://github.com/detain/myadmin-globalsign-ssl/actions/workflows/tests.yml/badge.svg)](https://github.com/detain/myadmin-globalsign-ssl/actions/workflows/tests.yml)
+[![Latest Stable Version](https://poser.pugx.org/detain/myadmin-globalsign-ssl/version)](https://packagist.org/packages/detain/myadmin-globalsign-ssl)
+[![Total Downloads](https://poser.pugx.org/detain/myadmin-globalsign-ssl/downloads)](https://packagist.org/packages/detain/myadmin-globalsign-ssl)
+[![License](https://poser.pugx.org/detain/myadmin-globalsign-ssl/license)](https://packagist.org/packages/detain/myadmin-globalsign-ssl)
 
-## Build Status and Code Analysis
+A MyAdmin plugin that integrates with the GlobalSign SOAP API to provide automated SSL certificate ordering, renewal, and lifecycle management. Supports AlphaSSL, DomainSSL, OrganizationSSL, and ExtendedSSL certificate types with both standard and wildcard options.
 
-Site          | Status
---------------|---------------------------
-![Travis-CI](http://i.is.cc/storage/GYd75qN.png "Travis-CI")     | [![Build Status](https://travis-ci.org/detain/myadmin-globalsign-ssl.svg?branch=master)](https://travis-ci.org/detain/myadmin-globalsign-ssl)
-![CodeClimate](http://i.is.cc/storage/GYlageh.png "CodeClimate")  | [![Code Climate](https://codeclimate.com/github/detain/myadmin-globalsign-ssl/badges/gpa.svg)](https://codeclimate.com/github/detain/myadmin-globalsign-ssl) [![Test Coverage](https://codeclimate.com/github/detain/myadmin-globalsign-ssl/badges/coverage.svg)](https://codeclimate.com/github/detain/myadmin-globalsign-ssl/coverage) [![Issue Count](https://codeclimate.com/github/detain/myadmin-globalsign-ssl/badges/issue_count.svg)](https://codeclimate.com/github/detain/myadmin-globalsign-ssl)
-![Scrutinizer](http://i.is.cc/storage/GYeUnux.png "Scrutinizer")   | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/myadmin-plugins/globalsign-ssl/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/myadmin-plugins/globalsign-ssl/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/myadmin-plugins/globalsign-ssl/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/myadmin-plugins/globalsign-ssl/?branch=master) [![Build Status](https://scrutinizer-ci.com/g/myadmin-plugins/globalsign-ssl/badges/build.png?b=master)](https://scrutinizer-ci.com/g/myadmin-plugins/globalsign-ssl/build-status/master)
-![Codacy](http://i.is.cc/storage/GYi66Cx.png "Codacy")        | [![Codacy Badge](https://api.codacy.com/project/badge/Grade/226251fc068f4fd5b4b4ef9a40011d06)](https://www.codacy.com/app/detain/myadmin-globalsign-ssl) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/25fa74eb74c947bf969602fcfe87e349)](https://www.codacy.com/app/detain/myadmin-globalsign-ssl?utm_source=github.com&utm_medium=referral&utm_content=detain/myadmin-globalsign-ssl&utm_campaign=Badge_Coverage)
-![Coveralls](http://i.is.cc/storage/GYjNSim.png "Coveralls")    | [![Coverage Status](https://coveralls.io/repos/github/detain/db_abstraction/badge.svg?branch=master)](https://coveralls.io/github/detain/myadmin-globalsign-ssl?branch=master)
-![Packagist](http://i.is.cc/storage/GYacBEX.png "Packagist")     | [![Latest Stable Version](https://poser.pugx.org/detain/myadmin-globalsign-ssl/version)](https://packagist.org/packages/detain/myadmin-globalsign-ssl) [![Total Downloads](https://poser.pugx.org/detain/myadmin-globalsign-ssl/downloads)](https://packagist.org/packages/detain/myadmin-globalsign-ssl) [![Latest Unstable Version](https://poser.pugx.org/detain/myadmin-globalsign-ssl/v/unstable)](//packagist.org/packages/detain/myadmin-globalsign-ssl) [![Monthly Downloads](https://poser.pugx.org/detain/myadmin-globalsign-ssl/d/monthly)](https://packagist.org/packages/detain/myadmin-globalsign-ssl) [![Daily Downloads](https://poser.pugx.org/detain/myadmin-globalsign-ssl/d/daily)](https://packagist.org/packages/detain/myadmin-globalsign-ssl) [![License](https://poser.pugx.org/detain/myadmin-globalsign-ssl/license)](https://packagist.org/packages/detain/myadmin-globalsign-ssl)
+## Features
 
+- Automated SSL certificate provisioning via GlobalSign SOAP API
+- Support for DV (Domain Validated), OV (Organization Validated), and EV (Extended Validation) certificates
+- Wildcard certificate support across all validation levels
+- Certificate renewal with automatic order validation
+- CSR decoding and approver email management
+- Configurable test/production mode switching
+- Event-driven architecture using Symfony EventDispatcher
 
 ## Installation
 
-Install with composer like
+Install with Composer:
 
 ```sh
 composer require detain/myadmin-globalsign-ssl
 ```
 
+## Configuration
+
+The plugin exposes the following settings through the MyAdmin settings interface:
+
+| Setting | Description |
+|---------|-------------|
+| `globalsign_username` | API username for production |
+| `globalsign_password` | API password for production |
+| `globalsign_test_username` | API username for test environment |
+| `globalsign_test_password` | API password for test environment |
+| `globalsign_testing` | Enable/disable test mode |
+| `outofstock_globalsign_ssl` | Enable/disable sales |
+
+## Running Tests
+
+```sh
+composer install
+vendor/bin/phpunit
+```
+
 ## License
 
-The Globalsign Ssl Class class is licensed under the LGPL-v2.1 license.
-
+This package is licensed under the [LGPL-2.1](https://opensource.org/licenses/LGPL-2.1) license.

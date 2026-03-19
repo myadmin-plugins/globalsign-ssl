@@ -1,62 +1,55 @@
 <?php
+/**
+ * PHPUnit bootstrap file for myadmin-globalsign-ssl tests.
+ *
+ * Provides autoloading and stubs for global functions used by the
+ * source code that are not available in an isolated test environment.
+ */
 
-require_once __DIR__.'/../vendor/autoload.php';
-if (!function_exists('myadmin_log')) {
-    function myadmin_log($section, $level, $text, $line, $file)
-    {
-        //echo "{$section} {$level} {$line}@{$file}: {$text}\n";
+// Autoload via Composer if available
+$autoloadPaths = [
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/../../../autoload.php',
+];
+
+foreach ($autoloadPaths as $autoload) {
+    if (file_exists($autoload)) {
+        require_once $autoload;
+        break;
     }
 }
 
-if (!function_exists('make_csr')) {
-    /**
-     * make_csr()
-     * @param string $fqdn
-     * @param string $email
-     * @param string $city
-     * @param string $state
-     * @param string $country
-     * @param string $company
-     * @param string $department
-     * @return array
-     */
-    function make_csr($fqdn, $email, $city, $state, $country, $company, $department)
+// Define constants used by the source code if not already defined
+if (!defined('WSDL_CACHE_BOTH')) {
+    define('WSDL_CACHE_BOTH', 3);
+}
+if (!defined('STATISTICS_SERVER')) {
+    define('STATISTICS_SERVER', '');
+}
+if (!defined('GLOBALSIGN_USERNAME')) {
+    define('GLOBALSIGN_USERNAME', 'test_user');
+}
+if (!defined('GLOBALSIGN_PASSWORD')) {
+    define('GLOBALSIGN_PASSWORD', 'test_pass');
+}
+if (!defined('GLOBALSIGN_TESTING')) {
+    define('GLOBALSIGN_TESTING', 'true');
+}
+if (!defined('GLOBALSIGN_TEST_USERNAME')) {
+    define('GLOBALSIGN_TEST_USERNAME', 'test_user');
+}
+if (!defined('GLOBALSIGN_TEST_PASSWORD')) {
+    define('GLOBALSIGN_TEST_PASSWORD', 'test_pass');
+}
+if (!defined('OUTOFSTOCK_GLOBALSIGN_SSL')) {
+    define('OUTOFSTOCK_GLOBALSIGN_SSL', '0');
+}
+
+// Stub global functions used by the source code
+if (!function_exists('myadmin_log')) {
+    function myadmin_log($module, $level, $message, $line = 0, $file = '', $module2 = '', $id = 0)
     {
-        $SSLcnf = [
-        //'config' => '/etc/pki/tls/openssl.cnf',
-        //'config' => '/etc/ssl/openssl.cnf',
-        //'config' => '/etc/tinyca/openssl.cnf',
-        //'config' => '/etc/openvpn/easy-rsa/openssl.cnf',
-        'encrypt_key' => true,
-        'private_key_type' => OPENSSL_KEYTYPE_RSA,
-        'digest_alg' => 'sha2',
-        'x509_extensions' => 'v3_ca',
-        'private_key_bits' => 2048
-    ];
-        // $fqdn = domain name for normal certs, individuals full name for s/MIME certs
-        $dn = [
-        'countryName' => $country,
-        'stateOrProvinceName' => $state,
-        'localityName' => $city,
-        'organizationName' => $company,
-        'organizationalUnitName' => $department,
-        'commonName' => $fqdn,
-        'emailAddress' => $email
-    ];
-        // Generate a new private (and public) key pair
-        $privkey = openssl_pkey_new($SSLcnf);
-        // Generate a certificate signing request
-        $csr = openssl_csr_new($dn, $privkey, $SSLcnf);
-        openssl_csr_export($csr, $csrout);
-        // You will usually want to create a self-signed certificate at this point until your CA fulfills your request. This creates a self-signed cert that is valid for 365 days
-        $sscert = openssl_csr_sign($csr, null, $privkey, 365);
-        // Now you will want to preserve your private key, CSR and self-signed cert so that they can be installed into your web server, mail server or mail client (depending on the intended use of the certificate). This example shows how to get those things into variables, but you can also store them directly into files. Typically, you will send the CSR on to your CA who will then issue you with the "real" certificate.
-        openssl_x509_export($sscert, $certout);
-        openssl_pkey_export($privkey, $pkeout);
-        // Show any errors that occurred here
-        //while (($e = openssl_error_string()) !== false)
-        //   echo $e.PHP_EOL;
-        return [$csrout, $certout, $pkeout];
+        // no-op in test environment
     }
 }
 
@@ -64,20 +57,95 @@ if (!function_exists('obj2array')) {
     function obj2array($obj)
     {
         $out = [];
-        //myadmin_log('myadmin', 'debug', json_encode($obj), __LINE__, __FILE__);
         foreach ($obj as $key => $val) {
             switch (true) {
-            case is_object($val):
-                $out[$key] = obj2array($val);
-                break;
-            case is_array($val):
-                $out[$key] = obj2array($val);
-                break;
-            default:
-                $out[$key] = $val;
-                break;
-        }
+                case is_object($val):
+                    $out[$key] = obj2array($val);
+                    break;
+                case is_array($val):
+                    $out[$key] = obj2array($val);
+                    break;
+                default:
+                    $out[$key] = $val;
+                    break;
+            }
         }
         return $out;
+    }
+}
+
+if (!function_exists('dialog')) {
+    function dialog($title, $message)
+    {
+        // no-op in test environment
+    }
+}
+
+if (!function_exists('myadmin_stringify')) {
+    function myadmin_stringify($data)
+    {
+        return json_encode($data);
+    }
+}
+
+if (!function_exists('get_service_define')) {
+    function get_service_define($name)
+    {
+        return $name;
+    }
+}
+
+if (!function_exists('run_event')) {
+    function run_event($event, $default = false, $module = '')
+    {
+        return $default;
+    }
+}
+
+if (!function_exists('get_module_settings')) {
+    function get_module_settings($module)
+    {
+        return [];
+    }
+}
+
+if (!function_exists('ensure_csr')) {
+    function ensure_csr($id)
+    {
+        return ['csr' => 'test-csr'];
+    }
+}
+
+if (!function_exists('_')) {
+    function _($text)
+    {
+        return $text;
+    }
+}
+
+if (!function_exists('make_csr')) {
+    function make_csr($fqdn, $email, $city, $state, $country, $company, $department)
+    {
+        return ['csr-data', 'cert-data', 'key-data'];
+    }
+}
+
+// Pre-load StatisticClient from vendor if available to prevent
+// the require_once in GlobalSign.php from conflicting
+$statisticClientPath = __DIR__ . '/../../../workerman/statistics/Applications/Statistics/Clients/StatisticClient.php';
+if (!class_exists('StatisticClient', false)) {
+    if (file_exists($statisticClientPath)) {
+        require_once $statisticClientPath;
+    } else {
+        class StatisticClient
+        {
+            public static function tick($module, $function)
+            {
+            }
+
+            public static function report($module, $function, $success, $code = 0, $msg = '', $server = '')
+            {
+            }
+        }
     }
 }
