@@ -4,3 +4,4 @@ vendor/
 tests/.env
 .idea/workspace.xml
 .idea/libraries
+.phpunit.cache
