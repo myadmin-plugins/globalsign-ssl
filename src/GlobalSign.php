@@ -9,7 +9,9 @@
 
 namespace Detain\MyAdminGlobalSign;
 
-require_once __DIR__.'/../../../workerman/statistics/Applications/Statistics/Clients/StatisticClient.php';
+if (is_file(__DIR__.'/../../../workerman/statistics/Applications/Statistics/Clients/StatisticClient.php')) {
+    require_once __DIR__.'/../../../workerman/statistics/Applications/Statistics/Clients/StatisticClient.php';
+}
 
 /**
  * GlobalSign
@@ -99,14 +101,20 @@ class GlobalSign
 
     public function soapCall(&$client, $function, $params)
     {
-        \StatisticClient::tick('GlobalSign', $function);
+        if (class_exists(\StatisticClient::class, false)) {
+            \StatisticClient::tick('GlobalSign', $function);
+        }
         try {
             myadmin_log('ssl', 'info', $function, __LINE__, __FILE__);
             myadmin_log('ssl', 'info', json_encode($params), __LINE__, __FILE__);
             $response = $client->__soapCall($function, $params);
-            \StatisticClient::report('GlobalSign', $function, true, 0, '', STATISTICS_SERVER);
+            if (class_exists(\StatisticClient::class, false)) {
+                \StatisticClient::report('GlobalSign', $function, true, 0, '', STATISTICS_SERVER);
+            }
         } catch (SoapFault $exception) {
-            \StatisticClient::report('GlobalSign', $function, false, $e->getCode(), $e->getMessage(), STATISTICS_SERVER);
+            if (class_exists(\StatisticClient::class, false)) {
+                \StatisticClient::report('GlobalSign', $function, false, $e->getCode(), $e->getMessage(), STATISTICS_SERVER);
+            }
         }
         return $response;
     }
