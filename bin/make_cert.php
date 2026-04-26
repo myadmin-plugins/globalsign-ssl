@@ -15,10 +15,10 @@ require_once __DIR__.'/../../include/functions.inc.php';
 
 $webpage = false;
 define('VERBOSE_MODE', false);
-/*	$db = clone $GLOBALS['tf']->db;
+/*	$db = clone \MyAdmin\App::db();
 $db2 = clone $db;
-$GLOBALS['tf']->session->create(160306, 'admin');
-$sid = $GLOBALS['tf']->session->sessionid;
+\MyAdmin\App::session()->create(160306, 'admin');
+$sid = \MyAdmin\App::session()->sessionid;
 */
 if (file_exists(__DIR__.'/.make_cert.last')) {
     include __DIR__.'/.make_cert.last';

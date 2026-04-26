@@ -4,7 +4,7 @@
 $_SERVER['HTTP_HOST'] = 'my.interserver.net';
 require_once __DIR__.'/../../include/functions.inc.php';
 
-$db = clone $GLOBALS['tf']->db;
+$db = clone \MyAdmin\App::db();
 $db2 = clone $db;
 $result = $db->query('select * from ssl_certs where ssl_id=' .intval($_SERVER['argv'][1]));
 while ($db->next_record(MYSQL_ASSOC)) {
