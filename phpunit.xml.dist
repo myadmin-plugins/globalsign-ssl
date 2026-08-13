@@ -12,6 +12,15 @@
     <testsuites>
         <testsuite name="unit">
             <directory>tests/unit</directory>
+            <!--
+                Named explicitly rather than by widening the directory to `tests`.
+                tests/GlobalSignTest.php also sits at that level and declares
+                `setUp()` without the `: void` return type PHPUnit 9 requires, so it
+                fatals on load and takes the whole run with it, which is why this
+                suite was narrowed to tests/unit in the first place. Widening the
+                directory would silently re-break the build.
+            -->
+            <file>tests/ContractTest.php</file>
         </testsuite>
     </testsuites>
 
