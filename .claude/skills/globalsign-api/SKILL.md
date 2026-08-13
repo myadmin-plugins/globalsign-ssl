@@ -1,6 +1,6 @@
 ---
 name: globalsign-api
-description: Adds new GlobalSign SOAP API methods to src/GlobalSign.php following the soapCall() pattern with AuthToken, StatisticClient tick/report, and SoapFault handling. Use when user says 'add API method', 'new SOAP call', 'add GlobalSign endpoint', or modifies src/GlobalSign.php. Do NOT use for Plugin hook changes. NOTE: for a plugin's contract/behavioral tests (tests/ContractTest.php, the shared harness, composer myadmin:scaffold-tests) use the plugin-contract-tests skill instead — this skill's reflection-only guidance predates that harness.
+description: Adds new GlobalSign SOAP API methods to src/GlobalSign.php following the soapCall() pattern with AuthToken, StatisticClient tick/report, and SoapFault handling. Use when user says 'add API method', 'new SOAP call', 'add GlobalSign endpoint', or modifies src/GlobalSign.php. Do NOT use for Plugin hook changes. For a plugin's contract or behavioral tests (tests/ContractTest.php, the shared harness, composer myadmin:scaffold-tests) use the plugin-contract-tests skill instead — this skill's reflection-only guidance predates that harness.
 ---
 <!-- myadmin-contract-harness-notice -->
 > ### ⚠️ Read this before the rest of the file

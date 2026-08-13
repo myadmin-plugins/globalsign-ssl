@@ -1,6 +1,6 @@
 ---
 name: plugin-hooks
-description: Wires new MyAdmin plugin event hooks in src/Plugin.php using Symfony GenericEvent, getHooks() registration, and static handler methods. Use when user says 'add hook', 'new event handler', 'register plugin event', or modifies src/Plugin.php. Do NOT use for SOAP API methods in GlobalSign.php or CLI scripts in bin/. NOTE: for a plugin's contract/behavioral tests (tests/ContractTest.php, the shared harness, composer myadmin:scaffold-tests) use the plugin-contract-tests skill instead — this skill's reflection-only guidance predates that harness.
+description: Wires new MyAdmin plugin event hooks in src/Plugin.php using Symfony GenericEvent, getHooks() registration, and static handler methods. Use when user says 'add hook', 'new event handler', 'register plugin event', or modifies src/Plugin.php. Do NOT use for SOAP API methods in GlobalSign.php or CLI scripts in bin/. For a plugin's contract or behavioral tests (tests/ContractTest.php, the shared harness, composer myadmin:scaffold-tests) use the plugin-contract-tests skill instead — this skill's reflection-only guidance predates that harness.
 ---
 <!-- myadmin-contract-harness-notice -->
 > ### ⚠️ Read this before the rest of the file

@@ -1,6 +1,6 @@
 ---
 name: phpunit-tests
-description: Creates PHPUnit 9 unit tests in tests/unit/ following the reflection-based and static analysis patterns from existing tests. Uses bootstrap stubs from tests/bootstrap.php. Use when user says 'add test', 'write test', 'test coverage', or adds new methods. Do NOT use for integration tests requiring live API credentials. NOTE: for a plugin's contract/behavioral tests (tests/ContractTest.php, the shared harness, composer myadmin:scaffold-tests) use the plugin-contract-tests skill instead — this skill's reflection-only guidance predates that harness.
+description: Creates PHPUnit 9 unit tests in tests/unit/ following the reflection-based and static analysis patterns from existing tests. Uses bootstrap stubs from tests/bootstrap.php. Use when user says 'add test', 'write test', 'test coverage', or adds new methods. Do NOT use for integration tests requiring live API credentials. For a plugin's contract or behavioral tests (tests/ContractTest.php, the shared harness, composer myadmin:scaffold-tests) use the plugin-contract-tests skill instead — this skill's reflection-only guidance predates that harness.
 ---
 <!-- myadmin-contract-harness-notice -->
 > ### ⚠️ Read this before the rest of the file
